@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Find Trusted Car Dealers Near You | MileVaahan Dealer Directory</title>
+  <meta name="description" content="Browse MileVaahan's verified dealer network across India. Find new car dealerships, used car dealers, and certified pre-owned car dealers in your city.">
+  <link rel="canonical" href="https://www.milevaahan.com/pages/dealers.html">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    *{font-family:'DM Sans',sans-serif;}h1,h2,h3,.font-display{font-family:'Syne',sans-serif;}
+    body{background:#0a0f1e;color:#e2e8f0;margin:0;}
+    .card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;transition:all 0.3s;cursor:pointer;}
+    .card:hover{border-color:rgba(13,148,136,0.4);transform:translateY(-4px);box-shadow:0 12px 40px rgba(13,148,136,0.12);}
+    .fi{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:10px 16px;font-size:14px;color:white;transition:all 0.2s;}
+    .fi:focus{outline:none;border-color:#0d9488;}
+    select.fi option{background:#1e2535;color:white;}
+    .badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+    .plan-badge-p{background:rgba(180,140,11,0.15);color:#B8860B;border:1px solid rgba(180,140,11,0.3);}
+    .plan-badge-pro{background:rgba(13,148,136,0.15);color:#0d9488;border:1px solid rgba(13,148,136,0.3);}
+    .plan-badge-b{background:rgba(100,116,139,0.15);color:#94a3b8;border:1px solid rgba(100,116,139,0.2);}
+    .star{color:#F59E0B;}
+    .tag{background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 8px;font-size:11px;color:rgba(255,255,255,0.5);}
+  </style>
+</head>
+<body>
+<nav class="sticky top-0 z-50 px-6 py-4 flex items-center justify-between" style="background:rgba(10,15,30,0.95);border-bottom:1px solid rgba(180,140,11,0.1);backdrop-filter:blur(12px)">
+  <a href="../index.html" class="flex items-center gap-3"><img src="../images/logo.png" class="h-9 w-9 object-contain"><span class="font-display font-bold text-xl text-white">mile<span style="color:#B8860B">vaahan</span></span></a>
+  <div class="flex items-center gap-4">
+    <a href="listings.html" class="text-sm text-white opacity-60 hover:opacity-100">Listings</a>
+    <a href="dealer-register.html" class="text-sm font-semibold px-4 py-2 rounded-xl" style="background:linear-gradient(135deg,#0d9488,#0284c7);color:white">Become a Dealer</a>
+  </div>
+</nav>
+
+<div class="px-4 py-10">
+  <div class="max-w-6xl mx-auto">
+    <div class="mb-8">
+      <h1 class="font-display font-bold text-3xl text-white mb-2">Find Trusted Dealers</h1>
+      <p style="color:rgba(255,255,255,0.5)">Verified dealers across India — browse by city, specialty, or brand</p>
+    </div>
+
+    <!-- Filters -->
+    <div class="flex flex-wrap gap-3 mb-6">
+      <input type="text" id="search" class="fi flex-1 min-w-48" placeholder="🔍 Search by dealer name, city, or brand..." oninput="filterDealers()">
+      <select id="f-city" class="fi w-40" onchange="filterDealers()">
+        <option value="">All Cities</option>
+        <option>Mumbai</option><option>Delhi</option><option>Bangalore</option><option>Pune</option><option>Chennai</option><option>Hyderabad</option><option>Ahmedabad</option><option>Kolkata</option><option>Jaipur</option><option>Surat</option>
+      </select>
+      <select id="f-type" class="fi w-40" onchange="filterDealers()">
+        <option value="">All Types</option>
+        <option value="new">New Cars</option>
+        <option value="used">Used Cars</option>
+        <option value="cpo">Certified Pre-Owned</option>
+        <option value="parts">Parts & Service</option>
+      </select>
+      <select id="f-plan" class="fi w-36" onchange="filterDealers()">
+        <option value="">All Plans</option>
+        <option value="premium">⭐ Premium</option>
+        <option value="pro">Pro</option>
+        <option value="basic">Basic</option>
+      </select>
+    </div>
+
+    <div class="flex items-center justify-between mb-5">
+      <p class="text-sm" style="color:rgba(255,255,255,0.4)">Showing <span id="d-count">0</span> dealers</p>
+      <div class="flex gap-2">
+        <button class="sort-btn text-xs px-3 py-1.5 rounded-lg font-semibold" style="background:rgba(13,148,136,0.15);color:#0d9488;border:1px solid rgba(13,148,136,0.3)" onclick="sortBy('rating')">⭐ Top Rated</button>
+        <button class="sort-btn text-xs px-3 py-1.5 rounded-lg font-semibold" style="background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1)" onclick="sortBy('listings')">📋 Most Listings</button>
+        <button class="sort-btn text-xs px-3 py-1.5 rounded-lg font-semibold" style="background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1)" onclick="sortBy('new')">🆕 Newest</button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" id="dealers-grid"></div>
+    <div id="no-result" style="display:none" class="text-center py-16"><div class="text-4xl mb-4">🔍</div><p class="text-white font-bold text-lg">No dealers found</p><p class="text-sm mt-2" style="color:rgba(255,255,255,0.4)">Try different filters</p></div>
+  </div>
+</div>
+
+<section class="py-12 px-4 text-center" style="background:rgba(13,148,136,0.05);border-top:1px solid rgba(13,148,136,0.1)">
+  <div class="max-w-2xl mx-auto">
+    <h2 class="font-display font-bold text-white text-2xl mb-3">List Your Dealership</h2>
+    <p class="mb-6" style="color:rgba(255,255,255,0.5)">Join 500+ verified dealers. Get quality leads, showcase inventory, and grow your business.</p>
+    <a href="dealer-register.html" class="inline-block px-8 py-4 rounded-xl font-bold text-white" style="background:linear-gradient(135deg,#0d9488,#0284c7)">Get Started – Plans from ₹1,999/mo →</a>
+  </div>
+</section>
+
+<footer class="text-center py-8" style="border-top:1px solid rgba(255,255,255,0.06)">
+  <p class="text-sm" style="color:rgba(255,255,255,0.3)">© 2025 MileVaahan • All dealers are verified</p>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script>
+const SAMPLE_DEALERS=[
+  {id:'d1',name:'AutoMax Motors',city:'Mumbai',state:'Maharashtra',plan:'premium',types:['new','cpo'],brands:['Hyundai','Kia','MG'],rating:4.8,reviews:124,listings:87,phone:'9988776655',since:2018,verified:true,badge:'Premium Partner',logo:'AM'},
+  {id:'d2',name:'DriveKing Auto',city:'Delhi',state:'Delhi',plan:'premium',types:['used','cpo'],brands:['Maruti','Hyundai','Tata'],rating:4.7,reviews:98,listings:143,phone:'9876543210',since:2016,verified:true,badge:'Top Seller',logo:'DK'},
+  {id:'d3',name:'Vaahan Motors',city:'Bangalore',state:'Karnataka',plan:'pro',types:['new','used'],brands:['Tata','Mahindra','MG'],rating:4.5,reviews:56,listings:62,phone:'9765432109',since:2020,verified:true,badge:'',logo:'VM'},
+  {id:'d4',name:'CarZone Pune',city:'Pune',state:'Maharashtra',plan:'pro',types:['used','parts'],brands:['Honda','Toyota','Volkswagen'],rating:4.6,reviews:87,listings:94,phone:'9654321098',since:2019,verified:true,badge:'',logo:'CZ'},
+  {id:'d5',name:'SpeedAuto Chennai',city:'Chennai',state:'Tamil Nadu',plan:'basic',types:['used'],brands:['Hyundai','Maruti'],rating:4.2,reviews:31,listings:28,phone:'9543210987',since:2022,verified:true,badge:'',logo:'SA'},
+  {id:'d6',name:'Elite Cars Hyderabad',city:'Hyderabad',state:'Telangana',plan:'premium',types:['new','cpo'],brands:['BMW','Mercedes','Audi'],rating:4.9,reviews:201,listings:47,phone:'9432109876',since:2015,verified:true,badge:'Luxury Specialist',logo:'EC'},
+  {id:'d7',name:'QuickCars Ahmedabad',city:'Ahmedabad',state:'Gujarat',plan:'pro',types:['new','used'],brands:['Kia','Hyundai','Tata'],rating:4.4,reviews:64,listings:71,phone:'9321098765',since:2021,verified:true,badge:'',logo:'QC'},
+  {id:'d8',name:'AutoPrime Kolkata',city:'Kolkata',state:'West Bengal',plan:'basic',types:['used','parts'],brands:['Maruti','Honda'],rating:4.1,reviews:22,listings:19,phone:'9210987654',since:2023,verified:false,badge:'',logo:'AP'},
+  {id:'d9',name:'GreenWheels EV Store',city:'Bangalore',state:'Karnataka',plan:'premium',types:['new'],brands:['Tata','MG','Hyundai'],rating:4.7,reviews:45,listings:33,phone:'9109876543',since:2022,verified:true,badge:'EV Specialist',logo:'GW'},
+  {id:'d10',name:'PremiumAuto Jaipur',city:'Jaipur',state:'Rajasthan',plan:'pro',types:['used','cpo'],brands:['Mahindra','Toyota'],rating:4.3,reviews:38,listings:52,phone:'9009876543',since:2020,verified:true,badge:'',logo:'PA'},
+  {id:'d11',name:'MegaMotors Mumbai',city:'Mumbai',state:'Maharashtra',plan:'pro',types:['new','used'],brands:['Honda','Maruti','Volkswagen'],rating:4.5,reviews:72,listings:108,phone:'9876540123',since:2017,verified:true,badge:'',logo:'MM'},
+  {id:'d12',name:'Shiva Auto Delhi',city:'Delhi',state:'Delhi',plan:'basic',types:['used'],brands:['Tata','Hyundai'],rating:4.0,reviews:18,listings:24,phone:'9765401234',since:2023,verified:true,badge:'',logo:'SH'},
+];
+
+let dealers=[], filtered=[], sortMode='rating';
+
+async function init(){
+  try {
+    const snap=await db.collection('dealers').where('status','==','approved').get();
+    dealers=snap.docs.map(d=>({id:d.id,...d.data()}));
+    if(!dealers.length) throw new Error();
+  } catch(e){ dealers=SAMPLE_DEALERS; }
+  filtered=[...dealers];
+  render();
+}
+
+function filterDealers(){
+  const q=document.getElementById('search').value.toLowerCase();
+  const city=document.getElementById('f-city').value;
+  const type=document.getElementById('f-type').value;
+  const plan=document.getElementById('f-plan').value;
+  filtered=dealers.filter(d=>{
+    if(q&&!`${d.name} ${d.city} ${(d.brands||[]).join(' ')}`.toLowerCase().includes(q)) return false;
+    if(city&&d.city!==city) return false;
+    if(type&&!(d.types||[]).includes(type)) return false;
+    if(plan&&d.plan!==plan) return false;
+    return true;
+  });
+  render();
+}
+
+function sortBy(mode){
+  sortMode=mode;
+  if(mode==='rating') filtered.sort((a,b)=>(b.rating||0)-(a.rating||0));
+  if(mode==='listings') filtered.sort((a,b)=>(b.listings||0)-(a.listings||0));
+  if(mode==='new') filtered.sort((a,b)=>(b.since||0)-(a.since||0));
+  render();
+}
+
+function render(){
+  document.getElementById('d-count').textContent=filtered.length;
+  if(!filtered.length){
+    document.getElementById('dealers-grid').innerHTML='';
+    document.getElementById('no-result').style.display='block';
+    return;
+  }
+  document.getElementById('no-result').style.display='none';
+  // Premium dealers first
+  const sorted=[...filtered].sort((a,b)=>(b.plan==='premium'?2:b.plan==='pro'?1:0)-(a.plan==='premium'?2:a.plan==='pro'?1:0));
+  document.getElementById('dealers-grid').innerHTML=sorted.map(d=>`
+    <div class="card" onclick="window.location.href='dealer-profile.html?id=${d.id}'">
+      <div class="p-5">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-white font-display font-bold text-lg flex-shrink-0" style="background:linear-gradient(135deg,${d.plan==='premium'?'#B8860B,#D4A017':d.plan==='pro'?'#0d9488,#0284c7':'#475569,#334155'})">${d.logo||d.name[0]}</div>
+            <div>
+              <div class="font-display font-bold text-white text-base">${d.name}</div>
+              <div class="text-xs mt-0.5" style="color:rgba(255,255,255,0.4)">📍 ${d.city}, ${d.state}</div>
+            </div>
+          </div>
+          <span class="badge ${d.plan==='premium'?'plan-badge-p':d.plan==='pro'?'plan-badge-pro':'plan-badge-b'}">${d.plan.toUpperCase()}</span>
+        </div>
+        ${d.badge?`<div class="mb-3"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold" style="background:rgba(180,140,11,0.1);color:#B8860B;border:1px solid rgba(180,140,11,0.2)">✦ ${d.badge}</span></div>`:''}
+        <div class="flex items-center gap-2 mb-3">
+          <div class="flex">${'★'.repeat(Math.floor(d.rating||4))}<span style="color:rgba(255,255,255,0.2)">${'★'.repeat(5-Math.floor(d.rating||4))}</span></div>
+          <span class="text-sm font-bold text-white">${d.rating||'4.0'}</span>
+          <span class="text-xs" style="color:rgba(255,255,255,0.4)">(${d.reviews||0} reviews)</span>
+        </div>
+        <div class="flex flex-wrap gap-1 mb-4">
+          ${(d.brands||[]).slice(0,4).map(b=>`<span class="tag">${b}</span>`).join('')}
+        </div>
+        <div class="flex items-center justify-between">
+          <div class="flex gap-3 text-xs" style="color:rgba(255,255,255,0.4)">
+            <span>📋 ${d.listings||0} listings</span>
+            <span>Since ${d.since||2020}</span>
+          </div>
+          ${d.verified?'<span class="text-xs font-bold" style="color:#0d9488">✓ Verified</span>':''}
+        </div>
+      </div>
+      <div class="px-5 py-3 flex gap-2" style="background:rgba(255,255,255,0.02);border-top:1px solid rgba(255,255,255,0.06)">
+        <a href="tel:${d.phone||''}" class="flex-1 py-2 rounded-xl text-sm font-semibold text-center" style="background:rgba(13,148,136,0.12);color:#0d9488;border:1px solid rgba(13,148,136,0.2)" onclick="event.stopPropagation()">📞 Call</a>
+        <a href="https://wa.me/91${d.phone||'9999999999'}?text=Hi, I found you on MileVaahan..." target="_blank" class="flex-1 py-2 rounded-xl text-sm font-semibold text-center" style="background:rgba(37,211,102,0.1);color:#25d366;border:1px solid rgba(37,211,102,0.2)" onclick="event.stopPropagation()">💬 WhatsApp</a>
+        <a href="listings.html?dealer=${d.id}" class="flex-1 py-2 rounded-xl text-sm font-semibold text-center" style="background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.08)" onclick="event.stopPropagation()">🚗 View</a>
+      </div>
+    </div>`).join('');
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dealer Dashboard – MileVaahan</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    *{font-family:'DM Sans',sans-serif;} .font-display,h1,h2,h3{font-family:'Syne',sans-serif;}
+    body{background:#f1f5f9;color:#1e293b;}
+    .sidebar{background:linear-gradient(175deg,#0a1628 0%,#0f2040 60%,#0f766e 100%);width:260px;min-height:100vh;flex-shrink:0;}
+    .sidebar-link{display:flex;align-items:center;gap:12px;padding:10px 20px;border-radius:10px;color:rgba(255,255,255,0.65);font-size:14px;font-weight:500;transition:all 0.2s;cursor:pointer;margin-bottom:4px;}
+    .sidebar-link:hover{background:rgba(255,255,255,0.1);color:white;}
+    .sidebar-link.active{background:linear-gradient(135deg,rgba(13,148,136,0.4),rgba(2,132,199,0.4));color:white;border-left:3px solid #0d9488;}
+    .stat-card{background:white;border-radius:16px;padding:24px;border:1px solid #e2e8f0;}
+    .stat-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;}
+    .content-panel{display:none;}
+    .content-panel.active{display:block;}
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:50;display:flex;align-items:center;justify-content:center;padding:20px;}
+    .modal-box{background:white;border-radius:20px;max-width:800px;width:100%;max-height:90vh;overflow-y:auto;padding:32px;}
+    .form-input{width:100%;padding:10px 14px;border:1px solid #e2e8f0;border-radius:10px;font-size:14px;color:#374151;transition:border-color 0.2s;}
+    .form-input:focus{outline:none;border-color:#0d9488;ring:2px solid rgba(13,148,136,0.2);}
+    .form-label{display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px;}
+    .btn-primary{background:linear-gradient(135deg,#0d9488,#0284c7);color:white;border:none;padding:10px 24px;border-radius:10px;font-weight:600;font-size:14px;cursor:pointer;transition:all 0.2s;}
+    .btn-primary:hover{opacity:0.9;transform:translateY(-1px);}
+    .btn-secondary{background:white;color:#374151;border:1px solid #e2e8f0;padding:10px 24px;border-radius:10px;font-weight:600;font-size:14px;cursor:pointer;transition:all 0.2s;}
+    .btn-danger{background:#fee2e2;color:#dc2626;border:1px solid #fecaca;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;}
+    .btn-edit{background:#f0fdfb;color:#0d9488;border:1px solid #ccfbf1;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;}
+    .listing-row{background:white;border:1px solid #e2e8f0;border-radius:12px;padding:16px;display:flex;align-items:center;gap:16px;margin-bottom:10px;transition:all 0.2s;}
+    .listing-row:hover{box-shadow:0 4px 15px rgba(13,148,136,0.08);border-color:#0d9488;}
+    .status-badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+    .status-active{background:#dcfce7;color:#16a34a;}
+    .status-pending{background:#fef3c7;color:#d97706;}
+    .status-rejected{background:#fee2e2;color:#dc2626;}
+    .status-draft{background:#f1f5f9;color:#64748b;}
+    .plan-bar{height:8px;border-radius:4px;background:#e2e8f0;overflow:hidden;}
+    .plan-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#0d9488,#0284c7);transition:width 0.5s ease;}
+    .image-upload-area{border:2px dashed #e2e8f0;border-radius:12px;padding:24px;text-align:center;cursor:pointer;transition:all 0.2s;}
+    .image-upload-area:hover{border-color:#0d9488;background:#f0fdfb;}
+    .image-preview{width:80px;height:60px;border-radius:8px;object-fit:cover;border:2px solid #e2e8f0;}
+    .tab-btn{padding:10px 20px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid #e2e8f0;background:white;color:#64748b;transition:all 0.2s;}
+    .tab-btn.active{background:linear-gradient(135deg,#0d9488,#0284c7);color:white;border-color:transparent;}
+    #global-loader{position:fixed;inset:0;z-index:9999;background:rgba(10,22,40,0.95);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+    .loader-ring{width:40px;height:40px;border:3px solid rgba(180,140,11,0.2);border-top-color:#B8860B;border-radius:50%;animation:spin 0.8s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .chart-bar{background:linear-gradient(180deg,#0d9488,#0284c7);border-radius:4px 4px 0 0;transition:height 0.5s ease;}
+    .notification-dot{width:8px;height:8px;background:#ef4444;border-radius:50%;position:absolute;top:-2px;right:-2px;}
+  </style>
+</head>
+<body>
+
+<div class="flex min-h-screen">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="sidebar hidden lg:flex flex-col p-5">
+    <!-- Logo -->
+    <a href="../index.html" class="flex items-center gap-3 mb-8 px-2">
+      <img src="../milevaahan.png" alt="MileVaahan" class="h-20 w-20 object-contain" />
+      <div>
+        <div class="font-display font-bold text-white text-lg leading-none">mile<span style="color:#B8860B">vaahan</span></div>
+        <div class="text-xs text-gray-400 mt-1">Dealer Portal</div>
+      </div>
+    </a>
+
+    <!-- Plan Badge -->
+    <div class="mb-6 px-2 py-3 rounded-xl" style="background:rgba(180,140,11,0.15);border:1px solid rgba(180,140,11,0.3);">
+      <div class="text-xs text-gray-400 mb-1">Current Plan</div>
+      <div class="font-display font-bold text-white text-sm flex items-center gap-2" id="sidebar-plan">
+        <span>👑</span> <span id="sidebar-plan-name">Pro Plan</span>
+      </div>
+      <div class="mt-2">
+        <div class="plan-bar"><div class="plan-bar-fill" id="plan-usage-bar" style="width:60%"></div></div>
+        <div class="flex justify-between text-xs text-gray-400 mt-1">
+          <span id="plan-used-count">30</span>
+          <span id="plan-total-count">50 listings</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nav Links -->
+    <nav class="flex-1">
+      <div class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3 px-2">Main</div>
+      <div class="sidebar-link active" onclick="showPanel('dashboard')">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        Dashboard
+      </div>
+      <div class="sidebar-link" onclick="showPanel('listings')">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        My Listings
+        <span class="ml-auto bg-teal-600 text-white text-xs px-2 py-0.5 rounded-full" id="sidebar-listings-count">0</span>
+      </div>
+      <div class="sidebar-link" onclick="showPanel('add-listing')">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        Add New Listing
+      </div>
+      <div class="sidebar-link relative" onclick="showPanel('inquiries')">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+        Inquiries
+        <div class="notification-dot" id="inquiry-dot" style="display:none;"></div>
+        <span class="ml-auto text-xs text-gray-400" id="sidebar-inquiry-count">0</span>
+      </div>
+      <div class="sidebar-link" onclick="showPanel('analytics')">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        Analytics
+      </div>
+      <div class="sidebar-link" onclick="showPanel('reviews')">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+        Reviews
+      </div>
+
+      <div class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3 mt-5 px-2">Account</div>
+      <div class="sidebar-link" onclick="showPanel('profile')">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        Dealer Profile
+      </div>
+      <div class="sidebar-link" onclick="showPanel('subscription')">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+        Subscription & Billing
+      </div>
+      <div class="sidebar-link" onclick="showPanel('featured')">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+        Featured Listings
+      </div>
+    </nav>
+
+    <!-- Logout -->
+    <button onclick="signOut()" class="sidebar-link mt-4 w-full text-left hover:text-red-300">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+      Sign Out
+    </button>
+  </aside>
+
+  <!-- ═══ MAIN AREA ═══ -->
+  <div class="flex-1 flex flex-col min-h-screen">
+
+    <!-- Top Bar -->
+    <header class="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between sticky top-0 z-40 shadow-sm">
+      <div class="flex items-center gap-4">
+        <!-- Mobile menu -->
+        <button class="lg:hidden text-gray-500" onclick="document.querySelector('.sidebar').classList.toggle('hidden')">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <h1 class="font-display font-bold text-gray-900 text-lg" id="panel-title">Dashboard</h1>
+          <p class="text-xs text-gray-400" id="panel-subtitle">Welcome back!</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button onclick="showPanel('add-listing')" class="btn-primary hidden sm:flex items-center gap-2 text-sm">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          Add Listing
+        </button>
+        <div class="w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-sm" style="background:linear-gradient(135deg,#0d9488,#0284c7);" id="dealer-avatar">D</div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="flex-1 p-6">
+
+      <!-- ═══ DASHBOARD PANEL ═══ -->
+      <div id="panel-dashboard" class="content-panel active">
+        <!-- Stats Row -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div class="stat-card">
+            <div class="flex items-start justify-between mb-3">
+              <div class="stat-icon" style="background:linear-gradient(135deg,rgba(13,148,136,0.12),rgba(2,132,199,0.12));">🚗</div>
+              <span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full" id="active-change">+2 this week</span>
+            </div>
+            <div class="font-display font-bold text-3xl text-gray-900" id="stat-active">0</div>
+            <div class="text-gray-500 text-sm mt-1">Active Listings</div>
+          </div>
+          <div class="stat-card">
+            <div class="flex items-start justify-between mb-3">
+              <div class="stat-icon" style="background:linear-gradient(135deg,rgba(180,140,11,0.12),rgba(212,160,23,0.12));">👁️</div>
+              <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">+15%</span>
+            </div>
+            <div class="font-display font-bold text-3xl text-gray-900" id="stat-views">0</div>
+            <div class="text-gray-500 text-sm mt-1">Total Views</div>
+          </div>
+          <div class="stat-card">
+            <div class="flex items-start justify-between mb-3">
+              <div class="stat-icon" style="background:linear-gradient(135deg,rgba(2,132,199,0.12),rgba(13,148,136,0.12));">📩</div>
+              <span class="text-xs font-bold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full" id="new-inquiry-badge">3 new</span>
+            </div>
+            <div class="font-display font-bold text-3xl text-gray-900" id="stat-inquiries">0</div>
+            <div class="text-gray-500 text-sm mt-1">Inquiries</div>
+          </div>
+          <div class="stat-card">
+            <div class="flex items-start justify-between mb-3">
+              <div class="stat-icon" style="background:linear-gradient(135deg,rgba(180,140,11,0.12),rgba(212,160,23,0.12));">✅</div>
+              <span class="text-xs font-bold text-teal-600 bg-teal-50 px-2 py-0.5 rounded-full">All time</span>
+            </div>
+            <div class="font-display font-bold text-3xl text-gray-900" id="stat-sold">0</div>
+            <div class="text-gray-500 text-sm mt-1">Cars Sold</div>
+          </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
+          <!-- Views Chart -->
+          <div class="stat-card">
+            <div class="flex items-center justify-between mb-5">
+              <h3 class="font-display font-bold text-gray-800">Views This Week</h3>
+              <span class="text-xs text-gray-400">Last 7 days</span>
+            </div>
+            <div class="flex items-end gap-2 h-32" id="views-chart">
+              <!-- JS rendered bars -->
+            </div>
+            <div class="flex gap-2 mt-2 text-xs text-gray-400" id="chart-labels"></div>
+          </div>
+
+          <!-- Top Listings -->
+          <div class="stat-card">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-display font-bold text-gray-800">Top Performing Listings</h3>
+              <button onclick="showPanel('listings')" class="text-xs text-teal-600 font-medium">View All</button>
+            </div>
+            <div id="top-listings" class="space-y-3">
+              <div class="text-center text-gray-400 text-sm py-4">Loading...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="stat-card mb-5">
+          <h3 class="font-display font-bold text-gray-800 mb-4">Quick Actions</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <button onclick="showPanel('add-listing')" class="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-dashed border-teal-200 hover:border-teal-400 hover:bg-teal-50 transition-all text-sm font-semibold text-teal-600">
+              <span class="text-2xl">➕</span> Add Listing
+            </button>
+            <button onclick="showPanel('featured')" class="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-dashed border-yellow-200 hover:border-yellow-400 hover:bg-yellow-50 transition-all text-sm font-semibold text-yellow-700">
+              <span class="text-2xl">⭐</span> Feature Listing
+            </button>
+            <button onclick="showPanel('inquiries')" class="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-dashed border-blue-200 hover:border-blue-400 hover:bg-blue-50 transition-all text-sm font-semibold text-blue-600">
+              <span class="text-2xl">📩</span> View Inquiries
+            </button>
+            <button onclick="showPanel('profile')" class="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-dashed border-gray-200 hover:border-gray-400 hover:bg-gray-50 transition-all text-sm font-semibold text-gray-600">
+              <span class="text-2xl">🏪</span> Edit Profile
+            </button>
+          </div>
+        </div>
+
+        <!-- Recent Inquiries Preview -->
+        <div class="stat-card">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-display font-bold text-gray-800">Recent Inquiries</h3>
+            <button onclick="showPanel('inquiries')" class="text-xs text-teal-600 font-medium">View All</button>
+          </div>
+          <div id="recent-inquiries" class="space-y-3">
+            <div class="text-center text-gray-400 text-sm py-4">Loading...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ LISTINGS PANEL ═══ -->
+      <div id="panel-listings" class="content-panel">
+        <div class="flex items-center justify-between mb-5">
+          <div class="flex gap-2">
+            <button class="tab-btn active" onclick="filterListings('all', this)">All</button>
+            <button class="tab-btn" onclick="filterListings('active', this)">Active</button>
+            <button class="tab-btn" onclick="filterListings('pending', this)">Pending</button>
+            <button class="tab-btn" onclick="filterListings('draft', this)">Drafts</button>
+            <button class="tab-btn" onclick="filterListings('sold', this)">Sold</button>
+          </div>
+          <button onclick="showPanel('add-listing')" class="btn-primary flex items-center gap-2 text-sm">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Add New
+          </button>
+        </div>
+
+        <!-- Search -->
+        <div class="mb-4">
+          <input type="text" id="listing-search" placeholder="Search your listings..." oninput="searchListings(this.value)" class="form-input max-w-sm" />
+        </div>
+
+        <div id="dealer-listings-list">
+          <div class="text-center py-10 text-gray-400">Loading your listings...</div>
+        </div>
+      </div>
+
+      <!-- ═══ ADD / EDIT LISTING PANEL ═══ -->
+      <div id="panel-add-listing" class="content-panel">
+        <div class="max-w-3xl">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="font-display text-xl font-bold text-gray-900" id="listing-form-title">Add New Listing</h2>
+            <div class="flex gap-2">
+              <button onclick="saveListing('draft')" class="btn-secondary text-sm">Save Draft</button>
+              <button onclick="saveListing('submit')" class="btn-primary text-sm">Submit for Review</button>
+            </div>
+          </div>
+
+          <input type="hidden" id="edit-listing-id" />
+
+          <!-- Car Details -->
+          <div class="stat-card mb-5">
+            <h3 class="font-display font-bold text-gray-800 mb-4">Car Information</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="form-label">Listing Type *</label>
+                <select id="f-condition" class="form-input">
+                  <option value="">Select condition</option>
+                  <option value="new">New Car</option>
+                  <option value="used">Used Car</option>
+                  <option value="cpo">Certified Pre-Owned</option>
+                  <option value="parts">Part / Accessory</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Make *</label>
+                <select id="f-make" class="form-input" onchange="populateModels()">
+                  <option value="">Select Make</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Model *</label>
+                <select id="f-model" class="form-input">
+                  <option value="">Select Model</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Year *</label>
+                <select id="f-year" class="form-input">
+                  <option value="">Select Year</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Variant / Trim</label>
+                <input type="text" id="f-variant" class="form-input" placeholder="e.g. SX(O), VXi, ZX" />
+              </div>
+              <div>
+                <label class="form-label">Price (₹) *</label>
+                <input type="number" id="f-price" class="form-input" placeholder="e.g. 850000" />
+              </div>
+              <div>
+                <label class="form-label">Fuel Type *</label>
+                <select id="f-fuel" class="form-input">
+                  <option value="">Select Fuel</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Transmission *</label>
+                <select id="f-transmission" class="form-input">
+                  <option value="">Select Transmission</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Body Type</label>
+                <select id="f-body" class="form-input">
+                  <option value="">Select Body Type</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Color</label>
+                <select id="f-color" class="form-input">
+                  <option value="">Select Color</option>
+                </select>
+              </div>
+              <div id="mileage-field">
+                <label class="form-label">Mileage (km)</label>
+                <input type="number" id="f-mileage" class="form-input" placeholder="e.g. 25000" />
+              </div>
+              <div>
+                <label class="form-label">Engine (cc)</label>
+                <input type="text" id="f-engine" class="form-input" placeholder="e.g. 1498cc" />
+              </div>
+              <div>
+                <label class="form-label">Owner Type</label>
+                <select id="f-owner" class="form-input">
+                  <option value="">Select Owner Type</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Registration State</label>
+                <select id="f-reg-state" class="form-input">
+                  <option value="">Select State</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="mt-4">
+              <label class="form-label">Description *</label>
+              <textarea id="f-description" rows="4" class="form-input resize-none" placeholder="Describe the car's condition, features, service history, modifications..."></textarea>
+              <p class="text-xs text-gray-400 mt-1">Minimum 50 characters. Good descriptions get 3x more inquiries.</p>
+            </div>
+          </div>
+
+          <!-- Location -->
+          <div class="stat-card mb-5">
+            <h3 class="font-display font-bold text-gray-800 mb-4">Location</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="form-label">State *</label>
+                <select id="f-state" class="form-input" onchange="populateCities()">
+                  <option value="">Select State</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">City *</label>
+                <select id="f-city" class="form-input">
+                  <option value="">Select City</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Images -->
+          <div class="stat-card mb-5">
+            <h3 class="font-display font-bold text-gray-800 mb-2">Photos</h3>
+            <p class="text-xs text-gray-400 mb-4">Upload up to 20 photos. First photo is the cover image. Max 5MB each.</p>
+            <div class="image-upload-area" onclick="document.getElementById('image-input').click()">
+              <div class="text-3xl mb-2">📷</div>
+              <p class="text-sm text-gray-500">Click to upload or drag & drop</p>
+              <p class="text-xs text-gray-400 mt-1">PNG, JPG, WebP up to 5MB each</p>
+              <input type="file" id="image-input" multiple accept="image/*" class="hidden" onchange="handleImageUpload(this.files)" />
+            </div>
+            <div class="flex gap-3 mt-4 flex-wrap" id="image-previews"></div>
+          </div>
+
+          <!-- Pricing & Contact -->
+          <div class="stat-card mb-5">
+            <h3 class="font-display font-bold text-gray-800 mb-4">Contact & Pricing Options</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="form-label">Contact Phone</label>
+                <input type="tel" id="f-phone" class="form-input" placeholder="+91 98765 43210" />
+              </div>
+              <div>
+                <label class="form-label">WhatsApp Number</label>
+                <input type="tel" id="f-whatsapp" class="form-input" placeholder="+91 98765 43210" />
+              </div>
+              <div>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" id="f-negotiable" class="w-4 h-4" style="accent-color:#0d9488;" />
+                  <span class="text-sm font-medium text-gray-700">Price is Negotiable</span>
+                </label>
+              </div>
+              <div>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" id="f-exchange" class="w-4 h-4" style="accent-color:#0d9488;" />
+                  <span class="text-sm font-medium text-gray-700">Exchange Accepted</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- SEO Fields (optional) -->
+          <div class="stat-card mb-5">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-display font-bold text-gray-800">SEO Details</h3>
+              <span class="text-xs text-teal-600 font-medium bg-teal-50 px-2 py-1 rounded">Auto-generated if left blank</span>
+            </div>
+            <div class="space-y-3">
+              <div>
+                <label class="form-label">SEO Title</label>
+                <input type="text" id="f-seo-title" class="form-input" placeholder="Auto-generated from car details" />
+              </div>
+              <div>
+                <label class="form-label">SEO Description</label>
+                <textarea id="f-seo-desc" rows="2" class="form-input resize-none" placeholder="Auto-generated from car details"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex gap-3 justify-end">
+            <button onclick="showPanel('listings')" class="btn-secondary">Cancel</button>
+            <button onclick="saveListing('draft')" class="btn-secondary">Save Draft</button>
+            <button onclick="saveListing('submit')" class="btn-primary">Submit for Review</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ INQUIRIES PANEL ═══ -->
+      <div id="panel-inquiries" class="content-panel">
+        <div class="flex gap-2 mb-5">
+          <button class="tab-btn active" onclick="filterInquiries('all', this)">All</button>
+          <button class="tab-btn" onclick="filterInquiries('unread', this)">Unread</button>
+          <button class="tab-btn" onclick="filterInquiries('replied', this)">Replied</button>
+        </div>
+        <div id="inquiries-list" class="space-y-3">
+          <div class="text-center py-10 text-gray-400">Loading inquiries...</div>
+        </div>
+      </div>
+
+      <!-- ═══ ANALYTICS PANEL ═══ -->
+      <div id="panel-analytics" class="content-panel">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+          <div class="stat-card">
+            <h3 class="font-display font-bold text-gray-800 mb-4">Views by Listing (Top 5)</h3>
+            <div id="analytics-by-listing" class="space-y-3"></div>
+          </div>
+          <div class="stat-card">
+            <h3 class="font-display font-bold text-gray-800 mb-4">Inquiry Sources</h3>
+            <div id="inquiry-sources" class="space-y-3"></div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <h3 class="font-display font-bold text-gray-800 mb-4">Monthly Performance</h3>
+          <div class="flex items-end gap-3 h-40" id="monthly-chart">
+          </div>
+          <div class="flex gap-3 mt-2 text-xs text-gray-400" id="monthly-labels"></div>
+        </div>
+      </div>
+
+      <!-- ═══ PROFILE PANEL ═══ -->
+      <div id="panel-profile" class="content-panel">
+        <div class="max-w-2xl">
+          <div class="stat-card mb-5">
+            <h3 class="font-display font-bold text-gray-800 mb-5">Dealership Information</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="form-label">Dealership Name *</label>
+                <input type="text" id="p-name" class="form-input" placeholder="Your Dealership Name" />
+              </div>
+              <div>
+                <label class="form-label">Contact Person</label>
+                <input type="text" id="p-contact" class="form-input" placeholder="Contact Person Name" />
+              </div>
+              <div>
+                <label class="form-label">Email *</label>
+                <input type="email" id="p-email" class="form-input" disabled />
+              </div>
+              <div>
+                <label class="form-label">Phone *</label>
+                <input type="tel" id="p-phone" class="form-input" placeholder="+91 98765 43210" />
+              </div>
+              <div>
+                <label class="form-label">WhatsApp</label>
+                <input type="tel" id="p-whatsapp" class="form-input" placeholder="+91 98765 43210" />
+              </div>
+              <div>
+                <label class="form-label">GST Number</label>
+                <input type="text" id="p-gst" class="form-input" placeholder="27AABCU9603R1ZP" />
+              </div>
+              <div class="sm:col-span-2">
+                <label class="form-label">Address</label>
+                <textarea id="p-address" rows="2" class="form-input resize-none" placeholder="Complete dealership address"></textarea>
+              </div>
+              <div>
+                <label class="form-label">State</label>
+                <select id="p-state" class="form-input"></select>
+              </div>
+              <div>
+                <label class="form-label">City</label>
+                <select id="p-city" class="form-input"></select>
+              </div>
+              <div class="sm:col-span-2">
+                <label class="form-label">About Dealership</label>
+                <textarea id="p-about" rows="3" class="form-input resize-none" placeholder="Tell buyers about your dealership, experience, brands you deal in..."></textarea>
+              </div>
+              <div>
+                <label class="form-label">Website</label>
+                <input type="url" id="p-website" class="form-input" placeholder="https://yourwebsite.com" />
+              </div>
+              <div>
+                <label class="form-label">Working Hours</label>
+                <input type="text" id="p-hours" class="form-input" placeholder="Mon–Sat: 9AM–7PM" />
+              </div>
+            </div>
+            <div class="flex justify-end mt-5">
+              <button onclick="saveProfile()" class="btn-primary">Save Profile</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ SUBSCRIPTION PANEL ═══ -->
+      <div id="panel-subscription" class="content-panel">
+        <div class="max-w-4xl">
+          <div class="stat-card mb-5">
+            <div class="flex items-start justify-between">
+              <div>
+                <h3 class="font-display font-bold text-gray-800 mb-1">Current Plan</h3>
+                <div class="flex items-center gap-3">
+                  <span class="text-2xl font-display font-bold text-teal-700" id="current-plan-name">Pro Plan</span>
+                  <span class="text-xs font-bold text-white px-2 py-1 rounded-full" style="background:linear-gradient(135deg,#0d9488,#0284c7);">ACTIVE</span>
+                </div>
+                <p class="text-sm text-gray-500 mt-2">Renews on <span id="renewal-date">Jan 1, 2025</span></p>
+              </div>
+              <div class="text-right">
+                <div class="font-display font-bold text-2xl text-gray-900" id="current-plan-price">₹4,999</div>
+                <div class="text-gray-400 text-sm">/month</div>
+              </div>
+            </div>
+            <div class="mt-5 p-4 rounded-xl bg-gray-50">
+              <div class="flex justify-between text-sm mb-2">
+                <span class="text-gray-600">Listing Usage</span>
+                <span class="font-bold text-gray-800" id="plan-usage-text">30 / 50</span>
+              </div>
+              <div class="plan-bar"><div class="plan-bar-fill" style="width:60%"></div></div>
+            </div>
+          </div>
+
+          <!-- Upgrade Options -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="stat-card border-2 border-gray-200">
+              <h3 class="font-display font-bold text-gray-800 mb-1">Basic</h3>
+              <div class="font-display font-bold text-2xl text-gray-900 mb-3">₹1,999<span class="text-sm font-normal text-gray-400">/mo</span></div>
+              <ul class="space-y-2 text-xs text-gray-600 mb-4">
+                <li>✅ 10 Listings</li><li>✅ Basic Profile</li><li>❌ Featured</li><li>❌ Analytics</li>
+              </ul>
+              <button onclick="initPayment('basic')" class="w-full py-2 rounded-lg border-2 border-gray-200 text-sm font-semibold hover:border-teal-400 transition-all">Downgrade</button>
+            </div>
+            <div class="stat-card border-2 border-teal-500 relative">
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-xs font-bold text-white" style="background:linear-gradient(135deg,#0d9488,#0284c7);">CURRENT</div>
+              <h3 class="font-display font-bold text-gray-800 mb-1">Pro</h3>
+              <div class="font-display font-bold text-2xl text-teal-700 mb-3">₹4,999<span class="text-sm font-normal text-gray-400">/mo</span></div>
+              <ul class="space-y-2 text-xs text-gray-600 mb-4">
+                <li>✅ 50 Listings</li><li>✅ 3 Featured</li><li>✅ Analytics</li><li>✅ Verified Badge</li>
+              </ul>
+              <button class="w-full py-2 rounded-lg text-sm font-semibold text-gray-400" disabled>Current Plan</button>
+            </div>
+            <div class="stat-card border-2 border-yellow-300">
+              <h3 class="font-display font-bold text-gray-800 mb-1">Premium</h3>
+              <div class="font-display font-bold text-2xl text-yellow-700 mb-3">₹9,999<span class="text-sm font-normal text-gray-400">/mo</span></div>
+              <ul class="space-y-2 text-xs text-gray-600 mb-4">
+                <li>✅ Unlimited</li><li>✅ 10 Featured</li><li>✅ Homepage Banner</li><li>✅ Priority Support</li>
+              </ul>
+              <button onclick="initPayment('premium')" class="w-full py-2 rounded-lg text-sm font-bold text-white" style="background:linear-gradient(135deg,#B8860B,#D4A017);">Upgrade</button>
+            </div>
+          </div>
+
+          <!-- Billing History -->
+          <div class="stat-card mt-5">
+            <h3 class="font-display font-bold text-gray-800 mb-4">Billing History</h3>
+            <div id="billing-history" class="space-y-2">
+              <div class="text-center text-gray-400 text-sm py-4">No billing history yet</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ FEATURED PANEL ═══ -->
+      <div id="panel-featured" class="content-panel">
+        <div class="stat-card mb-5">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="font-display font-bold text-gray-800">Featured Listing Slots</h3>
+              <p class="text-sm text-gray-500 mt-1">Featured listings appear at the top of search results and on the homepage.</p>
+            </div>
+            <div class="text-right">
+              <div class="font-display font-bold text-2xl text-teal-700" id="featured-remaining">3</div>
+              <div class="text-xs text-gray-400">slots remaining</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="featured-listings-list" class="space-y-3">
+          <div class="text-center py-10 text-gray-400">Loading listings to feature...</div>
+        </div>
+      </div>
+
+      <!-- ═══ REVIEWS PANEL ═══ -->
+      <div id="panel-reviews" class="content-panel">
+        <div class="stat-card mb-5">
+          <div class="flex items-center gap-6">
+            <div class="text-center">
+              <div class="font-display font-bold text-5xl text-gray-900" id="avg-rating">4.8</div>
+              <div class="text-yellow-400 text-xl mt-1">⭐⭐⭐⭐⭐</div>
+              <div class="text-xs text-gray-400 mt-1" id="total-reviews">0 reviews</div>
+            </div>
+            <div class="flex-1">
+              <div id="rating-bars" class="space-y-2"></div>
+            </div>
+          </div>
+        </div>
+        <div id="reviews-list" class="space-y-4">
+          <div class="text-center py-10 text-gray-400">Loading reviews...</div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Reply Modal -->
+<div id="reply-modal" style="display:none;" class="modal-overlay">
+  <div class="modal-box max-w-lg">
+    <div class="flex items-center justify-between mb-5">
+      <h3 class="font-display font-bold text-gray-900 text-lg">Reply to Inquiry</h3>
+      <button onclick="closeModal('reply-modal')" class="text-gray-400 hover:text-gray-600 text-xl">✕</button>
+    </div>
+    <div id="inquiry-preview" class="p-4 rounded-xl bg-gray-50 mb-4 text-sm text-gray-700"></div>
+    <textarea id="reply-text" rows="4" class="form-input resize-none mb-4" placeholder="Type your reply..."></textarea>
+    <div class="flex gap-3 justify-end">
+      <button onclick="closeModal('reply-modal')" class="btn-secondary">Cancel</button>
+      <button onclick="sendReply()" class="btn-primary">Send Reply</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div id="delete-modal" style="display:none;" class="modal-overlay">
+  <div class="modal-box max-w-md text-center">
+    <div class="text-5xl mb-4">🗑️</div>
+    <h3 class="font-display font-bold text-gray-900 text-xl mb-2">Delete Listing?</h3>
+    <p class="text-gray-500 text-sm mb-6">This action cannot be undone. The listing will be permanently deleted.</p>
+    <div class="flex gap-3 justify-center">
+      <button onclick="closeModal('delete-modal')" class="btn-secondary">Cancel</button>
+      <button onclick="confirmDelete()" class="bg-red-500 text-white px-6 py-2 rounded-xl font-bold text-sm hover:bg-red-600 transition-colors">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Razorpay -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// DEALER DASHBOARD JS
+// ═══════════════════════════════════════════════════════════
+let dealerData = null;
+let dealerListings = [];
+let dealerInquiries = [];
+let currentEditId = null;
+let deleteTargetId = null;
+let uploadedImages = [];
+let currentReplyInquiryId = null;
+
+window.addEventListener('load', async () => {
+  try {
+    const { user } = await requireRole(ROLES.DEALER, '../index.html');
+    await loadDealerData(user.uid);
+    initFormDropdowns();
+    loadDashboardData();
+    setTimeout(() => showLoader(false), 600);
+  } catch(e) {
+    showLoader(false);
+  }
+});
+
+async function loadDealerData(uid) {
+  try {
+    const snap = await db.collection(COLLECTIONS.DEALERS).where('uid', '==', uid).limit(1).get();
+    if (!snap.empty) {
+      dealerData = { id: snap.docs[0].id, ...snap.docs[0].data() };
+      updateSidebarPlan();
+      prefillProfile();
+    }
+  } catch(e) {
+    // Use mock data
+    dealerData = { id: 'mock', name: 'Demo Dealership', plan: 'pro', listingCount: 30, uid: auth.currentUser?.uid };
+    updateSidebarPlan();
+  }
+  document.getElementById('dealer-avatar').textContent = (dealerData?.name?.[0] || 'D').toUpperCase();
+  document.getElementById('panel-subtitle').textContent = `Welcome, ${dealerData?.name || 'Dealer'}`;
+}
+
+function updateSidebarPlan() {
+  if (!dealerData) return;
+  const plan = SUBSCRIPTION_PLANS[dealerData.plan] || SUBSCRIPTION_PLANS.pro;
+  document.getElementById('sidebar-plan-name').textContent = plan.name + ' Plan';
+  const used = dealerData.listingCount || 0;
+  const total = plan.listings === -1 ? '∞' : plan.listings;
+  document.getElementById('plan-used-count').textContent = used;
+  document.getElementById('plan-total-count').textContent = `${total} listings`;
+  if (plan.listings > 0) {
+    document.getElementById('plan-usage-bar').style.width = `${Math.min(100, (used / plan.listings) * 100)}%`;
+  }
+}
+
+function showPanel(name) {
+  document.querySelectorAll('.content-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  document.getElementById(`panel-${name}`).classList.add('active');
+  const panelTitles = {
+    dashboard: ['Dashboard', `Welcome, ${dealerData?.name || 'Dealer'}`],
+    listings: ['My Listings', 'Manage all your car listings'],
+    'add-listing': ['Add New Listing', 'Fill in the details below'],
+    inquiries: ['Inquiries', 'Manage buyer inquiries'],
+    analytics: ['Analytics', 'Track your performance'],
+    profile: ['Dealer Profile', 'Manage your public profile'],
+    subscription: ['Subscription & Billing', 'Manage your plan'],
+    featured: ['Featured Listings', 'Boost your visibility'],
+    reviews: ['Reviews', 'See what buyers say about you'],
+  };
+  const [title, sub] = panelTitles[name] || [name, ''];
+  document.getElementById('panel-title').textContent = title;
+  document.getElementById('panel-subtitle').textContent = sub;
+
+  if (name === 'listings') loadDealerListings();
+  if (name === 'inquiries') loadInquiries();
+  if (name === 'analytics') loadAnalytics();
+  if (name === 'featured') loadFeaturedPanel();
+  if (name === 'reviews') loadReviews();
+  if (name === 'add-listing') resetForm();
+}
+
+function loadDashboardData() {
+  // Stats
+  document.getElementById('stat-active').textContent = dealerData?.listingCount || 30;
+  document.getElementById('stat-views').textContent = '2,847';
+  document.getElementById('stat-inquiries').textContent = '48';
+  document.getElementById('stat-sold').textContent = '12';
+  document.getElementById('sidebar-listings-count').textContent = dealerData?.listingCount || 30;
+
+  // Views chart
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const values = [85, 120, 95, 145, 110, 180, 130];
+  const max = Math.max(...values);
+  const chart = document.getElementById('views-chart');
+  const labels = document.getElementById('chart-labels');
+  chart.innerHTML = values.map((v, i) => `
+    <div class="flex-1 flex flex-col items-center gap-1">
+      <span class="text-xs text-gray-500 font-bold">${v}</span>
+      <div class="chart-bar w-full" style="height:${(v/max)*100}%"></div>
+    </div>`).join('');
+  labels.innerHTML = days.map(d => `<span class="flex-1 text-center">${d}</span>`).join('');
+
+  // Top listings
+  const topListings = [
+    { name: '2023 Hyundai Creta', views: 245, inquiries: 12 },
+    { name: '2024 Tata Nexon', views: 189, inquiries: 8 },
+    { name: '2022 Kia Seltos', views: 156, inquiries: 6 },
+  ];
+  document.getElementById('top-listings').innerHTML = topListings.map(l => `
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-8 rounded-lg flex items-center justify-center text-lg" style="background:#f1f5f9;">🚗</div>
+      <div class="flex-1">
+        <div class="text-sm font-semibold text-gray-800">${l.name}</div>
+        <div class="flex gap-3 text-xs text-gray-400"><span>👁️ ${l.views}</span><span>📩 ${l.inquiries}</span></div>
+      </div>
+    </div>`).join('');
+
+  // Recent inquiries
+  const inquiries = [
+    { buyer: 'Rahul M.', car: '2023 Hyundai Creta', time: '2h ago', message: 'Is this still available?' },
+    { buyer: 'Priya S.', car: '2024 Tata Nexon', time: '5h ago', message: 'What is the lowest price?' },
+    { buyer: 'Arjun K.', car: '2022 Kia Seltos', time: '1d ago', message: 'Can I schedule a test drive?' },
+  ];
+  document.getElementById('recent-inquiries').innerHTML = inquiries.map(i => `
+    <div class="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors">
+      <div class="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0" style="background:linear-gradient(135deg,#0d9488,#0284c7);">${i.buyer[0]}</div>
+      <div class="flex-1">
+        <div class="flex items-center justify-between">
+          <span class="font-semibold text-sm text-gray-800">${i.buyer}</span>
+          <span class="text-xs text-gray-400">${i.time}</span>
+        </div>
+        <div class="text-xs text-gray-500">${i.car}</div>
+        <div class="text-xs text-gray-600 mt-0.5">${i.message}</div>
+      </div>
+    </div>`).join('');
+}
+
+async function loadDealerListings(filter = 'all') {
+  const container = document.getElementById('dealer-listings-list');
+  container.innerHTML = '<div class="text-center py-8 text-gray-400">Loading...</div>';
+
+  try {
+    let query = db.collection(COLLECTIONS.LISTINGS).where('dealerId', '==', dealerData?.id || 'mock');
+    if (filter !== 'all') query = query.where('status', '==', filter);
+    const snap = await query.orderBy('createdAt', 'desc').get();
+    dealerListings = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch(e) {
+    // Mock listings
+    dealerListings = Array.from({ length: 8 }, (_, i) => ({
+      id: `mock-${i}`,
+      make: ['Hyundai','Tata','Kia','Maruti'][i%4],
+      model: ['Creta','Nexon','Seltos','Swift'][i%4],
+      year: 2021 + (i%4),
+      price: 800000 + i * 200000,
+      condition: ['used','cpo','new'][i%3],
+      status: ['active','pending','active','draft','active','active','sold','active'][i],
+      featured: i < 2,
+      views: (i+1) * 45,
+      city: 'Mumbai',
+      createdAt: { toDate: () => new Date(Date.now() - i * 86400000) }
+    }));
+  }
+  renderDealerListings(dealerListings);
+}
+
+function renderDealerListings(listings) {
+  const container = document.getElementById('dealer-listings-list');
+  if (!listings.length) {
+    container.innerHTML = '<div class="text-center py-12"><div class="text-4xl mb-3">🚗</div><p class="text-gray-500">No listings yet.</p><button onclick="showPanel(\'add-listing\')" class="btn-primary mt-4 text-sm">Add Your First Listing</button></div>';
+    return;
+  }
+  container.innerHTML = listings.map(l => `
+    <div class="listing-row">
+      <div class="w-16 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0" style="background:#f1f5f9;">🚗</div>
+      <div class="flex-1 min-w-0">
+        <div class="font-display font-bold text-gray-900 text-sm">${l.year} ${l.make} ${l.model}</div>
+        <div class="flex items-center gap-3 mt-1">
+          <span class="text-sm font-bold" style="color:#0f766e">${formatPrice(l.price)}</span>
+          <span class="status-badge status-${l.status}">${l.status?.toUpperCase()}</span>
+          ${l.featured ? '<span class="text-xs font-bold text-yellow-600">⭐ Featured</span>' : ''}
+        </div>
+        <div class="text-xs text-gray-400 mt-1">👁️ ${l.views || 0} views • 📍 ${l.city} • ${timeAgo(l.createdAt)}</div>
+      </div>
+      <div class="flex gap-2 flex-shrink-0">
+        <button class="btn-edit" onclick="editListing('${l.id}')">✏️ Edit</button>
+        <button onclick="toggleListingStatus('${l.id}', '${l.status}')" class="btn-edit" style="background:#f0f9ff;color:#0369a1;border-color:#bae6fd;">${l.status === 'active' ? '⏸ Pause' : '▶ Activate'}</button>
+        <button class="btn-danger" onclick="openDeleteModal('${l.id}')">🗑️ Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+function filterListings(status, btn) {
+  document.querySelectorAll('#panel-listings .tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadDealerListings(status);
+}
+
+function searchListings(query) {
+  const filtered = query ? dealerListings.filter(l =>
+    `${l.make} ${l.model} ${l.year}`.toLowerCase().includes(query.toLowerCase())
+  ) : dealerListings;
+  renderDealerListings(filtered);
+}
+
+function initFormDropdowns() {
+  const makeSelect = document.getElementById('f-make');
+  const yearSelect = document.getElementById('f-year');
+  const fuelSelect = document.getElementById('f-fuel');
+  const transSelect = document.getElementById('f-transmission');
+  const bodySelect = document.getElementById('f-body');
+  const colorSelect = document.getElementById('f-color');
+  const ownerSelect = document.getElementById('f-owner');
+  const stateSelect = document.getElementById('f-state');
+  const pStateSelect = document.getElementById('p-state');
+
+  Object.keys(CAR_DATA.makes).forEach(m => { makeSelect.innerHTML += `<option value="${m}">${m}</option>`; });
+  CAR_DATA.years.slice(0,30).forEach(y => { yearSelect.innerHTML += `<option value="${y}">${y}</option>`; });
+  CAR_DATA.fuelTypes.forEach(f => { fuelSelect.innerHTML += `<option value="${f}">${f}</option>`; });
+  CAR_DATA.transmissions.forEach(t => { transSelect.innerHTML += `<option value="${t}">${t}</option>`; });
+  CAR_DATA.bodyTypes.forEach(b => { bodySelect.innerHTML += `<option value="${b}">${b}</option>`; });
+  CAR_DATA.colors.forEach(c => { colorSelect.innerHTML += `<option value="${c}">${c}</option>`; });
+  CAR_DATA.ownerTypes.forEach(o => { ownerSelect.innerHTML += `<option value="${o}">${o}</option>`; });
+  Object.keys(INDIA_LOCATIONS).forEach(s => { stateSelect.innerHTML += `<option value="${s}">${s}</option>`; pStateSelect.innerHTML += `<option value="${s}">${s}</option>`; });
+  document.getElementById('f-reg-state').innerHTML = stateSelect.innerHTML;
+}
+
+function populateModels() {
+  const make = document.getElementById('f-make').value;
+  const modelSelect = document.getElementById('f-model');
+  modelSelect.innerHTML = '<option value="">Select Model</option>';
+  if (make && CAR_DATA.makes[make]) {
+    CAR_DATA.makes[make].forEach(m => { modelSelect.innerHTML += `<option value="${m}">${m}</option>`; });
+  }
+}
+
+function populateCities() {
+  const state = document.getElementById('f-state').value;
+  const citySelect = document.getElementById('f-city');
+  citySelect.innerHTML = '<option value="">Select City</option>';
+  if (state && INDIA_LOCATIONS[state]) {
+    INDIA_LOCATIONS[state].forEach(c => { citySelect.innerHTML += `<option value="${c}">${c}</option>`; });
+  }
+}
+
+function resetForm() {
+  document.getElementById('listing-form-title').textContent = 'Add New Listing';
+  document.getElementById('edit-listing-id').value = '';
+  currentEditId = null;
+  uploadedImages = [];
+  ['f-condition','f-make','f-model','f-year','f-variant','f-price','f-fuel','f-transmission','f-body','f-color','f-mileage','f-engine','f-owner','f-reg-state','f-state','f-city','f-description','f-phone','f-whatsapp','f-seo-title','f-seo-desc'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('f-negotiable').checked = false;
+  document.getElementById('f-exchange').checked = false;
+  document.getElementById('image-previews').innerHTML = '';
+}
+
+async function saveListing(action) {
+  const data = {
+    make: document.getElementById('f-make').value,
+    model: document.getElementById('f-model').value,
+    year: parseInt(document.getElementById('f-year').value),
+    variant: document.getElementById('f-variant').value,
+    price: parseInt(document.getElementById('f-price').value),
+    condition: document.getElementById('f-condition').value,
+    fuel: document.getElementById('f-fuel').value,
+    transmission: document.getElementById('f-transmission').value,
+    bodyType: document.getElementById('f-body').value,
+    color: document.getElementById('f-color').value,
+    mileage: parseInt(document.getElementById('f-mileage').value) || 0,
+    engine: document.getElementById('f-engine').value,
+    ownerType: document.getElementById('f-owner').value,
+    state: document.getElementById('f-state').value,
+    city: document.getElementById('f-city').value,
+    description: document.getElementById('f-description').value,
+    phone: document.getElementById('f-phone').value,
+    whatsApp: document.getElementById('f-whatsapp').value,
+    negotiable: document.getElementById('f-negotiable').checked,
+    exchange: document.getElementById('f-exchange').checked,
+    dealerId: dealerData?.id,
+    dealerName: dealerData?.name,
+    status: action === 'draft' ? 'draft' : 'pending',
+    featured: false,
+    views: 0,
+    images: uploadedImages,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    seo: {
+      title: document.getElementById('f-seo-title').value || `${document.getElementById('f-year').value} ${document.getElementById('f-make').value} ${document.getElementById('f-model').value} for Sale in ${document.getElementById('f-city').value} | MileVaahan`,
+      description: document.getElementById('f-seo-desc').value || `Buy ${document.getElementById('f-year').value} ${document.getElementById('f-make').value} ${document.getElementById('f-model').value} in ${document.getElementById('f-city').value}. ${document.getElementById('f-fuel').value}, ${document.getElementById('f-transmission').value}. Price: ₹${parseInt(document.getElementById('f-price').value).toLocaleString('en-IN')}.`
+    }
+  };
+
+  if (!data.make || !data.model || !data.year || !data.price || !data.condition) {
+    showToast('Please fill all required fields', 'error'); return;
+  }
+
+  try {
+    showLoader(true);
+    if (currentEditId) {
+      await db.collection(COLLECTIONS.LISTINGS).doc(currentEditId).update({ ...data, createdAt: undefined });
+      showToast('Listing updated successfully!');
+    } else {
+      const docRef = await db.collection(COLLECTIONS.LISTINGS).add(data);
+      // Update dealer listing count
+      await db.collection(COLLECTIONS.DEALERS).doc(dealerData.id).update({ listingCount: firebase.firestore.FieldValue.increment(1) });
+      // Trigger SEO indexing ping (Cloud Function would handle this)
+      showToast(action === 'draft' ? '✅ Saved as draft' : '🚀 Submitted for review! Published after approval.');
+    }
+    showLoader(false);
+    showPanel('listings');
+  } catch(e) {
+    showLoader(false);
+    showToast('Error saving listing. Please try again.', 'error');
+  }
+}
+

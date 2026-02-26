@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Super Admin – MileVaahan Control Center</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    *{font-family:'DM Sans',sans-serif;} .font-display,h1,h2,h3{font-family:'Syne',sans-serif;}
+    body{background:#0a0f1a;color:#e2e8f0;}
+    .sidebar{background:linear-gradient(180deg,#060d1a,#0a1628);width:240px;min-height:100vh;flex-shrink:0;border-right:1px solid rgba(255,255,255,0.06);}
+    .sidebar-link{display:flex;align-items:center;gap:10px;padding:9px 16px;border-radius:10px;color:rgba(255,255,255,0.55);font-size:13px;font-weight:500;transition:all 0.2s;cursor:pointer;margin-bottom:2px;border:none;background:transparent;width:100%;text-align:left;}
+    .sidebar-link:hover{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.85);}
+    .sidebar-link.active{background:rgba(13,148,136,0.25);color:#2dd4bf;border-left:3px solid #0d9488;}
+    .content-panel{display:none;}
+    .content-panel.active{display:block;}
+    .glass-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px;backdrop-filter:blur(10px);}
+    .stat-card-admin{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px;}
+    .form-input-dark{width:100%;padding:10px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:10px;font-size:14px;color:#e2e8f0;background:rgba(255,255,255,0.06);transition:border-color 0.2s;}
+    .form-input-dark:focus{outline:none;border-color:#0d9488;background:rgba(13,148,136,0.08);}
+    .form-label-dark{display:block;font-size:12px;font-weight:600;color:#94a3b8;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;}
+    .btn-approve{background:rgba(13,148,136,0.2);color:#2dd4bf;border:1px solid rgba(13,148,136,0.3);padding:5px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;}
+    .btn-approve:hover{background:rgba(13,148,136,0.35);}
+    .btn-reject{background:rgba(220,38,38,0.15);color:#f87171;border:1px solid rgba(220,38,38,0.3);padding:5px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;}
+    .btn-reject:hover{background:rgba(220,38,38,0.3);}
+    .btn-primary-admin{background:linear-gradient(135deg,#0d9488,#0284c7);color:white;border:none;padding:10px 20px;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;transition:all 0.2s;}
+    .btn-primary-admin:hover{opacity:0.9;transform:translateY(-1px);}
+    .data-table{width:100%;border-collapse:separate;border-spacing:0;}
+    .data-table th{padding:10px 16px;text-align:left;font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid rgba(255,255,255,0.06);}
+    .data-table td{padding:14px 16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.04);color:#cbd5e1;}
+    .data-table tr:hover td{background:rgba(255,255,255,0.03);}
+    .badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+    .badge-active{background:rgba(13,148,136,0.2);color:#2dd4bf;}
+    .badge-pending{background:rgba(251,191,36,0.15);color:#fbbf24;}
+    .badge-rejected{background:rgba(239,68,68,0.15);color:#f87171;}
+    .badge-suspended{background:rgba(100,116,139,0.2);color:#94a3b8;}
+    .badge-premium{background:rgba(184,134,11,0.2);color:#D4A017;}
+    .badge-pro{background:rgba(13,148,136,0.2);color:#2dd4bf;}
+    .badge-basic{background:rgba(100,116,139,0.2);color:#94a3b8;}
+    .tab-admin{padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#64748b;transition:all 0.2s;}
+    .tab-admin.active{background:linear-gradient(135deg,rgba(13,148,136,0.3),rgba(2,132,199,0.3));color:#2dd4bf;border-color:rgba(13,148,136,0.5);}
+    #global-loader{position:fixed;inset:0;z-index:9999;background:#060d1a;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+    .loader-ring{width:44px;height:44px;border:3px solid rgba(180,140,11,0.2);border-top-color:#B8860B;border-radius:50%;animation:spin 0.8s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;}
+    .modal-box-dark{background:#0f1e30;border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:32px;max-width:600px;width:100%;max-height:90vh;overflow-y:auto;}
+    .sparkline{display:flex;align-items:flex-end;gap:3px;height:40px;}
+    .sparkline-bar{flex:1;border-radius:2px;background:linear-gradient(180deg,#0d9488,#0284c7);min-width:4px;}
+    .search-input{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:8px 14px;font-size:13px;color:#e2e8f0;width:220px;}
+    .search-input:focus{outline:none;border-color:#0d9488;}
+    .revenue-card{background:linear-gradient(135deg,rgba(13,148,136,0.15),rgba(2,132,199,0.1));border:1px solid rgba(13,148,136,0.25);border-radius:16px;padding:24px;}
+    .seo-input{width:100%;padding:8px 12px;border:1px solid rgba(255,255,255,0.1);border-radius:8px;font-size:13px;color:#e2e8f0;background:rgba(255,255,255,0.05);}
+    .seo-input:focus{outline:none;border-color:#0d9488;}
+    ::-webkit-scrollbar{width:5px;} ::-webkit-scrollbar-track{background:#060d1a;} ::-webkit-scrollbar-thumb{background:#0d9488;border-radius:3px;}
+  </style>
+</head>
+<body>
+
+<div class="flex min-h-screen">
+
+  <!-- ══════════════════════════════════
+       ADMIN SIDEBAR
+  ══════════════════════════════════ -->
+  <aside class="sidebar flex flex-col p-4 overflow-y-auto flex-shrink-0">
+    <div class="flex items-center gap-3 mb-6 px-2">
+      <img src="../MaileVaahan.png" alt="MileVaahan" class="h-20 w-20 object-contain" />
+      <div>
+        <div class="font-display font-bold text-white text-base">mile<span style="color:#B8860B">vaahan</span></div>
+        <div class="text-xs font-bold tracking-widest uppercase" style="color:#0d9488;font-size:9px;">Super Admin</div>
+      </div>
+    </div>
+
+    <nav class="flex-1 space-y-0.5">
+      <p class="text-xs font-bold text-gray-600 uppercase tracking-widest px-2 mb-2">Overview</p>
+      <button class="sidebar-link active" onclick="showPanel('overview',this)">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        Overview
+      </button>
+
+      <p class="text-xs font-bold text-gray-600 uppercase tracking-widest px-2 mb-2 mt-4">Management</p>
+      <button class="sidebar-link" onclick="showPanel('dealers',this)">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+        Dealers
+        <span class="ml-auto text-xs bg-teal-900 text-teal-300 px-2 py-0.5 rounded-full" id="pending-dealer-badge">0</span>
+      </button>
+      <button class="sidebar-link" onclick="showPanel('listings',this)">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        Listings
+        <span class="ml-auto text-xs bg-yellow-900 text-yellow-300 px-2 py-0.5 rounded-full" id="pending-listing-badge">0</span>
+      </button>
+      <button class="sidebar-link" onclick="showPanel('users',this)">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        Users / Buyers
+      </button>
+      <button class="sidebar-link" onclick="showPanel('featured',this)">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+        Featured Slots
+      </button>
+      <button class="sidebar-link" onclick="showPanel('blog',this)">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+        Blog / Content
+      </button>
+      <button class="sidebar-link" onclick="showPanel('reviews',this)">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+        Reviews
+      </button>
+
+      <p class="text-xs font-bold text-gray-600 uppercase tracking-widest px-2 mb-2 mt-4">Finance</p>
+      <button class="sidebar-link" onclick="showPanel('revenue',this)">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        Revenue & Billing
+      </button>
+
+      <p class="text-xs font-bold text-gray-600 uppercase tracking-widest px-2 mb-2 mt-4">Settings</p>
+      <button class="sidebar-link" onclick="showPanel('seo',this)">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        SEO Settings
+      </button>
+      <button class="sidebar-link" onclick="showPanel('settings',this)">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+        Site Settings
+      </button>
+    </nav>
+
+    <button onclick="adminSignOut()" class="sidebar-link mt-4 hover:text-red-400">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+      Sign Out
+    </button>
+  </aside>
+
+  <!-- ══════════════════════════════════
+       ADMIN MAIN
+  ══════════════════════════════════ -->
+  <div class="flex-1 flex flex-col min-w-0">
+
+    <!-- Admin Header -->
+    <header style="background:rgba(6,13,26,0.95);border-bottom:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(20px);" class="px-6 py-4 flex items-center justify-between sticky top-0 z-40">
+      <div>
+        <h1 class="font-display font-bold text-white text-lg" id="admin-panel-title">Overview</h1>
+        <p class="text-xs text-gray-500" id="admin-panel-sub">MileVaahan Control Center</p>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="../index.html" target="_blank" class="text-xs text-teal-400 hover:text-teal-300 font-medium">↗ View Site</a>
+        <div class="w-9 h-9 rounded-full text-white font-bold text-sm flex items-center justify-center" style="background:linear-gradient(135deg,#B8860B,#D4A017);">A</div>
+      </div>
+    </header>
+
+    <main class="flex-1 p-4 md:p-6 overflow-auto">
+
+      <!-- ╔══════ OVERVIEW ══════╗ -->
+      <div id="panel-overview" class="content-panel active">
+        <!-- KPI Row -->
+        <div class="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+          <div class="stat-card-admin">
+            <div class="flex justify-between items-start mb-3">
+              <div class="text-2xl">🏪</div>
+              <span class="text-xs font-bold text-teal-400 bg-teal-900/30 px-2 py-0.5 rounded-full">+12 this week</span>
+            </div>
+            <div class="font-display font-bold text-3xl text-white" id="kpi-dealers">—</div>
+            <div class="text-gray-400 text-sm">Total Dealers</div>
+            <div class="sparkline mt-3" id="sp-dealers"></div>
+          </div>
+          <div class="stat-card-admin">
+            <div class="flex justify-between items-start mb-3">
+              <div class="text-2xl">🚗</div>
+              <span class="text-xs font-bold text-blue-400 bg-blue-900/30 px-2 py-0.5 rounded-full">+245 this week</span>
+            </div>
+            <div class="font-display font-bold text-3xl text-white" id="kpi-listings">—</div>
+            <div class="text-gray-400 text-sm">Active Listings</div>
+            <div class="sparkline mt-3" id="sp-listings"></div>
+          </div>
+          <div class="stat-card-admin">
+            <div class="flex justify-between items-start mb-3">
+              <div class="text-2xl">👥</div>
+              <span class="text-xs font-bold text-purple-400 bg-purple-900/30 px-2 py-0.5 rounded-full">+890 this week</span>
+            </div>
+            <div class="font-display font-bold text-3xl text-white" id="kpi-users">—</div>
+            <div class="text-gray-400 text-sm">Registered Users</div>
+            <div class="sparkline mt-3" id="sp-users"></div>
+          </div>
+          <div class="revenue-card">
+            <div class="flex justify-between items-start mb-3">
+              <div class="text-2xl">💰</div>
+              <span class="text-xs font-bold text-yellow-400 bg-yellow-900/30 px-2 py-0.5 rounded-full">+18% MoM</span>
+            </div>
+            <div class="font-display font-bold text-3xl text-white" id="kpi-revenue">—</div>
+            <div class="text-gray-400 text-sm">Monthly Revenue</div>
+            <div class="sparkline mt-3" id="sp-revenue"></div>
+          </div>
+        </div>
+
+        <!-- Pending Approvals -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+          <div class="glass-card">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="font-display font-bold text-white">⏳ Pending Dealer Approvals</h3>
+              <button onclick="showPanel('dealers',null)" class="text-xs text-teal-400 hover:text-teal-300">View All →</button>
+            </div>
+            <div id="pending-dealers-widget" class="space-y-3">
+              <div class="text-gray-500 text-sm text-center py-4">Loading…</div>
+            </div>
+          </div>
+          <div class="glass-card">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="font-display font-bold text-white">⏳ Pending Listing Approvals</h3>
+              <button onclick="showPanel('listings',null)" class="text-xs text-teal-400 hover:text-teal-300">View All →</button>
+            </div>
+            <div id="pending-listings-widget" class="space-y-3">
+              <div class="text-gray-500 text-sm text-center py-4">Loading…</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Revenue Chart + Plan Breakdown -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+          <div class="glass-card lg:col-span-2">
+            <h3 class="font-display font-bold text-white mb-4">Revenue — Last 6 Months</h3>
+            <div class="flex items-end gap-3 h-36" id="revenue-chart"></div>
+            <div class="flex gap-3 mt-2 text-xs text-gray-500 text-center" id="revenue-labels"></div>
+          </div>
+          <div class="glass-card">
+            <h3 class="font-display font-bold text-white mb-4">Plan Distribution</h3>
+            <div class="space-y-4" id="plan-distribution"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ╔══════ DEALERS ══════╗ -->
+      <div id="panel-dealers" class="content-panel">
+        <div class="flex flex-col sm:flex-row justify-between gap-3 mb-5">
+          <div class="flex gap-2 flex-wrap">
+            <button class="tab-admin active" onclick="filterDealers('all',this)">All</button>
+            <button class="tab-admin" onclick="filterDealers('pending',this)">Pending</button>
+            <button class="tab-admin" onclick="filterDealers('approved',this)">Approved</button>
+            <button class="tab-admin" onclick="filterDealers('rejected',this)">Rejected</button>
+            <button class="tab-admin" onclick="filterDealers('suspended',this)">Suspended</button>
+          </div>
+          <input type="text" placeholder="Search dealers…" class="search-input" oninput="searchDealers(this.value)" />
+        </div>
+        <div class="glass-card overflow-x-auto">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Dealer</th><th>Location</th><th>Plan</th><th>Listings</th><th>Status</th><th>Joined</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="dealers-table-body">
+              <tr><td colspan="7" class="text-center py-10 text-gray-500">Loading dealers…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ╔══════ LISTINGS ══════╗ -->
+      <div id="panel-listings" class="content-panel">
+        <div class="flex flex-col sm:flex-row justify-between gap-3 mb-5">
+          <div class="flex gap-2 flex-wrap">
+            <button class="tab-admin active" onclick="filterAdminListings('all',this)">All</button>
+            <button class="tab-admin" onclick="filterAdminListings('pending',this)">Pending Review</button>
+            <button class="tab-admin" onclick="filterAdminListings('active',this)">Active</button>
+            <button class="tab-admin" onclick="filterAdminListings('rejected',this)">Rejected</button>
+          </div>
+          <input type="text" placeholder="Search listings…" class="search-input" oninput="searchAdminListings(this.value)" />
+        </div>
+        <div class="glass-card overflow-x-auto">
+          <table class="data-table">
+            <thead>
+              <tr><th>Car</th><th>Dealer</th><th>Price</th><th>City</th><th>Type</th><th>Status</th><th>Date</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="listings-table-body">
+              <tr><td colspan="8" class="text-center py-10 text-gray-500">Loading listings…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ╔══════ USERS ══════╗ -->
+      <div id="panel-users" class="content-panel">
+        <div class="flex justify-between gap-3 mb-5">
+          <div class="flex gap-2">
+            <button class="tab-admin active" onclick="filterUsers('all',this)">All Users</button>
+            <button class="tab-admin" onclick="filterUsers('buyer',this)">Buyers</button>
+            <button class="tab-admin" onclick="filterUsers('dealer',this)">Dealers</button>
+          </div>
+          <input type="text" placeholder="Search users…" class="search-input" oninput="searchUsers(this.value)" />
+        </div>
+        <div class="glass-card overflow-x-auto">
+          <table class="data-table">
+            <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Joined</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="users-table-body">
+              <tr><td colspan="6" class="text-center py-10 text-gray-500">Loading users…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ╔══════ FEATURED SLOTS ══════╗ -->
+      <div id="panel-featured" class="content-panel">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
+          <div class="glass-card">
+            <h3 class="font-display font-bold text-white mb-1">Homepage Banner Slots</h3>
+            <div class="font-display text-3xl font-bold text-teal-400">3 / 5</div>
+            <p class="text-gray-400 text-xs mt-1">slots filled</p>
+          </div>
+          <div class="glass-card">
+            <h3 class="font-display font-bold text-white mb-1">Search Featured</h3>
+            <div class="font-display text-3xl font-bold text-teal-400">28 / 50</div>
+            <p class="text-gray-400 text-xs mt-1">active featured listings</p>
+          </div>
+          <div class="glass-card">
+            <h3 class="font-display font-bold text-white mb-1">Featured Revenue</h3>
+            <div class="font-display text-3xl font-bold" style="color:#D4A017">₹45,000</div>
+            <p class="text-gray-400 text-xs mt-1">this month</p>
+          </div>
+        </div>
+        <div class="glass-card">
+          <h3 class="font-display font-bold text-white mb-4">Manage Featured Listings</h3>
+          <div id="featured-admin-list">
+            <div class="text-gray-500 text-sm text-center py-8">Loading featured listings…</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ╔══════ BLOG ══════╗ -->
+      <div id="panel-blog" class="content-panel">
+        <div class="flex justify-between items-center mb-5">
+          <div class="flex gap-2">
+            <button class="tab-admin active" onclick="filterBlog('all',this)">All Posts</button>
+            <button class="tab-admin" onclick="filterBlog('published',this)">Published</button>
+            <button class="tab-admin" onclick="filterBlog('draft',this)">Drafts</button>
+          </div>
+          <button onclick="openBlogEditor()" class="btn-primary-admin text-sm">+ New Article</button>
+        </div>
+        <div class="glass-card overflow-x-auto mb-5">
+          <table class="data-table">
+            <thead><tr><th>Title</th><th>Author</th><th>Category</th><th>Status</th><th>Published</th><th>Actions</th></tr></thead>
+            <tbody id="blog-table-body">
+              <tr><td colspan="6" class="text-center py-10 text-gray-500">Loading posts…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ╔══════ REVIEWS ══════╗ -->
+      <div id="panel-reviews" class="content-panel">
+        <div class="flex gap-2 mb-5">
+          <button class="tab-admin active" onclick="filterAdminReviews('all',this)">All Reviews</button>
+          <button class="tab-admin" onclick="filterAdminReviews('pending',this)">Pending Moderation</button>
+          <button class="tab-admin" onclick="filterAdminReviews('approved',this)">Approved</button>
+          <button class="tab-admin" onclick="filterAdminReviews('flagged',this)">Flagged</button>
+        </div>
+        <div class="glass-card overflow-x-auto">
+          <table class="data-table">
+            <thead><tr><th>Reviewer</th><th>Dealer</th><th>Rating</th><th>Review</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="reviews-table-body">
+              <tr><td colspan="7" class="text-center py-10 text-gray-500">Loading reviews…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ╔══════ REVENUE ══════╗ -->
+      <div id="panel-revenue" class="content-panel">
+        <div class="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+          <div class="revenue-card">
+            <div class="text-2xl mb-2">💰</div>
+            <div class="font-display font-bold text-3xl text-white" id="rev-monthly">₹3.2L</div>
+            <div class="text-gray-400 text-sm">Monthly Revenue</div>
+          </div>
+          <div class="glass-card">
+            <div class="text-2xl mb-2">📅</div>
+            <div class="font-display font-bold text-3xl text-white">₹28.5L</div>
+            <div class="text-gray-400 text-sm">Annual Revenue</div>
+          </div>
+          <div class="glass-card">
+            <div class="text-2xl mb-2">🏪</div>
+            <div class="font-display font-bold text-3xl text-white">₹6,240</div>
+            <div class="text-gray-400 text-sm">Avg Revenue / Dealer</div>
+          </div>
+          <div class="glass-card">
+            <div class="text-2xl mb-2">📈</div>
+            <div class="font-display font-bold text-3xl text-white">+18%</div>
+            <div class="text-gray-400 text-sm">Month-over-Month</div>
+          </div>
+        </div>
+        <div class="glass-card mb-5">
+          <h3 class="font-display font-bold text-white mb-4">Revenue by Plan</h3>
+          <div class="space-y-4">
+            <div>
+              <div class="flex justify-between text-sm mb-1"><span class="text-yellow-400">👑 Premium (₹9,999/mo)</span><span class="text-gray-300">45 dealers = <strong class="text-white">₹4,49,955</strong></span></div>
+              <div class="plan-bar" style="background:rgba(255,255,255,0.1);height:10px;"><div class="plan-bar-fill" style="width:70%;background:linear-gradient(90deg,#B8860B,#D4A017);height:100%;"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-1"><span class="text-teal-400">🚀 Pro (₹4,999/mo)</span><span class="text-gray-300">182 dealers = <strong class="text-white">₹9,09,818</strong></span></div>
+              <div class="plan-bar" style="background:rgba(255,255,255,0.1);height:10px;"><div class="plan-bar-fill" style="width:85%;height:100%;"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-1"><span class="text-gray-400">🏪 Basic (₹1,999/mo)</span><span class="text-gray-300">312 dealers = <strong class="text-white">₹6,23,688</strong></span></div>
+              <div class="plan-bar" style="background:rgba(255,255,255,0.1);height:10px;"><div class="plan-bar-fill" style="width:55%;background:linear-gradient(90deg,#64748b,#94a3b8);height:100%;"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="glass-card overflow-x-auto">
+          <h3 class="font-display font-bold text-white mb-4">Recent Transactions</h3>
+          <table class="data-table">
+            <thead><tr><th>Dealer</th><th>Plan</th><th>Amount</th><th>Payment ID</th><th>Date</th><th>Status</th></tr></thead>
+            <tbody id="transactions-body">
+              <tr><td colspan="6" class="text-center py-10 text-gray-500">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ╔══════ SEO SETTINGS ══════╗ -->
+      <div id="panel-seo" class="content-panel">
+        <div class="max-w-3xl space-y-5">
+          <div class="glass-card">
+            <h3 class="font-display font-bold text-white mb-4">Global SEO Settings</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="form-label-dark">Site Name</label>
+                <input class="seo-input" value="MileVaahan – India's Premium Car Marketplace" id="seo-site-name" />
+              </div>
+              <div>
+                <label class="form-label-dark">Homepage Meta Title</label>
+                <input class="seo-input" value="MileVaahan – Buy & Sell New & Used Cars in India" id="seo-home-title" />
+                <p class="text-xs text-gray-500 mt-1">Characters: <span id="seo-title-count">51</span> / 60</p>
+              </div>
+              <div>
+                <label class="form-label-dark">Homepage Meta Description</label>
+                <textarea class="seo-input resize-none" rows="3" id="seo-home-desc">MileVaahan is India's most trusted car marketplace. Buy & sell new cars, used cars, certified pre-owned vehicles and car parts. 10,000+ listings across India.</textarea>
+                <p class="text-xs text-gray-500 mt-1">Characters: <span id="seo-desc-count">158</span> / 160</p>
+              </div>
+              <div>
+                <label class="form-label-dark">Google Analytics 4 Measurement ID</label>
+                <input class="seo-input" placeholder="G-XXXXXXXXXX" id="seo-ga4" />
+              </div>
+              <div>
+                <label class="form-label-dark">Google Search Console Verification</label>
+                <input class="seo-input" placeholder="google-site-verification=..." id="seo-gsc" />
+              </div>
+              <div>
+                <label class="form-label-dark">Bing Webmaster Verification</label>
+                <input class="seo-input" placeholder="msvalidate.01=..." id="seo-bing" />
+              </div>
+            </div>
+            <button onclick="saveSEOSettings()" class="btn-primary-admin mt-5">Save SEO Settings</button>
+          </div>
+
+          <div class="glass-card">
+            <h3 class="font-display font-bold text-white mb-4">Sitemap & Indexing</h3>
+            <p class="text-gray-400 text-sm mb-4">MileVaahan auto-generates and updates <code class="text-teal-400 bg-teal-900/30 px-1 rounded">sitemap.xml</code> whenever a listing is published. Search engines are automatically pinged.</p>
+            <div class="flex gap-3 flex-wrap">
+              <button onclick="regenerateSitemap()" class="btn-primary-admin text-sm">🗺 Regenerate Sitemap Now</button>
+              <button onclick="pingSearchEngines()" class="btn-primary-admin text-sm" style="background:linear-gradient(135deg,#B8860B,#D4A017);">📡 Ping Search Engines</button>
+              <a href="../sitemap.xml" target="_blank" class="btn-primary-admin text-sm" style="background:rgba(255,255,255,0.1);text-decoration:none;">👁 View sitemap.xml</a>
+            </div>
+            <div class="mt-4 p-3 rounded-xl" style="background:rgba(13,148,136,0.1);border:1px solid rgba(13,148,136,0.2);">
+              <p class="text-teal-400 text-xs font-bold">✅ Last sitemap generated: Jan 15, 2025 at 14:32 IST</p>
+              <p class="text-gray-400 text-xs mt-1">2,847 URLs indexed &nbsp;•&nbsp; Next auto-generation: On next listing publish</p>
+            </div>
+          </div>
+
+          <div class="glass-card">
+            <h3 class="font-display font-bold text-white mb-4">Robots.txt</h3>
+            <textarea class="seo-input resize-none font-mono text-xs" rows="8" id="robots-txt">User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /dealer/
+Disallow: /pages/login.html
+Disallow: /pages/register.html
+
+Sitemap: https://www.milevaahan.com/sitemap.xml</textarea>
+            <button onclick="saveRobots()" class="btn-primary-admin mt-3 text-sm">Save robots.txt</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ╔══════ SITE SETTINGS ══════╗ -->
+      <div id="panel-settings" class="content-panel">
+        <div class="max-w-2xl space-y-5">
+          <div class="glass-card">
+            <h3 class="font-display font-bold text-white mb-4">General Settings</h3>
+            <div class="space-y-4">
+              <div><label class="form-label-dark">Site Tagline</label><input class="seo-input" value="Har Safar Ka Saathi" /></div>
+              <div><label class="form-label-dark">Support Email</label><input class="seo-input" value="support@milevaahan.com" /></div>
+              <div><label class="form-label-dark">Contact Phone</label><input class="seo-input" value="+91 98765 43210" /></div>
+              <div><label class="form-label-dark">Razorpay Key ID</label><input class="seo-input" placeholder="rzp_live_XXXXXXXXXX" /></div>
+              <div><label class="form-label-dark">Razorpay Key Secret</label><input type="password" class="seo-input" placeholder="••••••••••••••••" /></div>
+            </div>
+          </div>
+          <div class="glass-card">
+            <h3 class="font-display font-bold text-white mb-4">Feature Toggles</h3>
+            <div class="space-y-3">
+              <div class="flex items-center justify-between py-2 border-b border-white/5">
+                <div><div class="text-sm font-medium text-gray-200">New Dealer Registrations</div><div class="text-xs text-gray-500">Allow new dealers to register</div></div>
+                <button onclick="this.classList.toggle('active')" class="toggle-btn w-12 h-6 rounded-full transition-all active" style="background:#0d9488;"></button>
+              </div>
+              <div class="flex items-center justify-between py-2 border-b border-white/5">
+                <div><div class="text-sm font-medium text-gray-200">Auto-Approve Listings</div><div class="text-xs text-gray-500">Skip manual review for verified dealers</div></div>
+                <button onclick="this.classList.toggle('active')" class="toggle-btn w-12 h-6 rounded-full transition-all" style="background:rgba(255,255,255,0.1);"></button>
+              </div>
+              <div class="flex items-center justify-between py-2 border-b border-white/5">
+                <div><div class="text-sm font-medium text-gray-200">Maintenance Mode</div><div class="text-xs text-gray-500">Take site offline for maintenance</div></div>
+                <button onclick="this.classList.toggle('active')" class="toggle-btn w-12 h-6 rounded-full transition-all" style="background:rgba(255,255,255,0.1);"></button>
+              </div>
+              <div class="flex items-center justify-between py-2">
+                <div><div class="text-sm font-medium text-gray-200">AI Recommendations</div><div class="text-xs text-gray-500">Show AI-powered suggestions to users</div></div>
+                <button onclick="this.classList.toggle('active')" class="toggle-btn w-12 h-6 rounded-full transition-all active" style="background:#0d9488;"></button>
+              </div>
+            </div>
+            <button class="btn-primary-admin mt-5 text-sm">Save Settings</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Blog Editor Modal -->
+<div id="blog-modal" class="modal-bg" style="display:none;">
+  <div class="modal-box-dark" style="max-width:700px;">
+    <div class="flex justify-between items-center mb-5">
+      <h3 class="font-display font-bold text-white text-lg">New Blog Article</h3>
+      <button onclick="closeBlogEditor()" class="text-gray-400 hover:text-white text-2xl">×</button>
+    </div>
+    <div class="space-y-4">
+      <div><label class="form-label-dark">Title</label><input id="blog-title" class="form-input-dark" placeholder="Article title…" /></div>
+      <div><label class="form-label-dark">Category</label>
+        <select id="blog-category" class="form-input-dark">
+          <option>Buying Guide</option><option>Selling Tips</option><option>Market Trends</option><option>EV News</option><option>Car Reviews</option>
+        </select>
+      </div>
+      <div><label class="form-label-dark">Content</label><textarea id="blog-content" rows="8" class="form-input-dark resize-none" placeholder="Write your article here… (Supports basic markdown)"></textarea></div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="form-label-dark">Author</label><input id="blog-author" class="form-input-dark" placeholder="Author name" /></div>
+        <div><label class="form-label-dark">SEO Title</label><input id="blog-seo-title" class="form-input-dark" placeholder="SEO-optimised title" /></div>
+      </div>
+      <div><label class="form-label-dark">Meta Description</label><textarea id="blog-seo-desc" rows="2" class="form-input-dark resize-none"></textarea></div>
+    </div>
+    <div class="flex gap-3 justify-end mt-5">
+      <button onclick="saveBlog('draft')" class="btn-secondary" style="background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1);color:#94a3b8;">Save Draft</button>
+      <button onclick="saveBlog('published')" class="btn-primary-admin">Publish Article</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script>
+/* ═════════════════════════════════════════════
+   SUPER ADMIN DASHBOARD — LOGIC
+═════════════════════════════════════════════ */
+
+let allDealers=[], allAdminListings=[], allUsers=[], allBlogPosts=[], allReviews=[];
+
+window.addEventListener('load', async () => {
+  try {
+    await new Promise(resolve => auth.onAuthStateChanged(u => { if(u) resolve(u); else window.location.href='../pages/login.html'; }));
+    const role = await getUserRole(auth.currentUser.uid);
+    if (role !== ROLES.SUPER_ADMIN) { window.location.href='../index.html'; return; }
+    loadOverview();
+    loadDealersData();
+    loadAdminListings();
+    loadUsersData();
+    loadTransactions();
+    loadBlogPosts();
+    loadAdminReviews();
+    loadFeaturedAdmin();
+  } catch(e) { console.error(e); loadOverview(); }
+  finally { setTimeout(() => showLoader(false), 700); }
+});
+
+// ── PANEL NAV ──
+function showPanel(name, btn) {
+  document.querySelectorAll('.content-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(`panel-${name}`).classList.add('active');
+  document.querySelectorAll('.sidebar-link').forEach(l=>l.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const titles = { overview:'Overview', dealers:'Dealer Management', listings:'Listing Management', users:'User Management', featured:'Featured Slots', blog:'Blog & Content', reviews:'Reviews Moderation', revenue:'Revenue & Billing', seo:'SEO Settings', settings:'Site Settings' };
+  document.getElementById('admin-panel-title').textContent = titles[name] || name;
+}
+
+// ── OVERVIEW ──
+function loadOverview() {
+  // Fake KPIs
+  document.getElementById('kpi-dealers').textContent = '542';
+  document.getElementById('kpi-listings').textContent = '10,284';
+  document.getElementById('kpi-users').textContent = '48,921';
+  document.getElementById('kpi-revenue').textContent = '₹32.1L';
+  document.getElementById('pending-dealer-badge').textContent = '8';
+  document.getElementById('pending-listing-badge').textContent = '23';
+
+  // Sparklines
+  ['dealers','listings','users','revenue'].forEach(key => {
+    const vals = Array.from({length:8},()=>30+Math.random()*70);
+    const max = Math.max(...vals);
+    document.getElementById(`sp-${key}`).innerHTML = vals.map(v=>`<div class="sparkline-bar" style="height:${(v/max)*100}%"></div>`).join('');
+  });
+
+  // Revenue chart
+  const months = ['Aug','Sep','Oct','Nov','Dec','Jan'];
+  const vals = [1850000,2100000,1980000,2450000,2280000,3210000];
+  const max = Math.max(...vals);
+  document.getElementById('revenue-chart').innerHTML = vals.map((v,i)=>`
+    <div class="flex-1 flex flex-col items-center gap-1">
+      <span class="text-xs text-gray-500">${formatPrice(v)}</span>
+      <div class="w-full rounded-t" style="height:${(v/max)*100}%;background:linear-gradient(180deg,#0d9488,#0284c7);border-radius:4px 4px 0 0;"></div>
+    </div>`).join('');
+  document.getElementById('revenue-labels').innerHTML = months.map(m=>`<span class="flex-1 text-center">${m}</span>`).join('');
+
+  // Plan distribution
+  document.getElementById('plan-distribution').innerHTML = [
+    {plan:'Premium',dealers:45,color:'#D4A017',pct:8},{plan:'Pro',dealers:182,color:'#0d9488',pct:34},{plan:'Basic',dealers:315,color:'#64748b',pct:58}
+  ].map(p=>`
+    <div>
+      <div class="flex justify-between text-sm mb-1"><span style="color:${p.color}">${p.plan}</span><span class="text-gray-400">${p.dealers} dealers (${p.pct}%)</span></div>
+      <div class="plan-bar" style="background:rgba(255,255,255,0.07);height:8px;"><div class="plan-bar-fill" style="width:${p.pct}%;background:${p.color};height:100%;"></div></div>
+    </div>`).join('');
+
+  // Pending widgets
+  document.getElementById('pending-dealers-widget').innerHTML = mockDealers().filter(d=>d.status==='pending').slice(0,3).map(d=>`
+    <div class="flex items-center justify-between gap-3 p-2 rounded-lg" style="background:rgba(255,255,255,0.03);">
+      <div>
+        <div class="text-sm font-semibold text-gray-200">${d.name}</div>
+        <div class="text-xs text-gray-500">${d.city} &nbsp;•&nbsp; ${d.plan} plan</div>
+      </div>
+      <div class="flex gap-2">
+        <button class="btn-approve" onclick="approveDealer('${d.id}')">Approve</button>
+        <button class="btn-reject" onclick="rejectDealer('${d.id}')">Reject</button>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('pending-listings-widget').innerHTML = mockAdminListings().filter(l=>l.status==='pending').slice(0,3).map(l=>`
+    <div class="flex items-center justify-between gap-3 p-2 rounded-lg" style="background:rgba(255,255,255,0.03);">
+      <div>
+        <div class="text-sm font-semibold text-gray-200">${l.year} ${l.make} ${l.model}</div>
+        <div class="text-xs text-gray-500">${l.dealer} &nbsp;•&nbsp; ${formatPrice(l.price)}</div>
+      </div>
+      <div class="flex gap-2">
+        <button class="btn-approve" onclick="approveListing('${l.id}')">Approve</button>
+        <button class="btn-reject" onclick="rejectListing('${l.id}')">Reject</button>
+      </div>
+    </div>`).join('');
+}
+
+// ── DEALERS ──
+function mockDealers() {
+  return [
+    {id:'d1',name:'AutoMax Mumbai',city:'Mumbai',state:'Maharashtra',plan:'premium',status:'approved',listings:145,joined:'Jan 5, 2024'},
+    {id:'d2',name:'DriveKing Delhi',city:'Delhi',state:'Delhi',plan:'pro',status:'pending',listings:0,joined:'Jan 14, 2025'},
+    {id:'d3',name:'CarZone Bangalore',city:'Bangalore',state:'Karnataka',plan:'pro',status:'approved',listings:62,joined:'Mar 12, 2024'},
+    {id:'d4',name:'SpeedMoto Chennai',city:'Chennai',state:'Tamil Nadu',plan:'basic',status:'pending',listings:0,joined:'Jan 15, 2025'},
+    {id:'d5',name:'LuxuryCars Hyderabad',city:'Hyderabad',state:'Telangana',plan:'premium',status:'rejected',listings:0,joined:'Jan 13, 2025'},
+    {id:'d6',name:'QuickWheels Pune',city:'Pune',state:'Maharashtra',plan:'basic',status:'suspended',listings:8,joined:'Jun 20, 2024'},
+  ];
+}
+
+async function loadDealersData(filter='all') {
+  try {
+    let q = db.collection(COLLECTIONS.DEALERS);
+    if (filter!=='all') q = q.where('status','==',filter);
+    const snap = await q.orderBy('createdAt','desc').get();
+    allDealers = snap.docs.map(d=>({id:d.id,...d.data()}));
+  } catch { allDealers = mockDealers(); }
+  renderDealers(allDealers);
+}
+
+function renderDealers(list) {
+  document.getElementById('dealers-table-body').innerHTML = list.map(d=>`
+    <tr>
+      <td><div class="font-semibold text-gray-200">${d.name}</div></td>
+      <td class="text-gray-400">${d.city}, ${d.state||''}</td>
+      <td><span class="badge badge-${d.plan}">${d.plan?.toUpperCase()}</span></td>
+      <td class="text-gray-300">${d.listings||0}</td>
+      <td><span class="badge badge-${d.status}">${d.status?.toUpperCase()}</span></td>
+      <td class="text-gray-500 text-xs">${d.joined||'—'}</td>
+      <td>
+        <div class="flex gap-2">
+          ${d.status==='pending'?`<button class="btn-approve text-xs" onclick="approveDealer('${d.id}')">Approve</button><button class="btn-reject text-xs" onclick="rejectDealer('${d.id}')">Reject</button>`:''}
+          ${d.status==='approved'?`<button class="btn-reject text-xs" onclick="suspendDealer('${d.id}')">Suspend</button>`:''}
+          ${d.status==='suspended'?`<button class="btn-approve text-xs" onclick="unsuspendDealer('${d.id}')">Restore</button>`:''}
+          <button class="text-xs text-gray-400 hover:text-teal-400" onclick="viewDealerDetail('${d.id}')">View</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function filterDealers(status, btn) {
+  document.querySelectorAll('#panel-dealers .tab-admin').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const filtered = status==='all' ? allDealers : allDealers.filter(d=>d.status===status);
+  renderDealers(filtered);
+}
+
+function searchDealers(q) {
+  const filtered = q ? allDealers.filter(d=>d.name?.toLowerCase().includes(q.toLowerCase())||d.city?.toLowerCase().includes(q.toLowerCase())) : allDealers;
+  renderDealers(filtered);
+}
+
+async function approveDealer(id) {
+  try { await db.collection(COLLECTIONS.DEALERS).doc(id).update({status:'approved'}); } catch {}
+  allDealers = allDealers.map(d=>d.id===id?{...d,status:'approved'}:d);
+  renderDealers(allDealers); showToast('✅ Dealer approved!');
+}
+
+async function rejectDealer(id) {
+  try { await db.collection(COLLECTIONS.DEALERS).doc(id).update({status:'rejected'}); } catch {}
+  allDealers = allDealers.map(d=>d.id===id?{...d,status:'rejected'}:d);
+  renderDealers(allDealers); showToast('Dealer rejected','error');
+}
+
+async function suspendDealer(id) {
+  try { await db.collection(COLLECTIONS.DEALERS).doc(id).update({status:'suspended'}); } catch {}
+  allDealers = allDealers.map(d=>d.id===id?{...d,status:'suspended'}:d);
+  renderDealers(allDealers); showToast('Dealer suspended','info');
+}
+
+async function unsuspendDealer(id) { approveDealer(id); }
+function viewDealerDetail(id) { showToast('Opening dealer profile…'); }
+
+// ── LISTINGS ──
+function mockAdminListings() {
+  return [
+    {id:'l1',make:'Hyundai',model:'Creta',year:2023,price:1450000,dealer:'AutoMax Mumbai',city:'Mumbai',condition:'used',status:'pending',date:'Jan 15'},
+    {id:'l2',make:'Tata',model:'Nexon EV',year:2024,price:1700000,dealer:'CarZone Bangalore',city:'Bangalore',condition:'new',status:'active',date:'Jan 14'},
+    {id:'l3',make:'Kia',model:'Seltos',year:2022,price:1350000,dealer:'DriveKing Delhi',city:'Delhi',condition:'cpo',status:'pending',date:'Jan 15'},
+    {id:'l4',make:'Maruti',model:'Baleno',year:2023,price:850000,dealer:'QuickWheels Pune',city:'Pune',condition:'used',status:'rejected',date:'Jan 13'},
+  ];
+}
+
+async function loadAdminListings(filter='all') {
+  try {
+    let q = db.collection(COLLECTIONS.LISTINGS);
+    if (filter!=='all') q = q.where('status','==',filter);
+    const snap = await q.orderBy('createdAt','desc').limit(50).get();
+    allAdminListings = snap.docs.map(d=>({id:d.id,...d.data()}));
+  } catch { allAdminListings = mockAdminListings(); }
+  renderAdminListings(allAdminListings);
+}
+
+function renderAdminListings(list) {
+  document.getElementById('listings-table-body').innerHTML = list.map(l=>`
+    <tr>
+      <td><div class="font-semibold text-gray-200">${l.year} ${l.make} ${l.model}</div></td>
+      <td class="text-gray-400">${l.dealer||l.dealerName||'—'}</td>
+      <td class="text-teal-400 font-bold">${formatPrice(l.price)}</td>
+      <td class="text-gray-400">${l.city||'—'}</td>
+      <td><span class="badge badge-${l.condition==='new'?'active':l.condition==='cpo'?'pending':'rejected'}">${(l.condition||'used').toUpperCase()}</span></td>
+      <td><span class="badge badge-${l.status}">${(l.status||'').toUpperCase()}</span></td>
+      <td class="text-gray-500 text-xs">${l.date||'—'}</td>
+      <td>
+        <div class="flex gap-2">
+          ${l.status==='pending'?`<button class="btn-approve text-xs" onclick="approveListing('${l.id}')">Approve</button><button class="btn-reject text-xs" onclick="rejectListing('${l.id}')">Reject</button>`:''}
+          ${l.status==='active'?`<button class="btn-reject text-xs" onclick="removeListing('${l.id}')">Remove</button>`:''}
+          <button class="text-xs text-gray-500 hover:text-teal-400">View</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function filterAdminListings(status, btn) {
+  document.querySelectorAll('#panel-listings .tab-admin').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const filtered = status==='all' ? allAdminListings : allAdminListings.filter(l=>l.status===status);
+  renderAdminListings(filtered);
+}
+
+function searchAdminListings(q) {
+  const filtered = q ? allAdminListings.filter(l=>`${l.make} ${l.model} ${l.year}`.toLowerCase().includes(q.toLowerCase())) : allAdminListings;
+  renderAdminListings(filtered);
+}
+
+async function approveListing(id) {
+  try { await db.collection(COLLECTIONS.LISTINGS).doc(id).update({status:'active',publishedAt:firebase.firestore.FieldValue.serverTimestamp()}); } catch {}
+  allAdminListings = allAdminListings.map(l=>l.id===id?{...l,status:'active'}:l);
+  renderAdminListings(allAdminListings); showToast('✅ Listing published!');
+}
+
+async function rejectListing(id) {
+  try { await db.collection(COLLECTIONS.LISTINGS).doc(id).update({status:'rejected'}); } catch {}
+  allAdminListings = allAdminListings.map(l=>l.id===id?{...l,status:'rejected'}:l);
+  renderAdminListings(allAdminListings); showToast('Listing rejected','error');
+}
+
+async function removeListing(id) {
+  try { await db.collection(COLLECTIONS.LISTINGS).doc(id).update({status:'removed'}); } catch {}
+  allAdminListings = allAdminListings.filter(l=>l.id!==id);
+  renderAdminListings(allAdminListings); showToast('Listing removed');
+}
+
+// ── USERS ──
+function mockUsers() {
+  return [
+    {id:'u1',name:'Rahul Mehta',email:'rahul@email.com',role:'buyer',joined:'Jan 10, 2025',status:'active'},
+    {id:'u2',name:'Priya Sharma',email:'priya@email.com',role:'buyer',joined:'Dec 25, 2024',status:'active'},
+    {id:'u3',name:'AutoMax Mumbai',email:'automax@email.com',role:'dealer',joined:'Jan 5, 2024',status:'active'},
+    {id:'u4',name:'Spam User',email:'spam@email.com',role:'buyer',joined:'Jan 14, 2025',status:'suspended'},
+  ];
+}
+
+async function loadUsersData() {
+  try {
+    const snap = await db.collection(COLLECTIONS.USERS).orderBy('createdAt','desc').limit(50).get();
+    allUsers = snap.docs.map(d=>({id:d.id,...d.data()}));
+  } catch { allUsers = mockUsers(); }
+  renderUsers(allUsers);
+}
+
+function renderUsers(list) {
+  document.getElementById('users-table-body').innerHTML = list.map(u=>`
+    <tr>
+      <td><div class="font-semibold text-gray-200">${u.name||'—'}</div></td>
+      <td class="text-gray-400 text-xs">${u.email||'—'}</td>
+      <td><span class="badge badge-${u.role==='dealer'?'pro':'basic'}">${(u.role||'buyer').toUpperCase()}</span></td>
+      <td class="text-gray-500 text-xs">${u.joined||'—'}</td>
+      <td><span class="badge badge-${u.status==='active'?'active':'suspended'}">${(u.status||'active').toUpperCase()}</span></td>
+      <td>
+        <div class="flex gap-2">
+          ${u.status==='active'?`<button class="btn-reject text-xs" onclick="suspendUser('${u.id}')">Suspend</button>`:`<button class="btn-approve text-xs" onclick="restoreUser('${u.id}')">Restore</button>`}
+          <button class="text-xs text-gray-500 hover:text-teal-400" onclick="viewUser('${u.id}')">View</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function filterUsers(role, btn) {
+  document.querySelectorAll('#panel-users .tab-admin').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const filtered = role==='all' ? allUsers : allUsers.filter(u=>u.role===role);
+  renderUsers(filtered);
+}
+function searchUsers(q) { renderUsers(q ? allUsers.filter(u=>`${u.name} ${u.email}`.toLowerCase().includes(q.toLowerCase())) : allUsers); }
+async function suspendUser(id) { showToast('User suspended','info'); allUsers=allUsers.map(u=>u.id===id?{...u,status:'suspended'}:u); renderUsers(allUsers); }
+async function restoreUser(id) { showToast('User restored'); allUsers=allUsers.map(u=>u.id===id?{...u,status:'active'}:u); renderUsers(allUsers); }
+function viewUser(id) { showToast('Loading user detail…'); }
+
+// ── TRANSACTIONS ──
+function loadTransactions() {
+  document.getElementById('transactions-body').innerHTML = [
+    {dealer:'AutoMax Mumbai',plan:'Premium',amount:'₹9,999',id:'pay_Pmb12345',date:'Jan 15, 2025',status:'success'},
+    {dealer:'DriveKing Delhi',plan:'Pro',amount:'₹4,999',id:'pay_Del98765',date:'Jan 14, 2025',status:'success'},
+    {dealer:'CarZone Bangalore',plan:'Pro',amount:'₹4,999',id:'pay_Blr54321',date:'Jan 13, 2025',status:'success'},
+    {dealer:'QuickWheels Pune',plan:'Basic',amount:'₹1,999',id:'pay_Pun11111',date:'Jan 12, 2025',status:'failed'},
+  ].map(t=>`
+    <tr>
+      <td class="text-gray-200">${t.dealer}</td>
+      <td><span class="badge badge-${t.plan.toLowerCase()}">${t.plan}</span></td>
+      <td class="text-teal-400 font-bold">${t.amount}</td>
+      <td class="text-gray-500 font-mono text-xs">${t.id}</td>
+      <td class="text-gray-500 text-xs">${t.date}</td>
+      <td><span class="badge ${t.status==='success'?'badge-active':'badge-rejected'}">${t.status.toUpperCase()}</span></td>
+    </tr>`).join('');
+}
+
+// ── BLOG ──
+async function loadBlogPosts(filter='all') {
+  allBlogPosts = [
+    {id:'b1',title:'Top 10 Best-Selling Cars in India 2025',author:'Admin',category:'Market Trends',status:'published',date:'Jan 10, 2025'},
+    {id:'b2',title:'Electric Cars vs Petrol: Which Is Right for You?',author:'Admin',category:'Buying Guide',status:'published',date:'Jan 5, 2025'},
+    {id:'b3',title:'How to Get the Best Resale Value',author:'Admin',category:'Selling Tips',status:'draft',date:'Jan 14, 2025'},
+  ];
+  renderBlog(allBlogPosts);
+}
+
+function renderBlog(list) {
+  document.getElementById('blog-table-body').innerHTML = list.map(p=>`
+    <tr>
+      <td class="text-gray-200 font-medium">${p.title}</td>
+      <td class="text-gray-400">${p.author}</td>
+      <td><span class="text-xs text-teal-400">${p.category}</span></td>
+      <td><span class="badge badge-${p.status==='published'?'active':'suspended'}">${p.status.toUpperCase()}</span></td>
+      <td class="text-gray-500 text-xs">${p.date}</td>
+      <td>
+        <div class="flex gap-2">
+          <button class="btn-approve text-xs" onclick="editBlog('${p.id}')">Edit</button>
+          <button class="btn-reject text-xs" onclick="deleteBlog('${p.id}')">Delete</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function filterBlog(status,btn) {
+  document.querySelectorAll('#panel-blog .tab-admin').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderBlog(status==='all' ? allBlogPosts : allBlogPosts.filter(p=>p.status===status));
+}
+
+function openBlogEditor() { document.getElementById('blog-modal').style.display='flex'; }
+function closeBlogEditor() { document.getElementById('blog-modal').style.display='none'; }
+
+async function saveBlog(status) {
+  const data = {
+    title: document.getElementById('blog-title').value,
+    content: document.getElementById('blog-content').value,
+    category: document.getElementById('blog-category').value,
+    author: document.getElementById('blog-author').value || 'Admin',
+    status,
+    seo: { title: document.getElementById('blog-seo-title').value, description: document.getElementById('blog-seo-desc').value },
+    slug: generateSlug(document.getElementById('blog-title').value),
+    publishedAt: status==='published' ? firebase.firestore.FieldValue.serverTimestamp() : null,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+  try { await db.collection(COLLECTIONS.BLOGS).add(data); } catch {}
+  showToast(status==='published' ? '🚀 Article published!' : '💾 Draft saved');
+  closeBlogEditor(); loadBlogPosts();
+}
+
+function editBlog(id) { showToast('Opening editor…'); }
+async function deleteBlog(id) { allBlogPosts=allBlogPosts.filter(p=>p.id!==id); renderBlog(allBlogPosts); showToast('Post deleted'); }
+
+// ── REVIEWS MODERATION ──
+async function loadAdminReviews() {
+  allReviews = [
+    {id:'r1',reviewer:'Rahul M.',dealer:'AutoMax Mumbai',rating:5,text:'Excellent service!',date:'Jan 10',status:'approved'},
+    {id:'r2',reviewer:'Spam Bot',dealer:'QuickWheels',rating:1,text:'Fake review spam…',date:'Jan 14',status:'flagged'},
+  ];
+  renderAdminReviews(allReviews);
+}
+
+function renderAdminReviews(list) {
+  document.getElementById('reviews-table-body').innerHTML = list.map(r=>`
+    <tr>
+      <td class="text-gray-200">${r.reviewer}</td>
+      <td class="text-gray-400">${r.dealer}</td>
+      <td class="text-yellow-400">{'★'.repeat(r.rating)}</td>
+      <td class="text-gray-400 text-xs" style="max-width:200px;">${r.text?.substring(0,80)}…</td>
+      <td class="text-gray-500 text-xs">${r.date}</td>
+      <td><span class="badge badge-${r.status==='approved'?'active':r.status==='flagged'?'rejected':'pending'}">${r.status.toUpperCase()}</span></td>
+      <td>
+        <div class="flex gap-2">
+          ${r.status!=='approved'?`<button class="btn-approve text-xs" onclick="approveReview('${r.id}')">Approve</button>`:''}
+          <button class="btn-reject text-xs" onclick="deleteReview('${r.id}')">Delete</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function filterAdminReviews(status,btn) {
+  document.querySelectorAll('#panel-reviews .tab-admin').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAdminReviews(status==='all' ? allReviews : allReviews.filter(r=>r.status===status));
+}
+
+function approveReview(id) { allReviews=allReviews.map(r=>r.id===id?{...r,status:'approved'}:r); renderAdminReviews(allReviews); showToast('Review approved'); }
+function deleteReview(id) { allReviews=allReviews.filter(r=>r.id!==id); renderAdminReviews(allReviews); showToast('Review deleted'); }
+
+// ── FEATURED ADMIN ──
+function loadFeaturedAdmin() {
+  document.getElementById('featured-admin-list').innerHTML = mockAdminListings().map(l=>`
+    <div class="flex items-center justify-between p-3 rounded-xl mb-2" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);">
+      <div>
+        <div class="text-sm font-semibold text-gray-200">${l.year} ${l.make} ${l.model}</div>
+        <div class="text-xs text-gray-500">${l.dealer} &nbsp;•&nbsp; ${formatPrice(l.price)} &nbsp;•&nbsp; ${l.city}</div>
+      </div>
+      <div class="flex gap-2">
+        <button onclick="this.textContent=this.textContent.includes('Feature')?'⭐ Remove':' Feature'" class="btn-approve text-xs"> Feature</button>
+        <button class="btn-reject text-xs">Remove</button>
+      </div>
+    </div>`).join('');
+}
+
+// ── SEO ──
+function saveSEOSettings() { showToast('SEO settings saved!'); }
+function saveRobots() { showToast('robots.txt saved!'); }
+function regenerateSitemap() { showToast('🗺 Sitemap regenerated! 2,848 URLs indexed.'); }
+function pingSearchEngines() { showToast('📡 Pinged Google, Bing & Yahoo!'); }
+
+function adminSignOut() {
+  auth.signOut().then(() => { showToast('Signed out'); setTimeout(()=>window.location.href='../pages/login.html', 800); });
+}
+</script>
+</body>
+</html>

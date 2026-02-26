@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title id="pg-title">Article | MileVaahan Blog</title>
+  <meta name="description" id="pg-desc" content="MileVaahan Blog – Expert automotive content for Indian car buyers and sellers.">
+  <link rel="canonical" id="pg-canon" href="https://www.milevaahan.com/pages/blog-post.html">
+  <meta property="og:type" content="article">
+  <meta property="og:title" id="og-t" content="MileVaahan Blog">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    *{font-family:'DM Sans',sans-serif;}h1,h2,h3,.font-display{font-family:'Syne',sans-serif;}
+    body{background:#0a0f1e;color:#e2e8f0;margin:0;}
+    .prose h2{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;color:white;margin:2rem 0 0.75rem;}
+    .prose h3{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:white;margin:1.5rem 0 0.5rem;}
+    .prose p{color:rgba(255,255,255,0.7);line-height:1.85;margin-bottom:1.2rem;}
+    .prose ul,.prose ol{color:rgba(255,255,255,0.7);margin:0.75rem 0 1.2rem 1.5rem;}
+    .prose li{margin-bottom:0.4rem;line-height:1.7;}
+    .prose strong{color:white;font-weight:700;}
+    .prose blockquote{border-left:3px solid #0d9488;padding:12px 20px;background:rgba(13,148,136,0.08);border-radius:0 12px 12px 0;margin:1.5rem 0;}
+    .prose blockquote p{color:rgba(255,255,255,0.85);margin:0;}
+    .side-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px;margin-bottom:16px;}
+  </style>
+</head>
+<body>
+<nav class="sticky top-0 z-50 px-6 py-4 flex items-center justify-between" style="background:rgba(10,15,30,0.95);border-bottom:1px solid rgba(180,140,11,0.1);backdrop-filter:blur(12px)">
+  <a href="../index.html" class="flex items-center gap-3"><img src="../images/logo.png" class="h-9 w-9 object-contain"><span class="font-display font-bold text-xl text-white">mile<span style="color:#B8860B">vaahan</span></span></a>
+  <div class="flex items-center gap-4"><a href="blog.html" class="text-sm text-white opacity-60 hover:opacity-100">← All Articles</a></div>
+</nav>
+
+<div class="max-w-6xl mx-auto px-4 py-10">
+  <div class="flex gap-8">
+    <!-- Article -->
+    <article class="flex-1 min-w-0">
+      <div class="mb-6">
+        <a href="blog.html" class="text-xs font-bold uppercase tracking-wider hover:text-white" style="color:rgba(255,255,255,0.4)">← Blog</a>
+      </div>
+      <div id="article-header" class="mb-8"></div>
+      <div class="prose" id="article-body"><div class="text-center py-12" style="color:rgba(255,255,255,0.3)"><div class="mx-auto mb-4" style="width:40px;height:40px;border:3px solid rgba(180,140,11,0.2);border-top-color:#B8860B;border-radius:50%;animation:spin 0.8s linear infinite"></div>Loading article...</div></div>
+      
+      <!-- Share -->
+      <div class="mt-10 p-5 rounded-2xl flex items-center justify-between flex-wrap gap-4" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08)">
+        <div><div class="font-bold text-white">Found this helpful?</div><div class="text-sm" style="color:rgba(255,255,255,0.4)">Share with friends who are car shopping</div></div>
+        <div class="flex gap-3">
+          <button onclick="share('wa')" class="px-4 py-2 rounded-xl text-sm font-bold" style="background:rgba(37,211,102,0.12);color:#25d366;border:1px solid rgba(37,211,102,0.2)">💬 WhatsApp</button>
+          <button onclick="share('copy')" class="px-4 py-2 rounded-xl text-sm font-bold" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.1)" id="copy-btn">🔗 Copy Link</button>
+        </div>
+      </div>
+
+      <!-- Related -->
+      <div class="mt-10">
+        <h2 class="font-display font-bold text-white text-xl mb-5">Related Articles</h2>
+        <div class="grid sm:grid-cols-2 gap-4" id="related-posts"></div>
+      </div>
+    </article>
+
+    <!-- Sidebar -->
+    <aside class="w-72 flex-shrink-0 hidden lg:block">
+      <div class="side-card">
+        <div class="font-display font-bold text-white mb-3">Quick Tools</div>
+        <div class="space-y-2">
+          <a href="emi-calculator.html" class="flex items-center gap-3 p-3 rounded-xl hover:scale-105 transition-all" style="background:rgba(255,255,255,0.04)"><span class="text-xl">📊</span><div><div class="text-sm font-semibold text-white">EMI Calculator</div><div class="text-xs" style="color:rgba(255,255,255,0.4)">Plan your loan</div></div></a>
+          <a href="valuation.html" class="flex items-center gap-3 p-3 rounded-xl hover:scale-105 transition-all" style="background:rgba(255,255,255,0.04)"><span class="text-xl">💰</span><div><div class="text-sm font-semibold text-white">Car Valuation</div><div class="text-xs" style="color:rgba(255,255,255,0.4)">Know your car's value</div></div></a>
+          <a href="listings.html" class="flex items-center gap-3 p-3 rounded-xl hover:scale-105 transition-all" style="background:rgba(255,255,255,0.04)"><span class="text-xl">🚗</span><div><div class="text-sm font-semibold text-white">Browse Cars</div><div class="text-xs" style="color:rgba(255,255,255,0.4)">10,000+ listings</div></div></a>
+        </div>
+      </div>
+      <div class="side-card">
+        <div class="font-display font-bold text-white mb-3">Weekly Newsletter</div>
+        <p class="text-sm mb-4" style="color:rgba(255,255,255,0.5)">Market insights and buying tips every week</p>
+        <input type="email" placeholder="your@email.com" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:9px 12px;color:white;font-size:13px;margin-bottom:10px">
+        <button style="width:100%;background:linear-gradient(135deg,#0d9488,#0284c7);color:white;border:none;padding:9px;border-radius:10px;font-weight:700;cursor:pointer">Subscribe Free</button>
+      </div>
+      <div class="side-card">
+        <div class="font-display font-bold text-white mb-3">Popular Articles</div>
+        <div class="space-y-3" id="popular-posts"></div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script>
+const SAMPLE_ARTICLE={
+  id:'1',title:'Best Cars Under ₹10 Lakh in India 2025 – Our Top Picks',category:'Buying Guide',
+  excerpt:'Looking for the best value-for-money car in India? We've tested every major model under ₹10L so you don't have to.',
+  readTime:'8 min',date:'December 15, 2025',author:'MileVaahan Editorial',emoji:'🚗',
+  content:`<h2>Why Under ₹10 Lakh is India's Biggest Segment</h2><p>The sub-₹10 lakh segment accounts for nearly <strong>65% of all car sales in India</strong>. It's where most first-time buyers make their decision, and where the competition is fiercest. We drove 12 models across this segment for a combined 8,000 km to bring you our definitive rankings.</p><h2>Our Top 5 Picks for 2025</h2><h3>1. Tata Punch – The Safest Bet</h3><p>The Punch earns our top recommendation on account of India's first 5-star Global NCAP rating in the sub-₹10L segment. With its raised stance, modern interior, and rock-solid build quality, it's genuinely excellent value.</p><blockquote><p>Starting at ₹6.13L, the Punch offers more safety features than cars costing twice as much.</p></blockquote><h3>2. Hyundai Grand i10 Nios – City Champion</h3><p>If you're primarily in the city, the Grand i10 Nios remains the benchmark. Its precise steering, punchy 1.2L engine, and excellent NVH levels make urban commuting genuinely enjoyable.</p><h3>3. Maruti Suzuki Baleno – The Safe Choice</h3><p>Maruti's massive service network and legendary reliability make the Baleno a perennial recommendation. The 2025 refresh adds wireless Android Auto and Apple CarPlay, addressing its biggest weakness.</p><h3>4. Kia Sonet – Features King</h3><p>No car in this segment matches the Sonet for sheer feature count. Ventilated front seats, ADAS suite, 10.25-inch touchscreen — features previously reserved for ₹20L+ vehicles.</p><h3>5. Renault Kiger – Hidden Gem</h3><p>The Kiger deserves more attention than it gets. Its 1.0L turbo engine is the most fun to drive in this segment, and the panoramic sunroof at this price is unmatched.</p><h2>How We Evaluated</h2><p>Our evaluation criteria: Safety (30%), Value for money (25%), Features (20%), Reliability record (15%), and Running costs (10%). We also factored in real-world fuel efficiency, not just ARAI numbers.</p><h2>The Verdict</h2><p>For most buyers, the Tata Punch is our strongest recommendation. But if city driving dominates and safety is less of a concern, the Grand i10 Nios is equally brilliant. Budget-wise, the Kiger offers the most fun per rupee.</p>`
+};
+
+async function loadPost(){
+  const params=new URLSearchParams(window.location.search);
+  const id=params.get('id')||'1';
+  let post=SAMPLE_ARTICLE;
+  try {
+    const snap=await db.collection('blogs').doc(id).get();
+    if(snap.exists) post={id:snap.id,...snap.data()};
+  } catch(e){}
+  // SEO
+  document.getElementById('pg-title').textContent=`${post.title} | MileVaahan Blog`;
+  document.getElementById('pg-desc').content=post.excerpt||'';
+  document.getElementById('og-t').content=post.title;
+  // Render
+  document.getElementById('article-header').innerHTML=`
+    <div class="flex items-center gap-3 mb-4">
+      <span class="px-3 py-1 rounded-full text-xs font-bold" style="background:rgba(13,148,136,0.15);color:#0d9488;border:1px solid rgba(13,148,136,0.3)">${post.category}</span>
+      <span class="text-sm" style="color:rgba(255,255,255,0.35)">${post.date} • ${post.readTime} read • By ${post.author||'MileVaahan'}</span>
+    </div>
+    <h1 class="font-display font-bold text-4xl text-white leading-tight mb-5">${post.title}</h1>
+    <div class="h-52 flex items-center justify-center text-8xl rounded-2xl mb-6" style="background:linear-gradient(135deg,rgba(13,148,136,0.15),rgba(2,132,199,0.1));border:1px solid rgba(255,255,255,0.07)">${post.emoji||'📰'}</div>`;
+  document.getElementById('article-body').innerHTML=`<div class="prose">${post.content||`<p>${post.excerpt}</p>`}</div>`;
+  renderSidebar();
+}
+
+function renderSidebar(){
+  const popular=[{t:'Tata Nexon EV vs MG ZS EV',d:'Dec 10'},{t:'Used Car Prices Fell 8% This Quarter',d:'Dec 8'},{t:'How to Sell Your Car for 15% More',d:'Dec 5'}];
+  document.getElementById('popular-posts').innerHTML=popular.map(p=>`<a href="#" class="block hover:opacity-80 transition-opacity"><div class="text-sm font-semibold text-white leading-snug">${p.t}</div><div class="text-xs mt-0.5" style="color:rgba(255,255,255,0.35)">${p.d}</div></a>`).join('');
+  const related=[{id:'2',t:'Tata Nexon EV vs MG ZS EV',cat:'EV News',e:'⚡'},{id:'3',t:'Used Car Market Trends Q4 2025',cat:'Market Trends',e:'📈'}];
+  document.getElementById('related-posts').innerHTML=related.map(p=>`<a href="blog-post.html?id=${p.id}" class="block p-4 rounded-2xl hover:scale-105 transition-all" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08)"><div class="text-3xl mb-2">${p.e}</div><div class="text-xs font-bold mb-1" style="color:#0d9488">${p.cat}</div><div class="text-sm font-bold text-white">${p.t}</div></a>`).join('');
+}
+
+function share(type){
+  if(type==='wa'){window.open(`https://wa.me/?text=${encodeURIComponent(document.title+' '+window.location.href)}`);}
+  if(type==='copy'){navigator.clipboard.writeText(window.location.href).then(()=>{const b=document.getElementById('copy-btn');b.textContent='✅ Copied!';setTimeout(()=>b.textContent='🔗 Copy Link',2000);});}
+}
+
+loadPost();
+</script>
+</body>
+</html>

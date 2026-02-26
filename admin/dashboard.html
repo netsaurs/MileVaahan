@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>My Dashboard | MileVaahan</title>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    *{font-family:'DM Sans',sans-serif;}
+    h1,h2,h3,.font-display{font-family:'Syne',sans-serif;}
+    body{background:#080d18;color:#e2e8f0;margin:0;min-height:100vh;}
+
+    /* Subtle grid bg */
+    body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(13,148,136,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(13,148,136,0.04) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+
+    .shell{position:relative;z-index:1;display:flex;min-height:100vh;}
+
+    /* Sidebar */
+    .sidebar{width:220px;flex-shrink:0;background:linear-gradient(180deg,#0c1220,#080d18);border-right:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;padding:0;position:sticky;top:0;height:100vh;}
+    .logo-area{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,0.06);}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 14px;margin:2px 8px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;color:rgba(255,255,255,0.45);transition:all 0.2s;text-decoration:none;}
+    .nav-item:hover{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.8);}
+    .nav-item.active{background:rgba(13,148,136,0.15);color:#2dd4bf;border-left:2px solid #0d9488;}
+    .nav-item .icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;background:rgba(255,255,255,0.05);}
+    .nav-item.active .icon{background:rgba(13,148,136,0.2);}
+    .nav-section{font-size:9px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,0.2);padding:14px 22px 4px;text-transform:uppercase;}
+
+    /* Main */
+    .main{flex:1;display:flex;flex-direction:column;min-width:0;}
+    .topbar{background:rgba(8,13,24,0.9);border-bottom:1px solid rgba(255,255,255,0.06);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(12px);position:sticky;top:0;z-index:30;}
+    .content{padding:24px;flex:1;}
+
+    /* Cards */
+    .card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:20px;}
+    .card-hover{transition:all 0.25s;cursor:pointer;}
+    .card-hover:hover{border-color:rgba(13,148,136,0.35);background:rgba(13,148,136,0.04);transform:translateY(-2px);}
+
+    /* Stat card */
+    .stat-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:18px;}
+
+    /* Panel */
+    .panel{display:none;}
+    .panel.active{display:block;}
+
+    /* Car card */
+    .car-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden;transition:all 0.25s;}
+    .car-card:hover{border-color:rgba(13,148,136,0.35);transform:translateY(-3px);box-shadow:0 12px 36px rgba(0,0,0,0.3);}
+
+    /* Inquiry card */
+    .inq-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:16px;transition:all 0.2s;}
+    .inq-card:hover{border-color:rgba(13,148,136,0.3);}
+    .inq-card.unread{border-left:3px solid #0d9488;background:rgba(13,148,136,0.05);}
+
+    /* Search pill */
+    .search-pill{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:10px 14px;cursor:pointer;transition:all 0.2s;}
+    .search-pill:hover{border-color:rgba(13,148,136,0.35);background:rgba(13,148,136,0.06);}
+
+    /* Form */
+    .fi{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:11px;padding:10px 14px;font-size:13px;color:white;width:100%;transition:all 0.2s;}
+    .fi:focus{outline:none;border-color:#0d9488;background:rgba(13,148,136,0.07);}
+    select.fi option{background:#1a2035;}
+
+    /* Badge */
+    .badge-g{background:rgba(22,163,74,0.12);color:#4ade80;border:1px solid rgba(22,163,74,0.2);padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;}
+    .badge-y{background:rgba(234,179,8,0.12);color:#fbbf24;border:1px solid rgba(234,179,8,0.2);padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;}
+    .badge-b{background:rgba(59,130,246,0.12);color:#93c5fd;border:1px solid rgba(59,130,246,0.2);padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;}
+
+    /* Avatar */
+    .avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;background:linear-gradient(135deg,#0d9488,#0284c7);color:white;flex-shrink:0;}
+    .avatar-lg{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:26px;background:linear-gradient(135deg,#0d9488,#B8860B);color:white;}
+
+    /* Button */
+    .btn-p{background:linear-gradient(135deg,#0d9488,#0284c7);color:white;border:none;padding:9px 20px;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;transition:all 0.2s;}
+    .btn-p:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(13,148,136,0.35);}
+    .btn-ghost{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.1);padding:8px 16px;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s;}
+    .btn-ghost:hover{background:rgba(255,255,255,0.09);color:white;}
+
+    /* Loader */
+    #gl{position:fixed;inset:0;z-index:9999;background:#080d18;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;}
+    .lr{width:36px;height:36px;border:3px solid rgba(13,148,136,0.15);border-top-color:#0d9488;border-radius:50%;animation:spin 0.75s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+
+    /* Empty state */
+    .empty{text-align:center;padding:48px 20px;}
+    .empty .ei{font-size:48px;margin-bottom:12px;}
+
+    /* Toast */
+    .toast{position:fixed;bottom:24px;right:24px;z-index:9999;padding:12px 20px;border-radius:12px;color:white;font-weight:600;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,0.4);transform:translateY(80px);opacity:0;transition:all 0.35s cubic-bezier(0.175,0.885,0.32,1.275);}
+    .toast.show{transform:translateY(0);opacity:1;}
+
+    /* Notification dot */
+    .notif-dot{width:7px;height:7px;background:#0d9488;border-radius:50%;margin-left:auto;}
+
+    /* Progress bar */
+    .progress{height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;}
+    .progress-bar{height:100%;background:linear-gradient(90deg,#0d9488,#0284c7);border-radius:3px;transition:width 0.6s ease;}
+
+    @media(max-width:768px){.sidebar{display:none;}.content{padding:16px;}}
+  </style>
+</head>
+<body>
+
+<div id="gl">
+  <img src="../images/logo.png" alt="MileVaahan" style="height:50px;filter:drop-shadow(0 0 16px rgba(13,148,136,0.5))">
+  <div class="lr"></div>
+</div>
+
+<div class="shell">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo-area">
+    <a href="../index.html" class="flex items-center gap-2">
+      <img src="../images/logo.png" class="w-8 h-8 object-contain">
+      <span class="font-display font-bold text-white text-base">mile<span style="color:#B8860B">vaahan</span></span>
+    </a>
+  </div>
+
+  <!-- User mini card -->
+  <div style="padding:14px 12px 10px">
+    <div class="flex items-center gap-3 px-2 py-3 rounded-xl" style="background:rgba(255,255,255,0.04)">
+      <div class="avatar" id="sb-avatar">U</div>
+      <div class="min-w-0">
+        <div class="text-white text-sm font-semibold truncate" id="sb-name">Loading...</div>
+        <div class="text-xs truncate" style="color:rgba(255,255,255,0.35)" id="sb-email">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-section">Menu</div>
+  <a class="nav-item active" onclick="show('overview')"><div class="icon">🏠</div>Overview</a>
+  <a class="nav-item" onclick="show('wishlist')"><div class="icon">❤️</div>Saved Cars <span id="wl-count-badge" class="ml-auto text-xs px-2 py-0.5 rounded-full" style="background:rgba(13,148,136,0.2);color:#0d9488">0</span></a>
+  <a class="nav-item" onclick="show('inquiries')"><div class="icon">💬</div>Inquiries <div class="notif-dot" id="inq-dot" style="display:none"></div></a>
+  <a class="nav-item" onclick="show('searches')"><div class="icon">🔍</div>Recent Searches</a>
+
+  <div class="nav-section">Account</div>
+  <a class="nav-item" onclick="show('profile')"><div class="icon">👤</div>Profile</a>
+  <a class="nav-item" onclick="show('prefs')"><div class="icon">🔔</div>Preferences</a>
+
+  <div style="margin-top:auto;padding:12px 8px 16px">
+    <a href="../index.html" class="nav-item" style="color:rgba(255,255,255,0.3)"><div class="icon">🌐</div>Browse Cars</a>
+    <a class="nav-item" onclick="doSignOut()" style="color:rgba(239,68,68,0.5)"><div class="icon">🚪</div>Sign Out</a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div>
+      <h1 class="font-display font-bold text-white text-lg" id="page-title">Overview</h1>
+      <p class="text-xs" style="color:rgba(255,255,255,0.3)" id="page-sub">Welcome back</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="../pages/listings.html" class="btn-ghost text-xs">🚗 Browse Cars</a>
+      <div class="avatar" id="top-avatar" style="cursor:pointer" onclick="show('profile')">U</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- OVERVIEW -->
+    <div id="panel-overview" class="panel active">
+      <!-- Greeting -->
+      <div class="mb-6 p-5 rounded-2xl" style="background:linear-gradient(135deg,rgba(13,148,136,0.12),rgba(2,132,199,0.08));border:1px solid rgba(13,148,136,0.2)">
+        <div class="flex items-center justify-between flex-wrap gap-3">
+          <div>
+            <div class="font-display font-bold text-white text-xl" id="greeting">Good morning! 👋</div>
+            <p class="text-sm mt-1" style="color:rgba(255,255,255,0.5)">You have <span id="ov-saved">0</span> saved cars and <span id="ov-inquiries">0</span> active inquiries.</p>
+          </div>
+          <a href="../pages/listings.html" class="btn-p text-sm">Find Your Car →</a>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+        <div class="stat-card">
+          <div class="text-2xl mb-1">❤️</div>
+          <div class="font-display font-bold text-2xl text-white" id="st-saved">0</div>
+          <div class="text-xs mt-0.5" style="color:rgba(255,255,255,0.35)">Saved Cars</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-2xl mb-1">💬</div>
+          <div class="font-display font-bold text-2xl text-white" id="st-inq">0</div>
+          <div class="text-xs mt-0.5" style="color:rgba(255,255,255,0.35)">Inquiries Sent</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-2xl mb-1">🔍</div>
+          <div class="font-display font-bold text-2xl text-white" id="st-srch">0</div>
+          <div class="text-xs mt-0.5" style="color:rgba(255,255,255,0.35)">Saved Searches</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-2xl mb-1">👁️</div>
+          <div class="font-display font-bold text-2xl text-white" id="st-views">0</div>
+          <div class="text-xs mt-0.5" style="color:rgba(255,255,255,0.35)">Cars Viewed</div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <!-- Recent saved -->
+        <div class="card">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-display font-bold text-white">Recently Saved</h3>
+            <button onclick="show('wishlist')" class="text-xs font-semibold" style="color:#0d9488">View All →</button>
+          </div>
+          <div id="ov-saved-list"><div class="empty"><div class="ei">❤️</div><p class="text-sm" style="color:rgba(255,255,255,0.35)">No saved cars yet</p><a href="../pages/listings.html" class="btn-p text-sm inline-block mt-3">Browse Listings</a></div></div>
+        </div>
+
+        <!-- Recent inquiries -->
+        <div class="card">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-display font-bold text-white">Recent Inquiries</h3>
+            <button onclick="show('inquiries')" class="text-xs font-semibold" style="color:#0d9488">View All →</button>
+          </div>
+          <div id="ov-inq-list"><div class="empty"><div class="ei">💬</div><p class="text-sm" style="color:rgba(255,255,255,0.35)">No inquiries yet</p></div></div>
+        </div>
+      </div>
+
+      <!-- Budget tracker -->
+      <div class="card mt-5">
+        <h3 class="font-display font-bold text-white mb-4">My Car Budget</h3>
+        <div class="flex items-center gap-4 flex-wrap">
+          <div class="flex-1 min-w-48">
+            <div class="flex justify-between text-xs mb-2" style="color:rgba(255,255,255,0.4)">
+              <span>Budget</span><span id="budget-val">₹15L</span>
+            </div>
+            <input type="range" min="100000" max="10000000" step="50000" value="1500000" id="budget-slider" class="w-full" oninput="updateBudget(this.value)" style="accent-color:#0d9488">
+            <div class="flex justify-between text-xs mt-1" style="color:rgba(255,255,255,0.25)"><span>₹1L</span><span>₹1Cr</span></div>
+          </div>
+          <a id="budget-link" href="../pages/listings.html?maxPrice=1500000" class="btn-p text-sm">Find Cars in Budget →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- WISHLIST -->
+    <div id="panel-wishlist" class="panel">
+      <div class="flex items-center justify-between mb-5">
+        <p class="text-sm" style="color:rgba(255,255,255,0.4)"><span id="wl-count">0</span> saved cars</p>
+        <div class="flex gap-2">
+          <select id="wl-sort" class="fi w-36 text-xs" onchange="renderWishlist()">
+            <option value="newest">Newest First</option>
+            <option value="price-asc">Price ↑</option>
+            <option value="price-desc">Price ↓</option>
+          </select>
+        </div>
+      </div>
+      <div id="wl-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </div>
+
+    <!-- INQUIRIES -->
+    <div id="panel-inquiries" class="panel">
+      <div class="flex gap-2 mb-5">
+        <button class="btn-p text-xs" onclick="filterInq('all',this)" id="inq-all">All</button>
+        <button class="btn-ghost text-xs" onclick="filterInq('pending',this)">⏳ Pending</button>
+        <button class="btn-ghost text-xs" onclick="filterInq('replied',this)">✅ Replied</button>
+      </div>
+      <div class="space-y-3" id="inq-list"></div>
+    </div>
+
+    <!-- RECENT SEARCHES -->
+    <div id="panel-searches" class="panel">
+      <div class="flex items-center justify-between mb-5">
+        <p class="text-sm" style="color:rgba(255,255,255,0.4)">Your recent searches are saved here. Click to run again.</p>
+        <button onclick="clearSearches()" class="btn-ghost text-xs">Clear All</button>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="searches-grid"></div>
+      <!-- Price alerts -->
+      <div class="card mt-6">
+        <h3 class="font-display font-bold text-white mb-4">🔔 Price Alerts</h3>
+        <p class="text-sm mb-4" style="color:rgba(255,255,255,0.4)">Get notified when a car matching your criteria drops in price</p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
+          <select id="pa-make" class="fi text-xs"><option value="">Any Make</option><option>Hyundai</option><option>Tata</option><option>Maruti Suzuki</option><option>Kia</option><option>Honda</option><option>Mahindra</option></select>
+          <select id="pa-city" class="fi text-xs"><option value="">Any City</option><option>Mumbai</option><option>Delhi</option><option>Bangalore</option><option>Pune</option><option>Chennai</option></select>
+          <input type="number" id="pa-max" class="fi text-xs" placeholder="Max Price (₹)">
+          <button onclick="addAlert()" class="btn-p text-xs">+ Add Alert</button>
+        </div>
+        <div id="alerts-list" class="space-y-2"></div>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div id="panel-profile" class="panel">
+      <div class="max-w-xl">
+        <div class="card mb-4">
+          <div class="flex items-center gap-4 mb-5">
+            <div class="avatar-lg" id="pr-avatar">U</div>
+            <div>
+              <div class="font-display font-bold text-white text-xl" id="pr-name">Loading...</div>
+              <div class="text-sm mt-0.5" style="color:rgba(255,255,255,0.4)" id="pr-email">—</div>
+              <div class="text-xs mt-1 px-2 py-0.5 inline-block rounded-full" style="background:rgba(13,148,136,0.15);color:#0d9488">Buyer</div>
+            </div>
+          </div>
+          <div class="mb-4">
+            <div class="text-xs font-bold uppercase tracking-wider mb-1" style="color:rgba(255,255,255,0.35)">Profile Completion</div>
+            <div class="progress"><div class="progress-bar" id="pr-progress" style="width:60%"></div></div>
+            <div class="text-xs mt-1" style="color:rgba(255,255,255,0.3)" id="pr-progress-txt">60% complete</div>
+          </div>
+        </div>
+
+        <div class="card space-y-4">
+          <h3 class="font-display font-bold text-white">Edit Profile</h3>
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="text-xs font-bold uppercase tracking-wider mb-1.5 block" style="color:rgba(255,255,255,0.35)">First Name</label><input type="text" id="pf-fname" class="fi" placeholder="Rahul"></div>
+            <div><label class="text-xs font-bold uppercase tracking-wider mb-1.5 block" style="color:rgba(255,255,255,0.35)">Last Name</label><input type="text" id="pf-lname" class="fi" placeholder="Sharma"></div>
+          </div>
+          <div><label class="text-xs font-bold uppercase tracking-wider mb-1.5 block" style="color:rgba(255,255,255,0.35)">Phone Number</label><input type="tel" id="pf-phone" class="fi" placeholder="+91 98765 43210"></div>
+          <div><label class="text-xs font-bold uppercase tracking-wider mb-1.5 block" style="color:rgba(255,255,255,0.35)">City</label>
+            <select id="pf-city" class="fi"><option value="">Select City</option><option>Mumbai</option><option>Delhi</option><option>Bangalore</option><option>Pune</option><option>Chennai</option><option>Hyderabad</option><option>Ahmedabad</option><option>Kolkata</option></select>
+          </div>
+          <div><label class="text-xs font-bold uppercase tracking-wider mb-1.5 block" style="color:rgba(255,255,255,0.35)">About (optional)</label><textarea id="pf-bio" rows="2" class="fi resize-none" placeholder="Looking for a family SUV under ₹20L..."></textarea></div>
+          <button onclick="saveProfile()" class="btn-p w-full">Save Changes</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PREFERENCES -->
+    <div id="panel-prefs" class="panel">
+      <div class="max-w-xl space-y-4">
+        <div class="card">
+          <h3 class="font-display font-bold text-white mb-4">Car Preferences</h3>
+          <p class="text-sm mb-4" style="color:rgba(255,255,255,0.4)">Help us show you more relevant listings</p>
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="text-xs font-bold uppercase tracking-wider mb-1.5 block" style="color:rgba(255,255,255,0.35)">Budget Range</label>
+              <select class="fi text-xs"><option>Under ₹5L</option><option>₹5L – ₹10L</option><option selected>₹10L – ₹20L</option><option>₹20L – ₹50L</option><option>Above ₹50L</option></select>
+            </div>
+            <div><label class="text-xs font-bold uppercase tracking-wider mb-1.5 block" style="color:rgba(255,255,255,0.35)">Preferred Fuel</label>
+              <select class="fi text-xs"><option>No Preference</option><option>Petrol</option><option>Diesel</option><option>Electric</option><option>CNG</option><option>Hybrid</option></select>
+            </div>
+            <div><label class="text-xs font-bold uppercase tracking-wider mb-1.5 block" style="color:rgba(255,255,255,0.35)">Body Type</label>
+              <select class="fi text-xs"><option>No Preference</option><option>SUV</option><option>Sedan</option><option>Hatchback</option><option>MUV</option></select>
+            </div>
+            <div><label class="text-xs font-bold uppercase tracking-wider mb-1.5 block" style="color:rgba(255,255,255,0.35)">Transmission</label>
+              <select class="fi text-xs"><option>No Preference</option><option>Automatic</option><option>Manual</option></select>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <h3 class="font-display font-bold text-white mb-4">Notifications</h3>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between"><div><div class="text-sm text-white">Price drops on saved cars</div><div class="text-xs" style="color:rgba(255,255,255,0.35)">Get notified when saved listings drop in price</div></div><label class="ts"><input type="checkbox" checked><span class="ts-s"></span></label></div>
+            <div class="flex items-center justify-between"><div><div class="text-sm text-white">New listings matching search</div><div class="text-xs" style="color:rgba(255,255,255,0.35)">New cars that match your saved searches</div></div><label class="ts"><input type="checkbox" checked><span class="ts-s"></span></label></div>
+            <div class="flex items-center justify-between"><div><div class="text-sm text-white">Dealer replies</div><div class="text-xs" style="color:rgba(255,255,255,0.35)">When a dealer responds to your inquiry</div></div><label class="ts"><input type="checkbox" checked><span class="ts-s"></span></label></div>
+            <div class="flex items-center justify-between"><div><div class="text-sm text-white">Weekly market updates</div><div class="text-xs" style="color:rgba(255,255,255,0.35)">Price trends and market insights</div></div><label class="ts"><input type="checkbox"><span class="ts-s"></span></label></div>
+          </div>
+        </div>
+        <button onclick="savePrefs()" class="btn-p w-full">Save Preferences</button>
+      </div>
+    </div>
+
+  </div><!-- end content -->
+</div><!-- end main -->
+</div><!-- end shell -->
+
+<style>
+.ts{position:relative;width:42px;height:23px;cursor:pointer;display:inline-block;flex-shrink:0;}
+.ts input{opacity:0;width:0;height:0;}
+.ts-s{position:absolute;inset:0;background:rgba(255,255,255,0.1);border-radius:12px;transition:0.3s;}
+.ts-s:before{content:'';position:absolute;width:17px;height:17px;left:3px;top:3px;background:white;border-radius:50%;transition:0.3s;}
+input:checked+.ts-s{background:#0d9488;}
+input:checked+.ts-s:before{transform:translateX(19px);}
+</style>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script>
+
+// ─── State ───────────────────────────────────────────────
+let currentUser = null;
+let userData = {};
+let wishlistItems = [];
+let inquiryItems = [];
+let recentSearches = [];
+let priceAlerts = [];
+
+// ─── Boot ────────────────────────────────────────────────
+window.addEventListener('load', async () => {
+  try {
+    currentUser = await new Promise((res, rej) => {
+      const t = setTimeout(() => rej('timeout'), 6000);
+      auth.onAuthStateChanged(u => { clearTimeout(t); u ? res(u) : rej('no-user'); });
+    });
+  } catch(e) {
+    // Demo mode — show with sample data
+    currentUser = { uid: 'demo', displayName: 'Demo User', email: 'demo@milevaahan.com' };
+  }
+  populateUI();
+  await loadAllData();
+  hideLoader();
+});
+
+function hideLoader() {
+  const el = document.getElementById('gl');
+  el.style.transition = 'opacity 0.4s';
+  el.style.opacity = '0';
+  setTimeout(() => el.style.display = 'none', 400);
+}
+
+// ─── Populate static UI ──────────────────────────────────
+function populateUI() {
+  const name = currentUser.displayName || 'User';
+  const letter = name[0].toUpperCase();
+  const email = currentUser.email || '';
+
+  document.getElementById('sb-name').textContent = name;
+  document.getElementById('sb-email').textContent = email;
+  document.getElementById('sb-avatar').textContent = letter;
+  document.getElementById('top-avatar').textContent = letter;
+  document.getElementById('pr-avatar').textContent = letter;
+  document.getElementById('pr-name').textContent = name;
+  document.getElementById('pr-email').textContent = email;
+
+  const parts = name.split(' ');
+  document.getElementById('pf-fname').value = parts[0] || '';
+  document.getElementById('pf-lname').value = parts[1] || '';
+
+  const h = new Date().getHours();
+  const greet = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('greeting').textContent = `${greet}, ${parts[0]}! 👋`;
+}
+
+// ─── Load all data ───────────────────────────────────────
+async function loadAllData() {
+  // Try Firebase, fall back to localStorage + sample data
+  try {
+    if (currentUser.uid !== 'demo') {
+      const [wSnap, iSnap, uSnap] = await Promise.all([
+        db.collection('wishlists').where('userId', '==', currentUser.uid).orderBy('savedAt', 'desc').limit(20).get(),
+        db.collection('inquiries').where('userId', '==', currentUser.uid).orderBy('createdAt', 'desc').limit(20).get(),
+        db.collection('users').doc(currentUser.uid).get()
+      ]);
+      wishlistItems = wSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      inquiryItems = iSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      userData = uSnap.exists ? uSnap.data() : {};
+    }
+  } catch(e) {}
+
+  // If empty, use demo data
+  if (!wishlistItems.length) wishlistItems = getSampleWishlist();
+  if (!inquiryItems.length) inquiryItems = getSampleInquiries();
+
+  recentSearches = JSON.parse(localStorage.getItem('mv_searches') || '[]');
+  if (!recentSearches.length) recentSearches = getSampleSearches();
+  priceAlerts = JSON.parse(localStorage.getItem('mv_alerts') || '[]');
+
+  renderAll();
+}
+
+function renderAll() {
+  renderOverview();
+  renderWishlist();
+  renderInquiries();
+  renderSearches();
+}
+
+// ─── Overview ────────────────────────────────────────────
+function renderOverview() {
+  const savedCount = wishlistItems.length;
+  const inqCount = inquiryItems.length;
+  const srchCount = recentSearches.length;
+  const viewed = parseInt(localStorage.getItem('mv_viewed') || '0') || Math.floor(Math.random()*30)+5;
+
+  document.getElementById('ov-saved').textContent = savedCount;
+  document.getElementById('ov-inquiries').textContent = inqCount;
+  document.getElementById('st-saved').textContent = savedCount;
+  document.getElementById('st-inq').textContent = inqCount;
+  document.getElementById('st-srch').textContent = srchCount;
+  document.getElementById('st-views').textContent = viewed;
+  document.getElementById('wl-count-badge').textContent = savedCount;
+
+  const unread = inquiryItems.filter(i => i.status === 'replied' && !i.read).length;
+  if (unread > 0) document.getElementById('inq-dot').style.display = 'block';
+
+  // Recent saved (first 3)
+  const c = document.getElementById('ov-saved-list');
+  if (!wishlistItems.length) {
+    c.innerHTML = `<div class="empty"><div class="ei">❤️</div><p class="text-sm" style="color:rgba(255,255,255,0.35)">No saved cars yet</p><a href="../pages/listings.html" class="btn-p text-sm inline-block mt-3">Browse Listings</a></div>`;
+  } else {
+    c.innerHTML = wishlistItems.slice(0, 3).map(car => miniCarCard(car)).join('');
+  }
+
+  // Recent inquiries (first 3)
+  const ic = document.getElementById('ov-inq-list');
+  if (!inquiryItems.length) {
+    ic.innerHTML = `<div class="empty"><div class="ei">💬</div><p class="text-sm" style="color:rgba(255,255,255,0.35)">No inquiries yet</p></div>`;
+  } else {
+    ic.innerHTML = inquiryItems.slice(0, 3).map(inq => miniInqCard(inq)).join('');
+  }
+}
+
+function miniCarCard(car) {
+  return `<div class="flex items-center gap-3 py-2.5" style="border-bottom:1px solid rgba(255,255,255,0.05)">
+    <div class="w-14 h-10 rounded-xl flex items-center justify-center text-2xl flex-shrink-0" style="background:rgba(255,255,255,0.04)">🚗</div>
+    <div class="flex-1 min-w-0">
+      <div class="text-sm font-semibold text-white truncate">${car.year} ${car.make} ${car.model}</div>
+      <div class="text-xs" style="color:rgba(255,255,255,0.4)">${formatPrice(car.price)} • ${car.city || '—'}</div>
+    </div>
+    <a href="car-detail.html?id=${car.listingId || car.id}" class="text-xs font-semibold flex-shrink-0" style="color:#0d9488">View →</a>
+  </div>`;
+}
+
+function miniInqCard(inq) {
+  return `<div class="flex items-start gap-3 py-2.5" style="border-bottom:1px solid rgba(255,255,255,0.05)">
+    <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm flex-shrink-0" style="background:rgba(255,255,255,0.06)">🏪</div>
+    <div class="flex-1 min-w-0">
+      <div class="text-sm font-semibold text-white truncate">${inq.carTitle || 'Car Inquiry'}</div>
+      <div class="text-xs" style="color:rgba(255,255,255,0.4)">${inq.dealerName || '—'} • ${timeAgo(inq.createdAt)}</div>
+    </div>
+    <span class="${inq.status==='replied'?'badge-g':inq.status==='rejected'?'badge-r':'badge-y'}">${inq.status || 'pending'}</span>
+  </div>`;
+}
+
+// ─── Wishlist ────────────────────────────────────────────
+function renderWishlist() {
+  const sort = document.getElementById('wl-sort')?.value || 'newest';
+  let items = [...wishlistItems];
+  if (sort === 'price-asc') items.sort((a, b) => a.price - b.price);
+  if (sort === 'price-desc') items.sort((a, b) => b.price - a.price);
+
+  document.getElementById('wl-count').textContent = items.length;
+  const grid = document.getElementById('wl-grid');
+
+  if (!items.length) {
+    grid.innerHTML = `<div class="col-span-3 empty"><div class="ei">❤️</div><h3 class="font-display font-bold text-white text-lg mb-2">No saved cars yet</h3><p class="text-sm mb-5" style="color:rgba(255,255,255,0.4)">Browse listings and tap the heart icon to save cars you like</p><a href="../pages/listings.html" class="btn-p inline-block">Browse Cars →</a></div>`;
+    return;
+  }
+
+  grid.innerHTML = items.map(car => `
+    <div class="car-card">
+      <div class="h-36 flex items-center justify-center text-5xl relative" style="background:linear-gradient(135deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01))">
+        🚗
+        <button onclick="removeWishlist('${car.id}')" class="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center" style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.25)" title="Remove">❤️</button>
+        ${car.condition === 'cpo' ? '<span class="absolute top-3 left-3 text-xs font-bold px-2 py-0.5 rounded-full" style="background:rgba(180,140,11,0.15);color:#B8860B;border:1px solid rgba(180,140,11,0.25)">CPO</span>' : ''}
+      </div>
+      <div class="p-4">
+        <div class="font-semibold text-white text-sm">${car.year} ${car.make} ${car.model}</div>
+        <div class="font-display font-bold text-base mt-0.5" style="color:#0d9488">${formatPrice(car.price)}</div>
+        <div class="flex flex-wrap gap-2 mt-2 text-xs" style="color:rgba(255,255,255,0.4)">
+          <span>⛽ ${car.fuel}</span><span>⚙️ ${car.transmission}</span><span>📍 ${car.city || '—'}</span>
+        </div>
+        <div class="flex gap-2 mt-3">
+          <a href="car-detail.html?id=${car.listingId || car.id}" class="flex-1 py-2 text-center rounded-xl text-xs font-semibold" style="background:rgba(13,148,136,0.12);color:#0d9488;border:1px solid rgba(13,148,136,0.2)">View Details</a>
+          <button onclick="contactDealer('${car.dealerPhone||''}')" class="flex-1 py-2 rounded-xl text-xs font-semibold" style="background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.08)">📞 Contact</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function removeWishlist(id) {
+  wishlistItems = wishlistItems.filter(c => c.id !== id);
+  try { db.collection('wishlists').doc(id).delete(); } catch(e) {}
+  renderWishlist();
+  renderOverview();
+  showToast('Removed from saved cars');
+}
+
+// ─── Inquiries ───────────────────────────────────────────
+let currentInqFilter = 'all';
+function filterInq(f, btn) {
+  currentInqFilter = f;
+  document.querySelectorAll('#panel-inquiries button').forEach(b => { b.className = 'btn-ghost text-xs'; });
+  btn.className = 'btn-p text-xs';
+  renderInquiries();
+}
+
+function renderInquiries() {
+  let items = currentInqFilter === 'all' ? inquiryItems : inquiryItems.filter(i => i.status === currentInqFilter);
+  const c = document.getElementById('inq-list');
+  if (!items.length) {
+    c.innerHTML = `<div class="empty"><div class="ei">💬</div><p class="text-sm" style="color:rgba(255,255,255,0.4)">No ${currentInqFilter === 'all' ? '' : currentInqFilter} inquiries</p></div>`;
+    return;
+  }
+  c.innerHTML = items.map(inq => `
+    <div class="inq-card ${inq.status === 'replied' && !inq.read ? 'unread' : ''}">
+      <div class="flex items-start gap-3">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0" style="background:rgba(255,255,255,0.05)">🚗</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between gap-2 mb-0.5">
+            <div class="font-semibold text-white text-sm truncate">${inq.carTitle || 'Car Inquiry'}</div>
+            <span class="${inq.status==='replied'?'badge-g':inq.status==='rejected'?badge_r:'badge-y'}">${inq.status || 'pending'}</span>
+          </div>
+          <div class="text-xs mb-2" style="color:rgba(255,255,255,0.4)">🏪 ${inq.dealerName || 'Dealer'} • ${timeAgo(inq.createdAt)}</div>
+          <div class="text-sm p-3 rounded-xl" style="background:rgba(255,255,255,0.03);color:rgba(255,255,255,0.65)">"${inq.message || 'Hi, I am interested in this car. Please share details.'}"</div>
+          ${inq.reply ? `<div class="text-sm p-3 rounded-xl mt-2" style="background:rgba(13,148,136,0.07);border:1px solid rgba(13,148,136,0.15);color:rgba(255,255,255,0.75)"><span class="text-xs font-bold" style="color:#0d9488">Dealer Reply:</span><br>${inq.reply}</div>` : ''}
+        </div>
+      </div>
+      <div class="flex gap-2 mt-3">
+        <a href="car-detail.html?id=${inq.listingId || ''}" class="text-xs font-semibold" style="color:#0d9488">View Car →</a>
+        ${inq.dealerPhone ? `<a href="https://wa.me/91${inq.dealerPhone}" target="_blank" class="text-xs font-semibold ml-3" style="color:#25d366">💬 WhatsApp</a>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+// ─── Searches ────────────────────────────────────────────
+function renderSearches() {
+  const grid = document.getElementById('searches-grid');
+  const alerts = document.getElementById('alerts-list');
+
+  if (!recentSearches.length) {
+    grid.innerHTML = `<div class="col-span-3 empty"><div class="ei">🔍</div><p class="text-sm" style="color:rgba(255,255,255,0.4)">No recent searches</p></div>`;
+  } else {
+    grid.innerHTML = recentSearches.map((s, i) => `
+      <div class="search-pill" onclick="runSearch('${s.url}')">
+        <div class="text-xl flex-shrink-0">🔍</div>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-semibold text-white truncate">${s.label}</div>
+          <div class="text-xs" style="color:rgba(255,255,255,0.35)">${s.count || '—'} listings • ${s.time}</div>
+        </div>
+        <button onclick="event.stopPropagation();removeSearch(${i})" class="text-xs flex-shrink-0" style="color:rgba(255,255,255,0.2)">✕</button>
+      </div>`).join('');
+  }
+
+  alerts.innerHTML = priceAlerts.length ? priceAlerts.map((a, i) => `
+    <div class="flex items-center justify-between p-3 rounded-xl" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07)">
+      <div><div class="text-sm text-white">${a.make || 'Any Make'} in ${a.city || 'Any City'}</div><div class="text-xs" style="color:rgba(255,255,255,0.35)">Under ${formatPrice(a.max || 1500000)}</div></div>
+      <button onclick="removeAlert(${i})" class="text-xs" style="color:rgba(239,68,68,0.6)">Remove</button>
+    </div>`).join('') : `<div class="text-sm" style="color:rgba(255,255,255,0.3)">No price alerts set</div>`;
+}
+
+function runSearch(url) { window.location.href = url || '../pages/listings.html'; }
+function removeSearch(i) { recentSearches.splice(i, 1); localStorage.setItem('mv_searches', JSON.stringify(recentSearches)); renderSearches(); }
+function clearSearches() { recentSearches = []; localStorage.setItem('mv_searches', JSON.stringify(recentSearches)); renderSearches(); }
+
+function addAlert() {
+  const make = document.getElementById('pa-make').value;
+  const city = document.getElementById('pa-city').value;
+  const max = parseInt(document.getElementById('pa-max').value) || 1500000;
+  priceAlerts.push({ make, city, max });
+  localStorage.setItem('mv_alerts', JSON.stringify(priceAlerts));
+  renderSearches();
+  showToast('🔔 Price alert added!');
+}
+function removeAlert(i) { priceAlerts.splice(i, 1); localStorage.setItem('mv_alerts', JSON.stringify(priceAlerts)); renderSearches(); }
+
+// ─── Profile ─────────────────────────────────────────────
+async function saveProfile() {
+  const data = {
+    firstName: document.getElementById('pf-fname').value,
+    lastName: document.getElementById('pf-lname').value,
+    phone: document.getElementById('pf-phone').value,
+    city: document.getElementById('pf-city').value,
+    bio: document.getElementById('pf-bio').value,
+    updatedAt: new Date()
+  };
+  try {
+    if (currentUser.uid !== 'demo') {
+      await db.collection('users').doc(currentUser.uid).set(data, { merge: true });
+    }
+  } catch(e) {}
+  showToast('✅ Profile saved!');
+
+  // Update progress bar
+  const filled = Object.values(data).filter(v => v && v !== new Date()).length;
+  const pct = Math.round((filled / 5) * 100);
+  document.getElementById('pr-progress').style.width = pct + '%';
+  document.getElementById('pr-progress-txt').textContent = pct + '% complete';
+}
+
+function savePrefs() { showToast('✅ Preferences saved!'); }
+
+// ─── Navigation ──────────────────────────────────────────
+const PAGE_META = {
+  overview: ['Overview', 'Welcome back'],
+  wishlist: ['Saved Cars', 'Your wishlist'],
+  inquiries: ['Inquiries', 'Messages with dealers'],
+  searches: ['Recent Searches', 'Saved searches & price alerts'],
+  profile: ['Profile', 'Your account details'],
+  prefs: ['Preferences', 'Notifications & car preferences']
+};
+
+function show(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  const [title, sub] = PAGE_META[name] || [name, ''];
+  document.getElementById('page-title').textContent = title;
+  document.getElementById('page-sub').textContent = sub;
+}
+
+// ─── Budget slider ───────────────────────────────────────
+function updateBudget(val) {
+  const price = parseInt(val);
+  document.getElementById('budget-val').textContent = formatPrice(price);
+  document.getElementById('budget-link').href = `../pages/listings.html?maxPrice=${price}`;
+}
+
+// ─── Auth ─────────────────────────────────────────────────
+function doSignOut() {
+  try { auth.signOut(); } catch(e) {}
+  window.location.href = '../pages/login.html';
+}
+
+function contactDealer(phone) {
+  if (phone) window.open(`https://wa.me/91${phone}?text=Hi, I saw your listing on MileVaahan`);
+}
+
+// ─── Helpers ─────────────────────────────────────────────
+function formatPrice(n) {
+  if (!n) return '—';
+  if (n >= 10000000) return '₹' + (n / 10000000).toFixed(2) + ' Cr';
+  if (n >= 100000) return '₹' + (n / 100000).toFixed(1) + ' L';
+  return '₹' + n.toLocaleString('en-IN');
+}
+
+function timeAgo(ts) {
+  try {
+    const d = ts?.toDate ? ts.toDate() : ts instanceof Date ? ts : new Date(ts);
+    const diff = (Date.now() - d.getTime()) / 1000;
+    if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+    if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+    return Math.floor(diff / 86400) + 'd ago';
+  } catch(e) { return 'recently'; }
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;padding:12px 20px;border-radius:12px;color:white;font-weight:600;font-size:13px;background:linear-gradient(135deg,#0d9488,#0284c7);box-shadow:0 8px 24px rgba(0,0,0,0.4);transform:translateY(60px);opacity:0;transition:all 0.35s cubic-bezier(0.175,0.885,0.32,1.275)';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  requestAnimationFrame(() => { t.style.transform = 'translateY(0)'; t.style.opacity = '1'; });
+  setTimeout(() => { t.style.transform = 'translateY(60px)'; t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 3000);
+}
+
+// ─── Sample data ─────────────────────────────────────────
+function getSampleWishlist() {
+  return [
+    { id: 'w1', listingId: 'l1', make: 'Hyundai', model: 'Creta', year: 2023, price: 1450000, fuel: 'Petrol', transmission: 'Automatic', city: 'Mumbai', condition: 'used', dealerPhone: '9988776655' },
+    { id: 'w2', listingId: 'l2', make: 'Tata', model: 'Nexon EV', year: 2024, price: 1680000, fuel: 'Electric', transmission: 'Automatic', city: 'Pune', condition: 'new' },
+    { id: 'w3', listingId: 'l3', make: 'Kia', model: 'Seltos', year: 2022, price: 1250000, fuel: 'Diesel', transmission: 'Manual', city: 'Delhi', condition: 'cpo' },
+    { id: 'w4', listingId: 'l4', make: 'Maruti Suzuki', model: 'Baleno', year: 2023, price: 720000, fuel: 'Petrol', transmission: 'Automatic', city: 'Bangalore', condition: 'used' },
+  ];
+}
+
+function getSampleInquiries() {
+  return [
+    { id: 'i1', listingId: 'l1', carTitle: '2023 Hyundai Creta', dealerName: 'AutoMax Motors', dealerPhone: '9988776655', message: 'Hi, I am interested in this car. Is the price negotiable?', status: 'replied', reply: 'Yes, we can discuss the price. Please visit our showroom or call us at 9988776655.', createdAt: new Date(Date.now() - 86400000 * 2), read: false },
+    { id: 'i2', listingId: 'l3', carTitle: '2022 Kia Seltos', dealerName: 'DriveKing Auto', message: 'Is this car still available? What is the lowest price?', status: 'pending', createdAt: new Date(Date.now() - 86400000 * 5) },
+    { id: 'i3', listingId: 'l5', carTitle: '2021 Honda City', dealerName: 'CarZone Pune', message: 'Can I schedule a test drive this weekend?', status: 'replied', reply: 'Absolutely! Please come on Saturday between 10am–5pm. Address: Kothrud, Pune.', createdAt: new Date(Date.now() - 86400000 * 10), read: true },
+  ];
+}
+
+function getSampleSearches() {
+  return [
+    { label: 'SUVs under ₹15L in Mumbai', url: '../pages/listings.html?bodyType=suv&maxPrice=1500000&city=Mumbai', count: '48', time: '2h ago' },
+    { label: 'Electric Cars, Bangalore', url: '../pages/listings.html?fuel=Electric&city=Bangalore', count: '23', time: '1d ago' },
+    { label: 'Hyundai Creta 2022+', url: '../pages/listings.html?make=Hyundai&model=Creta&minYear=2022', count: '31', time: '3d ago' },
+  ];
+}
+</script>
+</body>
+</html>

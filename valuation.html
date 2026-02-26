@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Free Car Valuation – Know Your Car's Worth | MileVaahan</title>
+  <meta name="description" content="Get instant, free car valuation in India. Know the exact resale value of your car with MileVaahan's AI-powered valuation tool. 100% free.">
+  <link rel="canonical" href="https://www.milevaahan.com/pages/valuation.html">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    *{font-family:'DM Sans',sans-serif;}h1,h2,h3,.font-display{font-family:'Syne',sans-serif;}
+    body{background:#0a0f1e;color:#e2e8f0;margin:0;}
+    .fi{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:12px 16px;font-size:14px;color:white;width:100%;transition:all 0.2s;}
+    .fi:focus{outline:none;border-color:#0d9488;background:rgba(13,148,136,0.08);}
+    select.fi option{background:#1e2535;color:white;}
+    .btn-p{background:linear-gradient(135deg,#0d9488,#0284c7);color:white;border:none;padding:14px 32px;border-radius:14px;font-weight:700;font-size:15px;cursor:pointer;transition:all 0.2s;}
+    .btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(13,148,136,0.4);}
+    .card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:24px;}
+    .val-ring{width:200px;height:200px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;background:conic-gradient(#0d9488 var(--pct,0deg), rgba(255,255,255,0.06) 0);position:relative;}
+    .val-inner{width:160px;height:160px;border-radius:50%;background:#0d1226;position:absolute;display:flex;align-items:center;justify-content:center;flex-direction:column;}
+    .step{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;}
+    .step.done{background:rgba(13,148,136,0.2);color:#0d9488;border:1px solid rgba(13,148,136,0.4);}
+    .step.active-s{background:linear-gradient(135deg,#0d9488,#0284c7);color:white;}
+    .step.todo{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.3);}
+  </style>
+</head>
+<body>
+<nav class="sticky top-0 z-50 px-6 py-4 flex items-center justify-between" style="background:rgba(10,15,30,0.95);border-bottom:1px solid rgba(180,140,11,0.1);backdrop-filter:blur(12px)">
+  <a href="../index.html" class="flex items-center gap-3"><img src="../images/logo.png" class="h-9 w-9 object-contain"><span class="font-display font-bold text-xl text-white">mile<span style="color:#B8860B">vaahan</span></span></a>
+  <div class="flex items-center gap-4"><a href="listings.html" class="text-sm text-white opacity-60 hover:opacity-100">Browse Cars</a><a href="emi-calculator.html" class="text-sm text-white opacity-60 hover:opacity-100">EMI Calc</a><a href="login.html" class="text-sm px-4 py-2 rounded-xl" style="background:rgba(13,148,136,0.15);color:#0d9488;border:1px solid rgba(13,148,136,0.3)">Sign In</a></div>
+</nav>
+
+<div class="max-w-3xl mx-auto px-4 py-12">
+  <div class="text-center mb-10">
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-4 text-sm font-semibold" style="background:rgba(13,148,136,0.12);border:1px solid rgba(13,148,136,0.25);color:#0d9488">🤖 AI-Powered • Free • Instant</div>
+    <h1 class="font-display font-bold text-4xl text-white mb-3">Know Your Car's True Value</h1>
+    <p class="text-lg" style="color:rgba(255,255,255,0.5)">Get an instant, accurate valuation based on real market data from 10,000+ transactions</p>
+  </div>
+
+  <!-- Progress -->
+  <div class="flex items-center gap-3 mb-8 justify-center">
+    <div class="step active-s" id="step1">1</div>
+    <div class="h-px w-8" style="background:rgba(255,255,255,0.1)"></div>
+    <div class="step todo" id="step2">2</div>
+    <div class="h-px w-8" style="background:rgba(255,255,255,0.1)"></div>
+    <div class="step todo" id="step3">3</div>
+    <div class="h-px w-8" style="background:rgba(255,255,255,0.1)"></div>
+    <div class="step todo" id="step4">✓</div>
+  </div>
+
+  <!-- Form -->
+  <div class="card" id="form-section">
+    <!-- Step 1 -->
+    <div id="s1">
+      <h2 class="font-display font-bold text-white text-xl mb-5">Basic Details</h2>
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div><label class="text-xs font-bold uppercase tracking-wider mb-2 block" style="color:rgba(255,255,255,0.4)">Make</label>
+          <select id="v-make" class="fi" onchange="populateModels(this.value)">
+            <option value="">Select Make</option>
+            <option>Hyundai</option><option>Maruti Suzuki</option><option>Tata</option><option>Mahindra</option><option>Kia</option><option>Honda</option><option>Toyota</option><option>Volkswagen</option><option>Skoda</option><option>MG</option><option>Renault</option><option>Nissan</option>
+          </select>
+        </div>
+        <div><label class="text-xs font-bold uppercase tracking-wider mb-2 block" style="color:rgba(255,255,255,0.4)">Model</label><select id="v-model" class="fi"><option>Select Make First</option></select></div>
+        <div><label class="text-xs font-bold uppercase tracking-wider mb-2 block" style="color:rgba(255,255,255,0.4)">Year</label>
+          <select id="v-year" class="fi">
+            <option>Select Year</option>
+            <option>2024</option><option>2023</option><option>2022</option><option>2021</option><option>2020</option><option>2019</option><option>2018</option><option>2017</option><option>2016</option><option>2015</option>
+          </select>
+        </div>
+        <div><label class="text-xs font-bold uppercase tracking-wider mb-2 block" style="color:rgba(255,255,255,0.4)">Fuel Type</label>
+          <select id="v-fuel" class="fi">
+            <option>Petrol</option><option>Diesel</option><option>CNG</option><option>Electric</option><option>Hybrid</option>
+          </select>
+        </div>
+      </div>
+      <button onclick="goStep(2)" class="btn-p w-full">Next: Condition →</button>
+    </div>
+
+    <!-- Step 2 -->
+    <div id="s2" style="display:none">
+      <h2 class="font-display font-bold text-white text-xl mb-5">Condition & Usage</h2>
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div><label class="text-xs font-bold uppercase tracking-wider mb-2 block" style="color:rgba(255,255,255,0.4)">Kilometers Driven</label><input type="number" id="v-km" class="fi" placeholder="e.g. 45000"></div>
+        <div><label class="text-xs font-bold uppercase tracking-wider mb-2 block" style="color:rgba(255,255,255,0.4)">No. of Owners</label>
+          <select id="v-owners" class="fi"><option value="1">1st Owner</option><option value="2">2nd Owner</option><option value="3">3rd Owner</option><option value="4">4+ Owners</option></select>
+        </div>
+        <div><label class="text-xs font-bold uppercase tracking-wider mb-2 block" style="color:rgba(255,255,255,0.4)">Transmission</label>
+          <select id="v-trans" class="fi"><option>Automatic</option><option>Manual</option></select>
+        </div>
+        <div><label class="text-xs font-bold uppercase tracking-wider mb-2 block" style="color:rgba(255,255,255,0.4)">City Registered</label>
+          <select id="v-city" class="fi">
+            <option>Mumbai</option><option>Delhi</option><option>Bangalore</option><option>Pune</option><option>Chennai</option><option>Hyderabad</option><option>Kolkata</option><option>Ahmedabad</option>
+          </select>
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="text-xs font-bold uppercase tracking-wider mb-3 block" style="color:rgba(255,255,255,0.4)">Overall Condition</label>
+        <div class="grid grid-cols-4 gap-2">
+          <button onclick="selectCond(this,'excellent')" class="cond-btn p-3 rounded-xl text-center border text-sm font-semibold" style="border-color:rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.6)">🌟<br><span class="text-xs">Excellent</span></button>
+          <button onclick="selectCond(this,'good')" class="cond-btn p-3 rounded-xl text-center border text-sm font-semibold" style="border-color:rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.6)">👍<br><span class="text-xs">Good</span></button>
+          <button onclick="selectCond(this,'fair')" class="cond-btn p-3 rounded-xl text-center border text-sm font-semibold" style="border-color:rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.6)">👌<br><span class="text-xs">Fair</span></button>
+          <button onclick="selectCond(this,'poor')" class="cond-btn p-3 rounded-xl text-center border text-sm font-semibold" style="border-color:rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.6)">⚠️<br><span class="text-xs">Poor</span></button>
+        </div>
+      </div>
+      <div class="flex gap-3">
+        <button onclick="goStep(1)" class="px-6 py-3 rounded-xl font-semibold text-sm" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6)">← Back</button>
+        <button onclick="goStep(3)" class="btn-p flex-1">Next: Features →</button>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div id="s3" style="display:none">
+      <h2 class="font-display font-bold text-white text-xl mb-5">Additional Features</h2>
+      <p class="text-sm mb-4" style="color:rgba(255,255,255,0.5)">Check all that apply (these increase resale value)</p>
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-5" id="features-grid">
+        <label class="feat-cb flex items-center gap-2 p-3 rounded-xl cursor-pointer" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08)"><input type="checkbox" class="feat" style="accent-color:#0d9488"><span class="text-sm text-white">Sunroof/Moonroof</span></label>
+        <label class="feat-cb flex items-center gap-2 p-3 rounded-xl cursor-pointer" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08)"><input type="checkbox" class="feat" style="accent-color:#0d9488"><span class="text-sm text-white">Leather Seats</span></label>
+        <label class="feat-cb flex items-center gap-2 p-3 rounded-xl cursor-pointer" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08)"><input type="checkbox" class="feat" style="accent-color:#0d9488"><span class="text-sm text-white">360° Camera</span></label>
+        <label class="feat-cb flex items-center gap-2 p-3 rounded-xl cursor-pointer" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08)"><input type="checkbox" class="feat" style="accent-color:#0d9488"><span class="text-sm text-white">ADAS / Safety Pkg</span></label>
+        <label class="feat-cb flex items-center gap-2 p-3 rounded-xl cursor-pointer" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08)"><input type="checkbox" class="feat" style="accent-color:#0d9488"><span class="text-sm text-white">Keyless Entry</span></label>
+        <label class="feat-cb flex items-center gap-2 p-3 rounded-xl cursor-pointer" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08)"><input type="checkbox" class="feat" style="accent-color:#0d9488"><span class="text-sm text-white">Connected Car App</span></label>
+        <label class="feat-cb flex items-center gap-2 p-3 rounded-xl cursor-pointer" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08)"><input type="checkbox" class="feat" style="accent-color:#0d9488"><span class="text-sm text-white">Wireless Charging</span></label>
+        <label class="feat-cb flex items-center gap-2 p-3 rounded-xl cursor-pointer" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08)"><input type="checkbox" class="feat" style="accent-color:#0d9488"><span class="text-sm text-white">Ventilated Seats</span></label>
+        <label class="feat-cb flex items-center gap-2 p-3 rounded-xl cursor-pointer" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08)"><input type="checkbox" class="feat" style="accent-color:#0d9488"><span class="text-sm text-white">Factory Warranty</span></label>
+      </div>
+      <div class="flex gap-3">
+        <button onclick="goStep(2)" class="px-6 py-3 rounded-xl font-semibold text-sm" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6)">← Back</button>
+        <button onclick="doValuation()" class="btn-p flex-1">🤖 Get My Valuation →</button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div id="s-loading" style="display:none" class="text-center py-12">
+      <div class="mx-auto mb-4" style="width:60px;height:60px;border:4px solid rgba(180,140,11,0.2);border-top-color:#B8860B;border-radius:50%;animation:spin 0.8s linear infinite"></div>
+      <p class="text-white font-semibold">Analysing market data...</p>
+      <p class="text-sm mt-2" style="color:rgba(255,255,255,0.4)">Comparing 10,000+ recent transactions</p>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div id="result-section" style="display:none">
+    <div class="card text-center mb-4">
+      <h2 class="font-display font-bold text-white text-xl mb-6">Your Car's Estimated Value</h2>
+      <div class="flex justify-center mb-6">
+        <div class="val-ring" style="--pct:240deg">
+          <div class="val-inner">
+            <div class="font-display font-bold text-white text-xl" id="r-price">₹0</div>
+            <div class="text-xs mt-1" style="color:rgba(255,255,255,0.4)">Fair Market</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-3 mb-6">
+        <div class="p-3 rounded-xl" style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15)"><div class="text-sm font-bold text-red-400" id="r-low">₹0</div><div class="text-xs mt-1" style="color:rgba(255,255,255,0.4)">Lower Bound</div></div>
+        <div class="p-4 rounded-xl" style="background:rgba(13,148,136,0.1);border:1px solid rgba(13,148,136,0.25)"><div class="font-display font-bold text-teal-400 text-lg" id="r-mid">₹0</div><div class="text-xs mt-1 text-white font-semibold">Best Price</div></div>
+        <div class="p-3 rounded-xl" style="background:rgba(22,163,74,0.08);border:1px solid rgba(22,163,74,0.15)"><div class="text-sm font-bold text-green-400" id="r-high">₹0</div><div class="text-xs mt-1" style="color:rgba(255,255,255,0.4)">Upper Bound</div></div>
+      </div>
+      <div class="grid grid-cols-2 gap-3 mb-6 text-left">
+        <div class="p-3 rounded-xl" style="background:rgba(255,255,255,0.04)"><div class="text-xs mb-1" style="color:rgba(255,255,255,0.4)">Depreciation Score</div><div class="text-white font-semibold text-sm" id="r-dep">—</div></div>
+        <div class="p-3 rounded-xl" style="background:rgba(255,255,255,0.04)"><div class="text-xs mb-1" style="color:rgba(255,255,255,0.4)">Market Demand</div><div class="text-white font-semibold text-sm" id="r-dem">—</div></div>
+        <div class="p-3 rounded-xl" style="background:rgba(255,255,255,0.04)"><div class="text-xs mb-1" style="color:rgba(255,255,255,0.4)">Best Time to Sell</div><div class="text-white font-semibold text-sm">Now (Oct–Dec peak)</div></div>
+        <div class="p-3 rounded-xl" style="background:rgba(255,255,255,0.04)"><div class="text-xs mb-1" style="color:rgba(255,255,255,0.4)">Confidence Level</div><div class="text-green-400 font-semibold text-sm">High (92%)</div></div>
+      </div>
+      <div class="flex gap-3">
+        <a href="listings.html" class="flex-1 py-3 rounded-xl font-semibold text-sm text-center" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.7)">Browse Similar Cars</a>
+        <button onclick="resetVal()" class="px-6 py-3 rounded-xl font-semibold text-sm" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6)">Recalculate</button>
+        <button class="btn-p flex-1 text-sm" onclick="contactDealer()">📞 Get Dealer Quote</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3 class="font-display font-bold text-white mb-3">Valuation Factors</h3>
+      <div class="space-y-2" id="factors-list"></div>
+    </div>
+  </div>
+</div>
+
+<footer class="text-center py-8 mt-8" style="border-top:1px solid rgba(255,255,255,0.06)">
+  <p class="text-sm" style="color:rgba(255,255,255,0.3)">© 2025 MileVaahan • <a href="privacy.html" class="hover:text-white">Privacy</a> • <a href="terms.html" class="hover:text-white">Terms</a></p>
+</footer>
+
+<script>
+  @keyframes spin{to{transform:rotate(360deg)}}
+</script>
+<script>
+let condVal='good';
+const MODELS={
+  'Hyundai':['Creta','i20','Verna','Venue','Alcazar','Tucson','Grand i10'],
+  'Maruti Suzuki':['Swift','Dzire','Baleno','Brezza','Ertiga','Ciaz','WagonR','Alto'],
+  'Tata':['Nexon','Tiago','Tigor','Harrier','Safari','Altroz','Punch'],
+  'Mahindra':['Scorpio-N','XUV700','Thar','XUV300','Bolero'],
+  'Kia':['Seltos','Sonet','Carens','EV6'],
+  'Honda':['City','Amaze','WR-V','Elevate'],
+  'Toyota':['Innova Crysta','Fortuner','Urban Cruiser','Camry','Glanza'],
+  'Volkswagen':['Polo','Virtus','Taigun','Tiguan'],
+  'Skoda':['Slavia','Kushaq','Octavia','Superb'],
+  'MG':['Hector','Astor','ZS EV','Comet EV'],
+  'Renault':['Kwid','Triber','Kiger'],
+  'Nissan':['Magnite','Kicks']
+};
+const BASE_PRICE={
+  'Hyundai Creta':1400000,'Hyundai i20':800000,'Maruti Suzuki Swift':600000,'Maruti Suzuki Baleno':750000,
+  'Tata Nexon':1000000,'Tata Harrier':1600000,'Mahindra Scorpio-N':1800000,'Kia Seltos':1350000,
+  'Honda City':1150000,'Toyota Innova Crysta':2200000,'MG Hector':1900000
+};
+
+function populateModels(make){
+  const sel=document.getElementById('v-model');
+  sel.innerHTML='<option>Select Model</option>';
+  (MODELS[make]||[]).forEach(m=>sel.innerHTML+=`<option>${m}</option>`);
+}
+
+function selectCond(btn,val){
+  condVal=val;
+  document.querySelectorAll('.cond-btn').forEach(b=>{b.style.borderColor='rgba(255,255,255,0.1)';b.style.background='rgba(255,255,255,0.04)';b.style.color='rgba(255,255,255,0.6)';});
+  btn.style.borderColor='#0d9488';btn.style.background='rgba(13,148,136,0.15)';btn.style.color='white';
+}
+
+function goStep(n){
+  for(let i=1;i<=3;i++) document.getElementById('s'+i).style.display='none';
+  document.getElementById('s'+n).style.display='block';
+  for(let i=1;i<=4;i++){
+    const el=document.getElementById('step'+i);
+    if(!el)return;
+    el.className='step '+(i<n?'done':i===n?'active-s':'todo');
+    if(i<n) el.textContent='✓'; else el.textContent=i;
+  }
+}
+
+function doValuation(){
+  const make=document.getElementById('v-make').value;
+  const model=document.getElementById('v-model').value;
+  const year=parseInt(document.getElementById('v-year').value)||2021;
+  const km=parseInt(document.getElementById('v-km').value)||50000;
+  const owners=parseInt(document.getElementById('v-owners').value)||1;
+  if(!make||make==='Select Make'){alert('Please select a make');return;}
+  document.getElementById('s3').style.display='none';
+  document.getElementById('s-loading').style.display='block';
+  setTimeout(()=>{
+    const key=`${make} ${model}`;
+    const base=BASE_PRICE[key]||900000;
+    const age=2025-year;
+    let price=base;
+    price*=Math.pow(0.87,age); // 13% depreciation/year
+    price*=Math.max(0.6,1-(km/200000)*0.4);
+    const condMul={excellent:1.08,good:1,fair:0.88,poor:0.75};
+    price*=(condMul[condVal]||1);
+    const ownerMul={1:1,2:0.93,3:0.85,4:0.75};
+    price*=(ownerMul[owners]||0.75);
+    const feats=document.querySelectorAll('.feat:checked').length;
+    price+=feats*15000;
+    const mid=Math.round(price/1000)*1000;
+    const low=Math.round(mid*0.9/1000)*1000;
+    const high=Math.round(mid*1.1/1000)*1000;
+    document.getElementById('r-low').textContent=formatPrice(low);
+    document.getElementById('r-mid').textContent=formatPrice(mid);
+    document.getElementById('r-price').textContent=formatPrice(mid);
+    document.getElementById('r-high').textContent=formatPrice(high);
+    document.getElementById('r-dep').textContent=age<=2?'Low (Newer Car)':age<=4?'Moderate':age<=6?'High':'Very High';
+    document.getElementById('r-dem').textContent=model&&(model.includes('Creta')||model.includes('Nexon')||model.includes('Seltos'))?'🔥 Very High':'📈 Moderate';
+    document.getElementById('factors-list').innerHTML=[
+      {label:'Age Depreciation',val:`${age} year(s) × 13%/yr`,good:age<=2},
+      {label:'Mileage',val:`${km.toLocaleString('en-IN')} km`,good:km<60000},
+      {label:'Ownership History',val:`${owners===1?'Single Owner ✓':owners+' Owners'}`,good:owners===1},
+      {label:'Condition',val:condVal.charAt(0).toUpperCase()+condVal.slice(1),good:condVal==='excellent'||condVal==='good'},
+      {label:'Premium Features',val:`${feats} features adding ${formatPrice(feats*15000)}`,good:feats>3},
+    ].map(f=>`<div class="flex items-center justify-between py-2" style="border-bottom:1px solid rgba(255,255,255,0.05)"><span class="text-sm" style="color:rgba(255,255,255,0.6)">${f.label}</span><span class="text-sm font-semibold ${f.good?'text-green-400':'text-yellow-400'}">${f.val}</span></div>`).join('');
+    document.getElementById('s-loading').style.display='none';
+    document.getElementById('form-section').style.display='none';
+    document.getElementById('result-section').style.display='block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  },2000);
+}
+
+function resetVal(){
+  document.getElementById('form-section').style.display='block';
+  document.getElementById('result-section').style.display='none';
+  goStep(1);
+}
+
+function contactDealer(){
+  const make=document.getElementById('v-make').value;
+  window.location.href=`listings.html?make=${encodeURIComponent(make)}&intent=sell`;
+}
+
+function formatPrice(n){
+  if(n>=10000000) return '₹'+(n/10000000).toFixed(2)+' Cr';
+  if(n>=100000) return '₹'+(n/100000).toFixed(2)+' L';
+  return '₹'+n.toLocaleString('en-IN');
+}
+</script>
+</body>
+</html>

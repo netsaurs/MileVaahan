@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register Your Dealership – MileVaahan</title>
+  <meta name="description" content="List your dealership on MileVaahan and reach thousands of car buyers across India. Choose from Basic, Pro, or Premium plans." />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    *{font-family:'DM Sans',sans-serif;} h1,h2,h3{font-family:'Syne',sans-serif;}
+    body{background:#f8fafc;}
+    .nav-glass{background:rgba(10,22,40,0.97);border-bottom:1px solid rgba(180,140,11,0.2);}
+    .form-input{width:100%;padding:11px 16px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:14px;color:#374151;outline:none;transition:border-color 0.2s;}
+    .form-input:focus{border-color:#0d9488;box-shadow:0 0 0 3px rgba(13,148,136,0.08);}
+    .form-label{display:block;font-size:12px;font-weight:700;color:#64748b;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px;}
+    .btn-main{background:linear-gradient(135deg,#0d9488,#0284c7);color:white;border:none;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer;transition:all 0.2s;padding:13px 28px;}
+    .btn-main:hover{opacity:0.9;transform:translateY(-1px);}
+    .plan-card{border:2px solid #e2e8f0;border-radius:20px;padding:24px;cursor:pointer;transition:all 0.3s;position:relative;}
+    .plan-card:hover{border-color:#0d9488;transform:translateY(-2px);}
+    .plan-card.selected{border-color:#0d9488;background:linear-gradient(135deg,rgba(13,148,136,0.04),rgba(2,132,199,0.04));}
+    .plan-card.popular::before{content:'MOST POPULAR';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#B8860B,#D4A017);color:white;font-size:10px;font-weight:800;letter-spacing:2px;padding:3px 14px;border-radius:20px;}
+    .step-badge{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;}
+    .step-badge.done{background:linear-gradient(135deg,#0d9488,#0284c7);color:white;}
+    .step-badge.active-step{background:linear-gradient(135deg,#0d9488,#0284c7);color:white;}
+    .step-badge.pending{background:#f1f5f9;color:#94a3b8;}
+    #error-msg{background:#fee2e2;color:#dc2626;padding:10px 14px;border-radius:10px;font-size:13px;display:none;margin-bottom:16px;}
+    #success-overlay{position:fixed;inset:0;background:rgba(10,22,40,0.9);z-index:9999;display:none;align-items:center;justify-content:center;}
+  </style>
+</head>
+<body>
+<nav class="nav-glass fixed top-0 left-0 right-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+    <a href="../index.html" class="flex items-center gap-3">
+      <img src="../images/logo.png" alt="MileVaahan" class="h-9 w-9 object-contain" />
+      <span class="text-white font-display font-bold text-lg">mile<span style="color:#B8860B">vaahan</span></span>
+    </a>
+    <p class="text-gray-400 text-sm">Already have an account? <a href="login.html" class="text-teal-400 font-semibold hover:text-teal-300">Sign In</a></p>
+  </div>
+</nav>
+
+<!-- Success Overlay -->
+<div id="success-overlay" style="display:none;position:fixed;inset:0;background:rgba(10,22,40,0.93);z-index:9999;display:none;align-items:center;justify-content:center;flex-direction:column;gap:20px;">
+  <div class="text-center">
+    <div class="text-7xl mb-4">🎉</div>
+    <h2 class="text-white text-3xl font-bold font-display mb-3">Welcome to MileVaahan!</h2>
+    <p class="text-gray-300 max-w-md">Your dealership application has been submitted. Our team will review and approve it within 24 hours.</p>
+    <a href="../dealer/dashboard.html" class="mt-6 inline-block px-8 py-3 rounded-xl text-white font-bold" style="background:linear-gradient(135deg,#0d9488,#0284c7);">Go to Dashboard →</a>
+  </div>
+</div>
+
+<div class="pt-24 pb-16 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+  <!-- Header -->
+  <div class="text-center mb-10">
+    <p class="text-xs font-bold tracking-widest text-teal-600 uppercase mb-2">Dealer Onboarding</p>
+    <h1 class="font-display text-4xl font-bold text-gray-900 mb-3">List Your Dealership</h1>
+    <p class="text-gray-500 max-w-xl mx-auto">Join 500+ verified dealers on India's fastest-growing car marketplace. Start reaching serious buyers today.</p>
+  </div>
+
+  <!-- Steps -->
+  <div class="flex items-center justify-center gap-3 mb-10">
+    <div class="flex items-center gap-2">
+      <div class="step-badge active-step" id="step1-badge">1</div>
+      <span class="text-sm font-semibold text-gray-700" id="step1-label">Choose Plan</span>
+    </div>
+    <div class="h-px w-12 bg-gray-200" id="step-line-1"></div>
+    <div class="flex items-center gap-2">
+      <div class="step-badge pending" id="step2-badge">2</div>
+      <span class="text-sm font-medium text-gray-400" id="step2-label">Dealership Info</span>
+    </div>
+    <div class="h-px w-12 bg-gray-200" id="step-line-2"></div>
+    <div class="flex items-center gap-2">
+      <div class="step-badge pending" id="step3-badge">3</div>
+      <span class="text-sm font-medium text-gray-400" id="step3-label">Account & Payment</span>
+    </div>
+  </div>
+
+  <!-- STEP 1: Choose Plan -->
+  <div id="step-1">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+      <!-- Basic -->
+      <div class="plan-card selected" onclick="selectPlan('basic',this)">
+        <input type="radio" name="plan" value="basic" checked class="hidden" />
+        <div class="text-gray-500 text-sm font-bold mb-2">BASIC</div>
+        <div class="font-display text-3xl font-bold text-gray-900 mb-1">₹1,999<span class="text-base font-normal text-gray-400">/mo</span></div>
+        <p class="text-gray-500 text-xs mb-5">Perfect for small dealers just starting out</p>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li>✅ 10 active listings</li>
+          <li>✅ Basic dealer profile</li>
+          <li>✅ Buyer inquiries</li>
+          <li>✅ Email support</li>
+          <li class="text-gray-300">❌ Featured listings</li>
+          <li class="text-gray-300">❌ Analytics</li>
+          <li class="text-gray-300">❌ WhatsApp integration</li>
+        </ul>
+      </div>
+      <!-- Pro -->
+      <div class="plan-card popular" onclick="selectPlan('pro',this)">
+        <input type="radio" name="plan" value="pro" class="hidden" />
+        <div class="text-teal-600 text-sm font-bold mb-2">PRO</div>
+        <div class="font-display text-3xl font-bold text-gray-900 mb-1">₹4,999<span class="text-base font-normal text-gray-400">/mo</span></div>
+        <p class="text-gray-500 text-xs mb-5">For growing dealerships wanting more visibility</p>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li>✅ 50 active listings</li>
+          <li>✅ Enhanced dealer profile</li>
+          <li>✅ Buyer inquiries</li>
+          <li>✅ Priority support</li>
+          <li>✅ 3 featured listings/mo</li>
+          <li>✅ Analytics dashboard</li>
+          <li>✅ WhatsApp integration</li>
+        </ul>
+      </div>
+      <!-- Premium -->
+      <div class="plan-card" onclick="selectPlan('premium',this)" style="border-color:#B8860B18;">
+        <input type="radio" name="plan" value="premium" class="hidden" />
+        <div class="text-sm font-bold mb-2" style="color:#B8860B;">PREMIUM</div>
+        <div class="font-display text-3xl font-bold text-gray-900 mb-1">₹9,999<span class="text-base font-normal text-gray-400">/mo</span></div>
+        <p class="text-gray-500 text-xs mb-5">For established dealers wanting maximum leads</p>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li>✅ Unlimited listings</li>
+          <li>✅ Premium dealer profile</li>
+          <li>✅ Priority inquiries</li>
+          <li>✅ Dedicated support</li>
+          <li>✅ 10 featured listings/mo</li>
+          <li>✅ Advanced analytics</li>
+          <li>✅ Homepage banner slot</li>
+        </ul>
+      </div>
+    </div>
+    <div class="text-center">
+      <button onclick="goToStep(2)" class="btn-main px-12">Continue with <span id="selected-plan-label">Basic</span> Plan →</button>
+      <p class="text-xs text-gray-400 mt-3">No lock-in. Cancel or upgrade anytime.</p>
+    </div>
+  </div>
+
+  <!-- STEP 2: Dealership Info -->
+  <div id="step-2" style="display:none;" class="max-w-2xl mx-auto">
+    <div class="bg-white rounded-2xl border border-gray-100 p-8">
+      <h2 class="font-display font-bold text-gray-900 text-xl mb-6">Dealership Information</h2>
+      <div id="error-msg"></div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="sm:col-span-2">
+          <label class="form-label">Dealership Name *</label>
+          <input type="text" id="dealer-name" class="form-input" placeholder="e.g. AutoMax Motors" />
+        </div>
+        <div>
+          <label class="form-label">Your Name *</label>
+          <input type="text" id="owner-name" class="form-input" placeholder="Owner / Contact Name" />
+        </div>
+        <div>
+          <label class="form-label">Phone Number *</label>
+          <input type="tel" id="dealer-phone" class="form-input" placeholder="+91 98765 43210" />
+        </div>
+        <div>
+          <label class="form-label">State *</label>
+          <select id="dealer-state" class="form-input" onchange="loadCities()">
+            <option value="">Select state...</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">City *</label>
+          <select id="dealer-city" class="form-input">
+            <option value="">Select city...</option>
+          </select>
+        </div>
+        <div class="sm:col-span-2">
+          <label class="form-label">Dealership Address *</label>
+          <textarea id="dealer-address" rows="2" class="form-input resize-none" placeholder="Full address including landmark..."></textarea>
+        </div>
+        <div>
+          <label class="form-label">GST Number</label>
+          <input type="text" id="dealer-gst" class="form-input" placeholder="27AABCU9603R1ZP" />
+        </div>
+        <div>
+          <label class="form-label">Years in Business</label>
+          <select id="dealer-years" class="form-input">
+            <option>Less than 1 year</option><option>1-3 years</option><option>3-5 years</option><option>5-10 years</option><option>10+ years</option>
+          </select>
+        </div>
+        <div class="sm:col-span-2">
+          <label class="form-label">Car Brands You Deal In *</label>
+          <input type="text" id="dealer-brands" class="form-input" placeholder="e.g. Maruti Suzuki, Hyundai, Tata (comma separated)" />
+        </div>
+        <div class="sm:col-span-2">
+          <label class="form-label">Type of Cars</label>
+          <div class="flex flex-wrap gap-2 mt-1">
+            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked class="accent-teal-600" /><span class="text-sm text-gray-600">New Cars</span></label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked class="accent-teal-600" /><span class="text-sm text-gray-600">Used Cars</span></label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="accent-teal-600" /><span class="text-sm text-gray-600">Certified Pre-Owned</span></label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="accent-teal-600" /><span class="text-sm text-gray-600">Parts & Accessories</span></label>
+          </div>
+        </div>
+        <div class="sm:col-span-2">
+          <label class="form-label">Dealership Website (optional)</label>
+          <input type="url" id="dealer-website" class="form-input" placeholder="https://yourwebsite.com" />
+        </div>
+      </div>
+      <div class="flex gap-3 justify-between mt-6">
+        <button onclick="goToStep(1)" class="px-5 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:text-gray-700 border border-gray-200">← Back</button>
+        <button onclick="goToStep(3)" class="btn-main">Continue to Account Setup →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: Account + Payment -->
+  <div id="step-3" style="display:none;" class="max-w-2xl mx-auto">
+    <div class="bg-white rounded-2xl border border-gray-100 p-8">
+      <h2 class="font-display font-bold text-gray-900 text-xl mb-6">Create Your Account</h2>
+      <div id="error-msg-3"></div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+        <div class="sm:col-span-2">
+          <label class="form-label">Email Address *</label>
+          <input type="email" id="reg-email" class="form-input" placeholder="yourname@dealership.com" />
+        </div>
+        <div>
+          <label class="form-label">Password *</label>
+          <input type="password" id="reg-password" class="form-input" placeholder="Minimum 6 characters" />
+        </div>
+        <div>
+          <label class="form-label">Confirm Password *</label>
+          <input type="password" id="reg-confirm" class="form-input" placeholder="Repeat password" />
+        </div>
+      </div>
+
+      <!-- Plan Summary -->
+      <div class="p-4 rounded-xl mb-6" style="background:linear-gradient(135deg,rgba(13,148,136,0.06),rgba(2,132,199,0.06));border:1px solid rgba(13,148,136,0.15);">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="font-bold text-gray-900 text-sm" id="plan-summary-name">Basic Plan</div>
+            <div class="text-xs text-gray-500 mt-0.5" id="plan-summary-desc">10 listings · Basic profile</div>
+          </div>
+          <div class="font-display font-bold text-2xl text-teal-700" id="plan-summary-price">₹1,999<span class="text-sm font-normal text-gray-400">/mo</span></div>
+        </div>
+      </div>
+
+      <!-- Terms -->
+      <label class="flex items-start gap-3 mb-5 cursor-pointer">
+        <input type="checkbox" id="terms-check" class="accent-teal-600 mt-1" />
+        <span class="text-sm text-gray-600">I agree to MileVaahan's <a href="terms.html" class="text-teal-600 hover:underline">Terms of Service</a> and <a href="privacy.html" class="text-teal-600 hover:underline">Privacy Policy</a>. My dealership information is accurate and I own/operate this business.</span>
+      </label>
+
+      <div class="flex gap-3 justify-between">
+        <button onclick="goToStep(2)" class="px-5 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:text-gray-700 border border-gray-200">← Back</button>
+        <button onclick="registerAndPay()" class="btn-main" id="pay-btn">
+          🚀 Register & Pay ₹<span id="pay-amount">1,999</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trust badges -->
+  <div class="flex flex-wrap justify-center gap-6 mt-10 text-center">
+    <div class="flex items-center gap-2 text-sm text-gray-500"><span class="text-green-500">🔒</span> Secure SSL Payment</div>
+    <div class="flex items-center gap-2 text-sm text-gray-500"><span class="text-blue-500">🏦</span> Razorpay Powered</div>
+    <div class="flex items-center gap-2 text-sm text-gray-500"><span class="text-teal-500">↩️</span> Cancel Anytime</div>
+    <div class="flex items-center gap-2 text-sm text-gray-500"><span class="text-yellow-500">⭐</span> 500+ Active Dealers</div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+let selectedPlan = 'basic';
+const planDetails = {
+  basic: { label:'Basic', price:1999, desc:'10 listings · Basic profile' },
+  pro: { label:'Pro', price:4999, desc:'50 listings · Featured slots · Analytics' },
+  premium: { label:'Premium', price:9999, desc:'Unlimited listings · Homepage banner' }
+};
+
+// Load states
+window.addEventListener('load', () => {
+  const stateSelect = document.getElementById('dealer-state');
+  Object.keys(INDIA_LOCATIONS).forEach(s => stateSelect.appendChild(new Option(s, s)));
+});
+
+function loadCities() {
+  const state = document.getElementById('dealer-state').value;
+  const citySelect = document.getElementById('dealer-city');
+  citySelect.innerHTML = '<option value="">Select city...</option>';
+  if (state && INDIA_LOCATIONS[state]) {
+    INDIA_LOCATIONS[state].forEach(c => citySelect.appendChild(new Option(c, c)));
+  }
+}
+
+function selectPlan(plan, card) {
+  selectedPlan = plan;
+  document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  const pd = planDetails[plan];
+  document.getElementById('selected-plan-label').textContent = pd.label;
+  document.getElementById('plan-summary-name').textContent = `${pd.label} Plan`;
+  document.getElementById('plan-summary-desc').textContent = pd.desc;
+  document.getElementById('plan-summary-price').innerHTML = `₹${pd.price.toLocaleString('en-IN')}<span class="text-sm font-normal text-gray-400">/mo</span>`;
+  document.getElementById('pay-amount').textContent = pd.price.toLocaleString('en-IN');
+}
+
+function goToStep(step) {
+  if (step === 3 && !validateStep2()) return;
+  [1,2,3].forEach(s => { document.getElementById(`step-${s}`).style.display = s === step ? 'block' : 'none'; });
+  // Update step badges
+  ['step1-badge','step2-badge','step3-badge'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    const labelEl = document.getElementById(id.replace('badge','label'));
+    if (i + 1 < step) { el.className = 'step-badge done'; el.textContent = '✓'; }
+    else if (i + 1 === step) { el.className = 'step-badge active-step'; el.textContent = i + 1; labelEl.className = 'text-sm font-semibold text-gray-700'; }
+    else { el.className = 'step-badge pending'; el.textContent = i + 1; labelEl.className = 'text-sm font-medium text-gray-400'; }
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showError(msg, step=2) {
+  const el = document.getElementById(`error-msg${step===3?'-3':''}`);
+  el.textContent = msg; el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 5000);
+}
+
+function validateStep2() {
+  if (!document.getElementById('dealer-name').value.trim()) { showError('Dealership name is required'); return false; }
+  if (!document.getElementById('owner-name').value.trim()) { showError('Your name is required'); return false; }
+  if (!document.getElementById('dealer-phone').value.trim()) { showError('Phone number is required'); return false; }
+  if (!document.getElementById('dealer-state').value) { showError('Please select your state'); return false; }
+  if (!document.getElementById('dealer-city').value) { showError('Please select your city'); return false; }
+  if (!document.getElementById('dealer-address').value.trim()) { showError('Address is required'); return false; }
+  if (!document.getElementById('dealer-brands').value.trim()) { showError('Please enter the brands you deal in'); return false; }
+  return true;
+}
+
+async function registerAndPay() {
+  const email = document.getElementById('reg-email').value.trim();
+  const password = document.getElementById('reg-password').value;
+  const confirm = document.getElementById('reg-confirm').value;
+  if (!email) { showError('Email is required', 3); return; }
+  if (password.length < 6) { showError('Password must be at least 6 characters', 3); return; }
+  if (password !== confirm) { showError('Passwords do not match', 3); return; }
+  if (!document.getElementById('terms-check').checked) { showError('Please accept the terms and conditions', 3); return; }
+
+  document.getElementById('pay-btn').textContent = 'Processing...';
+  document.getElementById('pay-btn').disabled = true;
+
+  try {
+    // 1. Create Firebase Auth user
+    const cred = await auth.createUserWithEmailAndPassword(email, password);
+    const user = cred.user;
+
+    // 2. Collect dealer info
+    const dealerData = {
+      uid: user.uid,
+      name: document.getElementById('dealer-name').value.trim(),
+      ownerName: document.getElementById('owner-name').value.trim(),
+      phone: document.getElementById('dealer-phone').value.trim(),
+      email: email,
+      state: document.getElementById('dealer-state').value,
+      city: document.getElementById('dealer-city').value,
+      address: document.getElementById('dealer-address').value.trim(),
+      gst: document.getElementById('dealer-gst').value.trim(),
+      yearsInBusiness: document.getElementById('dealer-years').value,
+      brands: document.getElementById('dealer-brands').value.split(',').map(b => b.trim()),
+      website: document.getElementById('dealer-website').value.trim(),
+      plan: selectedPlan,
+      status: 'pending', // Awaits admin approval
+      listingCount: 0,
+      rating: 0,
+      reviewCount: 0,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    // 3. Save user doc as dealer
+    await db.collection(COLLECTIONS.USERS).doc(user.uid).set({
+      name: dealerData.ownerName,
+      email: email,
+      role: ROLES.DEALER,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    // 4. Save dealer doc
+    const dealerRef = await db.collection(COLLECTIONS.DEALERS).add(dealerData);
+
+    // 5. Process Razorpay payment
+    const pd = planDetails[selectedPlan];
+    await initiateRazorpay(pd.price, dealerRef.id, user);
+
+  } catch (e) {
+    document.getElementById('pay-btn').textContent = `🚀 Register & Pay ₹${planDetails[selectedPlan].price.toLocaleString('en-IN')}`;
+    document.getElementById('pay-btn').disabled = false;
+    if (e.code === 'auth/email-already-in-use') {
+      showError('This email is already registered. Please sign in instead.', 3);
+    } else {
+      showError(e.message || 'Registration failed. Please try again.', 3);
+    }
+  }
+}
+
+function initiateRazorpay(amount, dealerId, user) {
+  return new Promise((resolve, reject) => {
+    const pd = planDetails[selectedPlan];
+    const options = {
+      key: 'YOUR_RAZORPAY_KEY_ID',
+      amount: amount * 100,
+      currency: 'INR',
+      name: 'MileVaahan',
+      description: `${pd.label} Plan – Monthly Subscription`,
+      image: '../images/logo.png',
+      handler: async function(response) {
+        // Payment successful
+        await db.collection(COLLECTIONS.SUBSCRIPTIONS).add({
+          dealerId,
+          plan: selectedPlan,
+          amount,
+          razorpayPaymentId: response.razorpay_payment_id,
+          razorpayOrderId: response.razorpay_order_id,
+          status: 'active',
+          startDate: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        // Show success
+        document.getElementById('success-overlay').style.display = 'flex';
+        resolve();
+      },
+      prefill: { name: document.getElementById('owner-name').value, email: user.email, contact: document.getElementById('dealer-phone').value },
+      theme: { color: '#0d9488' },
+      modal: {
+        ondismiss: function() {
+          // Payment cancelled - dealer registered but no payment
+          // Still redirect to dashboard (they can pay later)
+          document.getElementById('success-overlay').style.display = 'flex';
+          resolve();
+        }
+      }
+    };
+    const rzp = new Razorpay(options);
+    rzp.open();
+  });
+}
+</script>
+</body>
+</html>

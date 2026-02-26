@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ═══════════════ PRIMARY SEO META ═══════════════ -->
+  <title>MileVaahan – India's Premium Car Marketplace | Buy, Sell & Find Cars</title>
+  <meta name="description" content="MileVaahan is India's most trusted car marketplace. Buy & sell new cars, used cars, certified pre-owned vehicles and car parts. 10,000+ listings across India. Find your perfect car today." />
+  <meta name="keywords" content="buy car India, sell car online, used cars, new cars, certified pre-owned, car dealer India, MileVaahan, car marketplace India" />
+  <meta name="author" content="MileVaahan" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="canonical" href="https://www.milevaahan.com/" />
+
+  <!-- ═══════════════ OPEN GRAPH ═══════════════ -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.milevaahan.com/" />
+  <meta property="og:title" content="MileVaahan – India's Premium Car Marketplace" />
+  <meta property="og:description" content="Buy & sell new cars, used cars, certified pre-owned vehicles. 10,000+ listings across India." />
+  <meta property="og:image" content="https://www.milevaahan.com/images/og-cover.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="MileVaahan" />
+  <meta property="og:locale" content="en_IN" />
+
+  <!-- ═══════════════ TWITTER CARD ═══════════════ -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@milevaahan" />
+  <meta name="twitter:title" content="MileVaahan – India's Premium Car Marketplace" />
+  <meta name="twitter:description" content="Buy & sell new cars, used cars, certified pre-owned vehicles. 10,000+ listings across India." />
+  <meta name="twitter:image" content="https://www.milevaahan.com/images/og-cover.jpg" />
+
+  <!-- ═══════════════ JSON-LD STRUCTURED DATA ═══════════════ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://www.milevaahan.com/#website",
+        "url": "https://www.milevaahan.com/",
+        "name": "MileVaahan",
+        "description": "India's Premium Car Marketplace",
+        "inLanguage": "en-IN",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": { "@type": "EntryPoint", "urlTemplate": "https://www.milevaahan.com/pages/listings.html?q={search_term_string}" },
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://www.milevaahan.com/#organization",
+        "name": "MileVaahan",
+        "url": "https://www.milevaahan.com/",
+        "logo": { "@type": "ImageObject", "url": "https://www.milevaahan.com/images/logo.png" },
+        "sameAs": [
+          "https://www.facebook.com/milevaahan",
+          "https://www.instagram.com/milevaahan",
+          "https://twitter.com/milevaahan",
+          "https://www.youtube.com/milevaahan"
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "email": "support@milevaahan.com",
+          "availableLanguage": ["English", "Hindi"]
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- ═══════════════ FONTS ═══════════════ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            peacock: { 50:'#f0fdfb', 100:'#ccfbf1', 200:'#99f6e4', 300:'#5eead4', 400:'#2dd4bf', 500:'#14b8a6', 600:'#0d9488', 700:'#0f766e', 800:'#115e59', 900:'#134e4a' },
+            ocean: { 400:'#38bdf8', 500:'#0ea5e9', 600:'#0284c7', 700:'#0369a1', 800:'#075985', 900:'#0c4a6e' },
+            gold: { 300:'#fcd34d', 400:'#fbbf24', 500:'#f59e0b', 600:'#d97706', 700:'#b45309', 800:'#92400e', DEFAULT:'#B8860B' }
+          },
+          fontFamily: {
+            display: ['Syne', 'sans-serif'],
+            body: ['DM Sans', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * { font-family: 'DM Sans', sans-serif; }
+    h1, h2, h3, .font-display { font-family: 'Syne', sans-serif; }
+
+    :root {
+      --peacock: #0d9488;
+      --peacock-dark: #0f766e;
+      --ocean: #0284c7;
+      --gold: #B8860B;
+      --gold-light: #D4A017;
+      --dark: #0a1628;
+      --dark2: #0f2040;
+    }
+
+    body { background: #f8fafc; color: #1e293b; overflow-x: hidden; }
+
+    /* Hero gradient */
+    .hero-bg {
+      background: linear-gradient(135deg, #0a1628 0%, #0f2040 30%, #0d4a6e 60%, #0f766e 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.15;
+    }
+
+    /* Nav */
+    .nav-glass {
+      background: rgba(10, 22, 40, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(180, 140, 11, 0.2);
+    }
+
+    /* Search box */
+    .search-card {
+      background: rgba(255,255,255,0.98);
+      border: 1px solid rgba(180,140,11,0.2);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.3), 0 0 0 1px rgba(13,148,136,0.1);
+    }
+
+    /* Car cards */
+    .car-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .car-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--peacock), var(--ocean), var(--gold));
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+    .car-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(13,148,136,0.15); border-color: #0d9488; }
+    .car-card:hover::before { transform: scaleX(1); }
+
+    .badge-new { background: linear-gradient(135deg, #0d9488, #0284c7); }
+    .badge-used { background: linear-gradient(135deg, #64748b, #475569); }
+    .badge-cpo { background: linear-gradient(135deg, #B8860B, #d97706); }
+
+    /* Section titles */
+    .section-title { font-family: 'Syne', sans-serif; }
+    .gold-line { height: 3px; width: 60px; background: linear-gradient(90deg, var(--gold), var(--peacock)); border-radius: 2px; }
+
+    /* Stat cards */
+    .stat-card {
+      background: linear-gradient(135deg, rgba(13,148,136,0.08), rgba(2,132,199,0.08));
+      border: 1px solid rgba(13,148,136,0.2);
+    }
+
+    /* Brand section */
+    .brand-strip { background: linear-gradient(135deg, #0a1628, #0f2040); }
+
+    /* Filter tabs */
+    .filter-tab { transition: all 0.2s ease; }
+    .filter-tab.active {
+      background: linear-gradient(135deg, var(--peacock), var(--ocean));
+      color: white;
+    }
+
+    /* Dealer card */
+    .dealer-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+    }
+    .dealer-card:hover { transform: translateY(-4px); box-shadow: 0 15px 40px rgba(13,148,136,0.12); border-color: #0d9488; }
+
+    /* CTA section */
+    .cta-section {
+      background: linear-gradient(135deg, #0a1628 0%, #0f2040 50%, #0f766e 100%);
+    }
+
+    /* Mobile nav */
+    .mobile-menu { transition: all 0.3s ease; }
+
+    /* Loader */
+    #global-loader {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(10,22,40,0.95);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 16px;
+    }
+    .loader-ring {
+      width: 50px; height: 50px;
+      border: 3px solid rgba(180,140,11,0.2);
+      border-top-color: #B8860B;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Animations */
+    .fade-up { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* Price tag */
+    .price-tag { color: var(--peacock-dark); font-family: 'Syne', sans-serif; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: var(--peacock); border-radius: 3px; }
+
+    /* Featured badge */
+    .featured-badge {
+      background: linear-gradient(135deg, #B8860B, #D4A017);
+      font-size: 10px; letter-spacing: 1px;
+    }
+
+    /* Verified badge */
+    .verified-badge { color: #0284c7; }
+
+    /* Range slider */
+    input[type=range] { accent-color: var(--peacock); }
+  </style>
+</head>
+<body>
+
+<!-- Global Loader -->
+<div id="global-loader">
+  <img src="images/logo.png" alt="MileVaahan" style="height:70px; filter: drop-shadow(0 0 20px rgba(180,140,11,0.4));" />
+  <div class="loader-ring"></div>
+  <p style="color: rgba(255,255,255,0.6); font-size: 13px; letter-spacing: 2px;">LOADING MILEVAAHAN</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     NAVIGATION
+═══════════════════════════════════════════════════════════ -->
+<nav class="nav-glass fixed top-0 left-0 right-0 z-50" role="navigation" aria-label="Main navigation">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-3" aria-label="MileVaahan Home">
+        <img src="images/logo.png" alt="MileVaahan Logo" class="h-10 w-10 object-contain" />
+        <span class="text-white font-display font-bold text-xl tracking-tight">mile<span style="color:#B8860B">vaahan</span></span>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <div class="hidden md:flex items-center gap-6">
+        <a href="pages/listings.html?type=new" class="text-gray-300 hover:text-white text-sm font-medium transition-colors">New Cars</a>
+        <a href="pages/listings.html?type=used" class="text-gray-300 hover:text-white text-sm font-medium transition-colors">Used Cars</a>
+        <a href="pages/listings.html?type=cpo" class="text-gray-300 hover:text-white text-sm font-medium transition-colors">Certified Pre-Owned</a>
+        <a href="pages/listings.html?type=parts" class="text-gray-300 hover:text-white text-sm font-medium transition-colors">Parts & Accessories</a>
+        <a href="pages/dealers.html" class="text-gray-300 hover:text-white text-sm font-medium transition-colors">Dealers</a>
+        <a href="pages/blog.html" class="text-gray-300 hover:text-white text-sm font-medium transition-colors">Blog</a>
+      </div>
+
+      <!-- Auth Actions -->
+      <div class="hidden md:flex items-center gap-3">
+        <div id="nav-auth-guest" class="flex items-center gap-3">
+          <a href="pages/login.html" class="text-gray-300 hover:text-white text-sm font-medium transition-colors">Sign In</a>
+          <a href="pages/register.html" class="px-4 py-2 rounded-lg text-sm font-semibold text-white transition-all hover:opacity-90" style="background: linear-gradient(135deg, #0d9488, #0284c7);">
+            List Your Car
+          </a>
+          <a href="pages/dealer-register.html" class="px-4 py-2 rounded-lg text-sm font-semibold border transition-all hover:bg-yellow-500/10" style="border-color: #B8860B; color: #D4A017;">
+            For Dealers
+          </a>
+        </div>
+        <div id="nav-auth-user" class="hidden flex items-center gap-3">
+          <a href="pages/wishlist.html" class="text-gray-300 hover:text-white text-sm">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          </a>
+          <div class="relative group">
+            <button class="flex items-center gap-2 text-gray-300 hover:text-white text-sm font-medium">
+              <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold" style="background: linear-gradient(135deg, #0d9488, #0284c7);" id="nav-avatar">U</div>
+              <span id="nav-user-name">User</span>
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+              <div class="p-2">
+                <a href="pages/profile.html" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 text-gray-700 text-sm">My Profile</a>
+                <a href="pages/my-listings.html" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 text-gray-700 text-sm">My Listings</a>
+                <a href="pages/messages.html" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 text-gray-700 text-sm">Messages</a>
+                <a href="pages/wishlist.html" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 text-gray-700 text-sm">Wishlist</a>
+                <hr class="my-1" />
+                <button onclick="signOut()" class="w-full text-left flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-red-50 text-red-600 text-sm">Sign Out</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button id="mobile-menu-btn" class="md:hidden text-gray-300 hover:text-white" aria-label="Toggle menu">
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden md:hidden bg-gray-900 border-t border-gray-800">
+    <div class="px-4 py-4 space-y-2">
+      <a href="pages/listings.html?type=new" class="block px-3 py-2 text-gray-300 hover:text-white text-sm">New Cars</a>
+      <a href="pages/listings.html?type=used" class="block px-3 py-2 text-gray-300 hover:text-white text-sm">Used Cars</a>
+      <a href="pages/listings.html?type=cpo" class="block px-3 py-2 text-gray-300 hover:text-white text-sm">Certified Pre-Owned</a>
+      <a href="pages/listings.html?type=parts" class="block px-3 py-2 text-gray-300 hover:text-white text-sm">Parts & Accessories</a>
+      <a href="pages/dealers.html" class="block px-3 py-2 text-gray-300 hover:text-white text-sm">Dealers</a>
+      <a href="pages/blog.html" class="block px-3 py-2 text-gray-300 hover:text-white text-sm">Blog</a>
+      <hr class="border-gray-700 my-2" />
+      <a href="pages/login.html" class="block px-3 py-2 text-gray-300 hover:text-white text-sm">Sign In</a>
+      <a href="pages/register.html" class="block px-4 py-2 rounded-lg text-center text-white font-semibold text-sm" style="background: linear-gradient(135deg, #0d9488, #0284c7);">List Your Car</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════
+     HERO SECTION
+═══════════════════════════════════════════════════════════ -->
+<section class="hero-bg pt-16 min-h-screen flex flex-col justify-center" aria-label="Hero - Find Your Perfect Car">
+  <!-- Glow effects -->
+  <div class="hero-glow" style="background: #0d9488; top: -100px; right: -100px;"></div>
+  <div class="hero-glow" style="background: #0284c7; bottom: 0; left: -100px;"></div>
+  <div class="hero-glow" style="background: #B8860B; width:300px; height:300px; top:50%; right:30%;"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
+
+    <!-- Badge -->
+    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold mb-6 border" style="background: rgba(180,140,11,0.1); border-color: rgba(180,140,11,0.3); color: #D4A017;">
+      <span class="w-1.5 h-1.5 rounded-full bg-yellow-400 animate-pulse"></span>
+      India's Most Trusted Car Marketplace
+    </div>
+
+    <!-- Headline -->
+    <h1 class="font-display text-5xl md:text-7xl font-bold text-white leading-tight mb-6">
+      Find Your <span style="background: linear-gradient(135deg, #0d9488, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Perfect</span><br/>
+      <span style="background: linear-gradient(135deg, #B8860B, #D4A017); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Vaahan</span> Today
+    </h1>
+    <p class="text-gray-300 text-lg md:text-xl max-w-2xl mx-auto mb-12">
+      India's premium marketplace for new cars, used cars & certified pre-owned vehicles. Connect with verified dealers across India.
+    </p>
+
+    <!-- Search Card -->
+    <div class="search-card rounded-2xl p-6 max-w-5xl mx-auto">
+      <!-- Tab Switcher -->
+      <div class="flex gap-2 mb-5 flex-wrap">
+        <button class="filter-tab active px-4 py-2 rounded-lg text-sm font-semibold border border-gray-200 text-gray-600" onclick="setListingType('used', this)">🚗 Used Cars</button>
+        <button class="filter-tab px-4 py-2 rounded-lg text-sm font-semibold border border-gray-200 text-gray-600" onclick="setListingType('new', this)">✨ New Cars</button>
+        <button class="filter-tab px-4 py-2 rounded-lg text-sm font-semibold border border-gray-200 text-gray-600" onclick="setListingType('cpo', this)">🏆 Certified Pre-Owned</button>
+        <button class="filter-tab px-4 py-2 rounded-lg text-sm font-semibold border border-gray-200 text-gray-600" onclick="setListingType('parts', this)">🔧 Parts</button>
+      </div>
+
+      <!-- Search Filters -->
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <select id="search-make" onchange="updateModels()" class="col-span-2 md:col-span-1 px-4 py-3 rounded-xl border border-gray-200 text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50">
+          <option value="">All Makes</option>
+        </select>
+        <select id="search-model" class="px-4 py-3 rounded-xl border border-gray-200 text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50">
+          <option value="">All Models</option>
+        </select>
+        <select id="search-year" class="px-4 py-3 rounded-xl border border-gray-200 text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50">
+          <option value="">Any Year</option>
+        </select>
+        <select id="search-city" class="px-4 py-3 rounded-xl border border-gray-200 text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50">
+          <option value="">Any City</option>
+        </select>
+        <button onclick="doSearch()" class="px-6 py-3 rounded-xl text-white font-bold text-sm transition-all hover:opacity-90 hover:scale-105 active:scale-95 flex items-center justify-center gap-2" style="background: linear-gradient(135deg, #0d9488, #0284c7);">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          Search
+        </button>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="flex gap-4 mt-4 flex-wrap text-xs text-gray-500">
+        <span>Popular:</span>
+        <a href="pages/listings.html?make=Maruti+Suzuki" class="hover:text-teal-600 transition-colors">Maruti Suzuki</a>
+        <a href="pages/listings.html?make=Hyundai" class="hover:text-teal-600 transition-colors">Hyundai</a>
+        <a href="pages/listings.html?make=Tata" class="hover:text-teal-600 transition-colors">Tata</a>
+        <a href="pages/listings.html?make=Mahindra" class="hover:text-teal-600 transition-colors">Mahindra</a>
+        <a href="pages/listings.html?fuel=Electric" class="hover:text-teal-600 transition-colors">⚡ Electric Cars</a>
+        <a href="pages/listings.html?budget=under-5l" class="hover:text-teal-600 transition-colors">Under ₹5 Lakh</a>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto mt-14">
+      <div class="text-center">
+        <div class="text-3xl font-display font-bold text-white" id="stat-listings">10K+</div>
+        <div class="text-gray-400 text-xs mt-1">Active Listings</div>
+      </div>
+      <div class="text-center">
+        <div class="text-3xl font-display font-bold text-white" id="stat-dealers">500+</div>
+        <div class="text-gray-400 text-xs mt-1">Verified Dealers</div>
+      </div>
+      <div class="text-center">
+        <div class="text-3xl font-display font-bold text-white" id="stat-cities">100+</div>
+        <div class="text-gray-400 text-xs mt-1">Cities Covered</div>
+      </div>
+      <div class="text-center">
+        <div class="text-3xl font-display font-bold text-white" id="stat-sold">50K+</div>
+        <div class="text-gray-400 text-xs mt-1">Cars Sold</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     BROWSE BY BRAND
+═══════════════════════════════════════════════════════════ -->
+<section class="py-16 bg-white" aria-label="Browse by car brand">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-10">
+      <p class="text-xs font-bold tracking-widest text-teal-600 uppercase mb-2">Explore</p>
+      <h2 class="section-title text-3xl md:text-4xl font-bold text-gray-900">Browse by Brand</h2>
+      <div class="gold-line mx-auto mt-3"></div>
+    </div>
+    <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4" id="brand-grid">
+      <!-- Populated by JS -->
+    </div>
+    <div class="text-center mt-8">
+      <a href="pages/listings.html" class="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 font-semibold text-sm">
+        View All Brands
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     FEATURED LISTINGS
+═══════════════════════════════════════════════════════════ -->
+<section class="py-16 bg-gray-50" aria-label="Featured car listings">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+      <div>
+        <p class="text-xs font-bold tracking-widest text-teal-600 uppercase mb-2">Hand-picked</p>
+        <h2 class="section-title text-3xl md:text-4xl font-bold text-gray-900">Featured Listings</h2>
+        <div class="gold-line mt-3"></div>
+      </div>
+      <div class="flex gap-2">
+        <button class="filter-tab active px-4 py-2 rounded-lg text-sm font-medium border border-gray-200" onclick="filterFeatured('all', this)">All</button>
+        <button class="filter-tab px-4 py-2 rounded-lg text-sm font-medium border border-gray-200" onclick="filterFeatured('new', this)">New</button>
+        <button class="filter-tab px-4 py-2 rounded-lg text-sm font-medium border border-gray-200" onclick="filterFeatured('used', this)">Used</button>
+        <button class="filter-tab px-4 py-2 rounded-lg text-sm font-medium border border-gray-200" onclick="filterFeatured('cpo', this)">CPO</button>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="featured-grid">
+      <!-- Car cards populated by JS -->
+      <div class="col-span-full flex justify-center py-10">
+        <div class="loader-ring" style="border-top-color: #0d9488;"></div>
+      </div>
+    </div>
+    <div class="text-center mt-10">
+      <a href="pages/listings.html" class="inline-flex items-center gap-3 px-8 py-3 rounded-xl text-white font-semibold transition-all hover:opacity-90 hover:scale-105" style="background: linear-gradient(135deg, #0d9488, #0284c7);">
+        View All Listings
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     TOOLS ROW
+═══════════════════════════════════════════════════════════ -->
+<section class="py-14 bg-white" aria-label="Car tools and calculators">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <a href="pages/emi-calculator.html" class="group p-6 rounded-2xl border border-gray-100 hover:border-teal-200 hover:shadow-lg transition-all text-center">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl group-hover:scale-110 transition-transform" style="background: linear-gradient(135deg, rgba(13,148,136,0.1), rgba(2,132,199,0.1));">💰</div>
+        <h3 class="font-display font-bold text-gray-800 mb-1">EMI Calculator</h3>
+        <p class="text-gray-500 text-xs">Plan your car finance</p>
+      </a>
+      <a href="pages/valuation.html" class="group p-6 rounded-2xl border border-gray-100 hover:border-teal-200 hover:shadow-lg transition-all text-center">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl group-hover:scale-110 transition-transform" style="background: linear-gradient(135deg, rgba(180,140,11,0.1), rgba(212,160,23,0.1));">📊</div>
+        <h3 class="font-display font-bold text-gray-800 mb-1">Car Valuation</h3>
+        <p class="text-gray-500 text-xs">Know your car's worth</p>
+      </a>
+      <a href="pages/compare.html" class="group p-6 rounded-2xl border border-gray-100 hover:border-teal-200 hover:shadow-lg transition-all text-center">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl group-hover:scale-110 transition-transform" style="background: linear-gradient(135deg, rgba(13,148,136,0.1), rgba(180,140,11,0.1));">⚖️</div>
+        <h3 class="font-display font-bold text-gray-800 mb-1">Compare Cars</h3>
+        <p class="text-gray-500 text-xs">Side-by-side comparison</p>
+      </a>
+      <a href="pages/vin-lookup.html" class="group p-6 rounded-2xl border border-gray-100 hover:border-teal-200 hover:shadow-lg transition-all text-center">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl group-hover:scale-110 transition-transform" style="background: linear-gradient(135deg, rgba(2,132,199,0.1), rgba(13,148,136,0.1));">🔍</div>
+        <h3 class="font-display font-bold text-gray-800 mb-1">VIN Lookup</h3>
+        <p class="text-gray-500 text-xs">Check vehicle history</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     BROWSE BY BODY TYPE
+═══════════════════════════════════════════════════════════ -->
+<section class="py-16 bg-gray-50" aria-label="Browse cars by body type">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-10">
+      <p class="text-xs font-bold tracking-widest text-teal-600 uppercase mb-2">Discover</p>
+      <h2 class="section-title text-3xl font-bold text-gray-900">Browse by Type</h2>
+      <div class="gold-line mx-auto mt-3"></div>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3">
+      <a href="pages/listings.html?body=Sedan" class="group flex flex-col items-center p-4 rounded-2xl bg-white border border-gray-100 hover:border-teal-300 hover:shadow-md transition-all text-center">
+        <span class="text-3xl mb-2 group-hover:scale-110 transition-transform">🚗</span>
+        <span class="text-xs font-semibold text-gray-700">Sedan</span>
+      </a>
+      <a href="pages/listings.html?body=Hatchback" class="group flex flex-col items-center p-4 rounded-2xl bg-white border border-gray-100 hover:border-teal-300 hover:shadow-md transition-all text-center">
+        <span class="text-3xl mb-2 group-hover:scale-110 transition-transform">🚙</span>
+        <span class="text-xs font-semibold text-gray-700">Hatchback</span>
+      </a>
+      <a href="pages/listings.html?body=SUV" class="group flex flex-col items-center p-4 rounded-2xl bg-white border border-gray-100 hover:border-teal-300 hover:shadow-md transition-all text-center">
+        <span class="text-3xl mb-2 group-hover:scale-110 transition-transform">🛻</span>
+        <span class="text-xs font-semibold text-gray-700">SUV</span>
+      </a>
+      <a href="pages/listings.html?body=MUV" class="group flex flex-col items-center p-4 rounded-2xl bg-white border border-gray-100 hover:border-teal-300 hover:shadow-md transition-all text-center">
+        <span class="text-3xl mb-2 group-hover:scale-110 transition-transform">🚐</span>
+        <span class="text-xs font-semibold text-gray-700">MUV/MPV</span>
+      </a>
+      <a href="pages/listings.html?body=Coupe" class="group flex flex-col items-center p-4 rounded-2xl bg-white border border-gray-100 hover:border-teal-300 hover:shadow-md transition-all text-center">
+        <span class="text-3xl mb-2 group-hover:scale-110 transition-transform">🏎️</span>
+        <span class="text-xs font-semibold text-gray-700">Coupe</span>
+      </a>
+      <a href="pages/listings.html?fuel=Electric" class="group flex flex-col items-center p-4 rounded-2xl bg-white border border-gray-100 hover:border-teal-300 hover:shadow-md transition-all text-center">
+        <span class="text-3xl mb-2 group-hover:scale-110 transition-transform">⚡</span>
+        <span class="text-xs font-semibold text-gray-700">Electric</span>
+      </a>
+      <a href="pages/listings.html?fuel=Hybrid" class="group flex flex-col items-center p-4 rounded-2xl bg-white border border-gray-100 hover:border-teal-300 hover:shadow-md transition-all text-center">
+        <span class="text-3xl mb-2 group-hover:scale-110 transition-transform">🌿</span>
+        <span class="text-xs font-semibold text-gray-700">Hybrid</span>
+      </a>
+      <a href="pages/listings.html?type=parts" class="group flex flex-col items-center p-4 rounded-2xl bg-white border border-gray-100 hover:border-teal-300 hover:shadow-md transition-all text-center">
+        <span class="text-3xl mb-2 group-hover:scale-110 transition-transform">🔧</span>
+        <span class="text-xs font-semibold text-gray-700">Parts</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     FEATURED DEALERS
+═══════════════════════════════════════════════════════════ -->
+<section class="py-16 bg-white" aria-label="Featured car dealers">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+      <div>
+        <p class="text-xs font-bold tracking-widest text-teal-600 uppercase mb-2">Trusted Partners</p>
+        <h2 class="section-title text-3xl md:text-4xl font-bold text-gray-900">Featured Dealers</h2>
+        <div class="gold-line mt-3"></div>
+      </div>
+      <a href="pages/dealers.html" class="text-teal-600 hover:text-teal-700 font-semibold text-sm flex items-center gap-1">
+        View All Dealers <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="dealers-grid">
+      <div class="col-span-full flex justify-center py-10">
+        <div class="loader-ring" style="border-top-color: #0d9488;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     WHY MILEVAAHAN
+═══════════════════════════════════════════════════════════ -->
+<section class="py-16" style="background: linear-gradient(135deg, #f0fdfb, #f0f9ff);" aria-label="Why choose MileVaahan">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <p class="text-xs font-bold tracking-widest text-teal-600 uppercase mb-2">Our Promise</p>
+      <h2 class="section-title text-3xl md:text-4xl font-bold text-gray-900">Why MileVaahan?</h2>
+      <div class="gold-line mx-auto mt-3"></div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="text-center p-8 rounded-2xl bg-white border border-teal-100 shadow-sm hover:shadow-lg transition-all">
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5 text-3xl" style="background: linear-gradient(135deg, rgba(13,148,136,0.12), rgba(2,132,199,0.12));">🛡️</div>
+        <h3 class="font-display font-bold text-xl text-gray-900 mb-3">Verified Dealers</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">All dealers are thoroughly verified with valid GST, trade licenses and real customer reviews before listing on MileVaahan.</p>
+      </div>
+      <div class="text-center p-8 rounded-2xl bg-white border border-yellow-100 shadow-sm hover:shadow-lg transition-all">
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5 text-3xl" style="background: linear-gradient(135deg, rgba(180,140,11,0.12), rgba(212,160,23,0.12));">💎</div>
+        <h3 class="font-display font-bold text-xl text-gray-900 mb-3">Certified Pre-Owned</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Our CPO vehicles undergo a rigorous 150-point inspection. Buy with complete peace of mind and warranty coverage.</p>
+      </div>
+      <div class="text-center p-8 rounded-2xl bg-white border border-blue-100 shadow-sm hover:shadow-lg transition-all">
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5 text-3xl" style="background: linear-gradient(135deg, rgba(2,132,199,0.12), rgba(13,148,136,0.12));">🤝</div>
+        <h3 class="font-display font-bold text-xl text-gray-900 mb-3">Instant Connections</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Connect with sellers via WhatsApp, phone, or our built-in chat. Get real responses within minutes, not days.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     RECENT BLOG POSTS
+═══════════════════════════════════════════════════════════ -->
+<section class="py-16 bg-white" aria-label="Car news and blog">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+      <div>
+        <p class="text-xs font-bold tracking-widest text-teal-600 uppercase mb-2">Stay Updated</p>
+        <h2 class="section-title text-3xl md:text-4xl font-bold text-gray-900">Car News & Insights</h2>
+        <div class="gold-line mt-3"></div>
+      </div>
+      <a href="pages/blog.html" class="text-teal-600 hover:text-teal-700 font-semibold text-sm flex items-center gap-1">
+        View All Articles <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="blog-grid">
+      <!-- Blog cards populated by JS -->
+      <div class="col-span-full text-center py-10 text-gray-400">Loading articles...</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SUBSCRIPTION PLANS (FOR DEALERS)
+═══════════════════════════════════════════════════════════ -->
+<section class="py-16 bg-gray-50" aria-label="Dealer subscription plans">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <p class="text-xs font-bold tracking-widest text-teal-600 uppercase mb-2">For Dealers</p>
+      <h2 class="section-title text-3xl md:text-4xl font-bold text-gray-900">Grow Your Business</h2>
+      <div class="gold-line mx-auto mt-3"></div>
+      <p class="text-gray-500 mt-4 max-w-xl mx-auto">Join 500+ dealers using MileVaahan to reach thousands of qualified buyers every day.</p>
+    </div>
+
+    <!-- Billing Toggle -->
+    <div class="flex items-center justify-center gap-3 mb-10">
+      <span class="text-sm font-medium text-gray-700">Monthly</span>
+      <button id="billing-toggle" onclick="toggleBilling()" class="relative w-12 h-6 rounded-full transition-colors" style="background: #0d9488;">
+        <div id="toggle-dot" class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition-transform"></div>
+      </button>
+      <span class="text-sm font-medium text-gray-700">Yearly <span class="text-xs text-teal-600 font-bold">(Save 17%)</span></span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+      <!-- Basic -->
+      <div class="bg-white rounded-2xl border-2 border-gray-200 p-8 hover:border-teal-300 transition-all hover:shadow-lg">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 text-xl" style="background: #f1f5f9;">🏪</div>
+        <h3 class="font-display text-2xl font-bold text-gray-800 mb-1">Basic</h3>
+        <p class="text-gray-500 text-sm mb-5">Perfect for small dealers</p>
+        <div class="mb-6">
+          <span class="text-4xl font-display font-bold text-gray-900" id="basic-price">₹1,999</span>
+          <span class="text-gray-400 text-sm" id="basic-period">/month</span>
+        </div>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center gap-2 text-sm text-gray-600"><svg class="w-4 h-4 text-teal-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>10 Active Listings</li>
+          <li class="flex items-center gap-2 text-sm text-gray-600"><svg class="w-4 h-4 text-teal-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Basic Dealer Profile</li>
+          <li class="flex items-center gap-2 text-sm text-gray-600"><svg class="w-4 h-4 text-teal-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Email Inquiries</li>
+          <li class="flex items-center gap-2 text-sm text-gray-400"><svg class="w-4 h-4 text-gray-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>Featured Listings</li>
+          <li class="flex items-center gap-2 text-sm text-gray-400"><svg class="w-4 h-4 text-gray-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>Analytics</li>
+        </ul>
+        <a href="pages/dealer-register.html?plan=basic" class="block w-full py-3 rounded-xl text-center font-semibold text-sm border-2 border-gray-200 hover:border-teal-500 hover:text-teal-600 transition-all">Get Started</a>
+      </div>
+
+      <!-- Pro (Popular) -->
+      <div class="rounded-2xl border-2 p-8 relative shadow-xl scale-105" style="background: linear-gradient(135deg, #0a1628, #0f2040); border-color: #B8860B;">
+        <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-bold text-white" style="background: linear-gradient(135deg, #B8860B, #D4A017);">MOST POPULAR</div>
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 text-xl" style="background: rgba(13,148,136,0.2);">🚀</div>
+        <h3 class="font-display text-2xl font-bold text-white mb-1">Pro</h3>
+        <p class="text-gray-400 text-sm mb-5">For growing dealerships</p>
+        <div class="mb-6">
+          <span class="text-4xl font-display font-bold text-white" id="pro-price">₹4,999</span>
+          <span class="text-gray-400 text-sm" id="pro-period">/month</span>
+        </div>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center gap-2 text-sm text-gray-300"><svg class="w-4 h-4 text-teal-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>50 Active Listings</li>
+          <li class="flex items-center gap-2 text-sm text-gray-300"><svg class="w-4 h-4 text-teal-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>3 Featured Listings/month</li>
+          <li class="flex items-center gap-2 text-sm text-gray-300"><svg class="w-4 h-4 text-teal-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Verified Dealer Badge</li>
+          <li class="flex items-center gap-2 text-sm text-gray-300"><svg class="w-4 h-4 text-teal-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>WhatsApp Integration</li>
+          <li class="flex items-center gap-2 text-sm text-gray-300"><svg class="w-4 h-4 text-teal-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Analytics Dashboard</li>
+        </ul>
+        <a href="pages/dealer-register.html?plan=pro" class="block w-full py-3 rounded-xl text-center font-bold text-sm text-white transition-all hover:opacity-90" style="background: linear-gradient(135deg, #0d9488, #0284c7);">Get Started</a>
+      </div>
+
+      <!-- Premium -->
+      <div class="bg-white rounded-2xl border-2 border-gray-200 p-8 hover:border-yellow-400 transition-all hover:shadow-lg">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 text-xl" style="background: rgba(180,140,11,0.1);">👑</div>
+        <h3 class="font-display text-2xl font-bold text-gray-800 mb-1">Premium</h3>
+        <p class="text-gray-500 text-sm mb-5">For large dealerships</p>
+        <div class="mb-6">
+          <span class="text-4xl font-display font-bold text-gray-900" id="premium-price">₹9,999</span>
+          <span class="text-gray-400 text-sm" id="premium-period">/month</span>
+        </div>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center gap-2 text-sm text-gray-600"><svg class="w-4 h-4 text-yellow-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Unlimited Listings</li>
+          <li class="flex items-center gap-2 text-sm text-gray-600"><svg class="w-4 h-4 text-yellow-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>10 Featured Listings/month</li>
+          <li class="flex items-center gap-2 text-sm text-gray-600"><svg class="w-4 h-4 text-yellow-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Homepage Banner Slot</li>
+          <li class="flex items-center gap-2 text-sm text-gray-600"><svg class="w-4 h-4 text-yellow-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Priority Support</li>
+          <li class="flex items-center gap-2 text-sm text-gray-600"><svg class="w-4 h-4 text-yellow-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Advanced Analytics</li>
+        </ul>
+        <a href="pages/dealer-register.html?plan=premium" class="block w-full py-3 rounded-xl text-center font-semibold text-sm border-2 border-yellow-400 text-yellow-700 hover:bg-yellow-50 transition-all">Get Started</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     CTA BANNER
+═══════════════════════════════════════════════════════════ -->
+<section class="cta-section py-20 relative overflow-hidden" aria-label="Sell your car on MileVaahan">
+  <div class="hero-glow" style="background: #B8860B; right: -50px; top: -50px; width: 300px; height: 300px;"></div>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+    <h2 class="font-display text-4xl md:text-5xl font-bold text-white mb-5">Ready to Sell Your Car?</h2>
+    <p class="text-gray-300 text-lg mb-10 max-w-xl mx-auto">Post your listing in minutes. Reach thousands of verified buyers across India. It's free for individuals!</p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="pages/post-listing.html" class="px-8 py-4 rounded-xl font-bold text-white text-base transition-all hover:scale-105" style="background: linear-gradient(135deg, #0d9488, #0284c7);">
+        Post Free Listing
+      </a>
+      <a href="pages/dealer-register.html" class="px-8 py-4 rounded-xl font-bold text-base transition-all hover:scale-105 border-2" style="border-color: #B8860B; color: #D4A017;">
+        Register as Dealer
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════════════ -->
+<footer style="background: #0a1628; color: #94a3b8;" aria-label="Footer" itemscope itemtype="https://schema.org/WPFooter">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-10">
+      <!-- Brand -->
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-3 mb-4">
+          <img src="images/logo.png" alt="MileVaahan" class="h-12 w-12 object-contain" />
+          <span class="font-display font-bold text-2xl text-white">mile<span style="color:#B8860B">vaahan</span></span>
+        </div>
+        <p class="text-sm leading-relaxed mb-5">India's most trusted car marketplace. Buy, sell & discover new, used, and certified pre-owned cars across India.</p>
+        <p class="text-xs mb-2" style="color:#D4A017">🏆 Har Safar Ka Saathi</p>
+        <div class="flex gap-3 mt-4">
+          <a href="#" class="w-9 h-9 rounded-lg flex items-center justify-center transition-all hover:scale-110" style="background: rgba(255,255,255,0.1);" aria-label="Facebook">
+            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+          </a>
+          <a href="#" class="w-9 h-9 rounded-lg flex items-center justify-center transition-all hover:scale-110" style="background: rgba(255,255,255,0.1);" aria-label="Instagram">
+            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" fill="#0a1628"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="#0a1628" stroke-width="2"/></svg>
+          </a>
+          <a href="#" class="w-9 h-9 rounded-lg flex items-center justify-center transition-all hover:scale-110" style="background: rgba(255,255,255,0.1);" aria-label="YouTube">
+            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#0a1628"/></svg>
+          </a>
+          <a href="#" class="w-9 h-9 rounded-lg flex items-center justify-center transition-all hover:scale-110" style="background: rgba(255,255,255,0.1);" aria-label="Twitter">
+            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <h4 class="font-display font-bold text-white mb-4 text-sm tracking-wider uppercase">Browse Cars</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="pages/listings.html?type=new" class="hover:text-white transition-colors">New Cars</a></li>
+          <li><a href="pages/listings.html?type=used" class="hover:text-white transition-colors">Used Cars</a></li>
+          <li><a href="pages/listings.html?type=cpo" class="hover:text-white transition-colors">Certified Pre-Owned</a></li>
+          <li><a href="pages/listings.html?type=parts" class="hover:text-white transition-colors">Parts & Accessories</a></li>
+          <li><a href="pages/listings.html?fuel=Electric" class="hover:text-white transition-colors">Electric Cars</a></li>
+          <li><a href="pages/dealers.html" class="hover:text-white transition-colors">Find Dealers</a></li>
+        </ul>
+      </div>
+
+      <!-- Tools -->
+      <div>
+        <h4 class="font-display font-bold text-white mb-4 text-sm tracking-wider uppercase">Tools</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="pages/emi-calculator.html" class="hover:text-white transition-colors">EMI Calculator</a></li>
+          <li><a href="pages/valuation.html" class="hover:text-white transition-colors">Car Valuation</a></li>
+          <li><a href="pages/compare.html" class="hover:text-white transition-colors">Compare Cars</a></li>
+          <li><a href="pages/vin-lookup.html" class="hover:text-white transition-colors">VIN Lookup</a></li>
+          <li><a href="pages/blog.html" class="hover:text-white transition-colors">Car News</a></li>
+          <li><a href="pages/reviews.html" class="hover:text-white transition-colors">Reviews</a></li>
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div>
+        <h4 class="font-display font-bold text-white mb-4 text-sm tracking-wider uppercase">Company</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="pages/about.html" class="hover:text-white transition-colors">About Us</a></li>
+          <li><a href="pages/dealer-register.html" class="hover:text-white transition-colors">For Dealers</a></li>
+          <li><a href="pages/contact.html" class="hover:text-white transition-colors">Contact Us</a></li>
+          <li><a href="pages/privacy.html" class="hover:text-white transition-colors">Privacy Policy</a></li>
+          <li><a href="pages/terms.html" class="hover:text-white transition-colors">Terms of Service</a></li>
+          <li><a href="sitemap.xml" class="hover:text-white transition-colors">Sitemap</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="border-t mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs" style="border-color: rgba(255,255,255,0.08);">
+      <p>© 2025 MileVaahan. All rights reserved. | CIN: UXXXXXXMH2025PLC000000</p>
+      <p>Made with ❤️ in India 🇮🇳</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════════
+     FIREBASE SDKs
+═══════════════════════════════════════════════════════════ -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// HOMEPAGE JAVASCRIPT
+// ═══════════════════════════════════════════════════════════
+
+let currentListingType = 'used';
+let billingYearly = false;
+
+// Loader helper
+function showLoader(show) {
+  const el = document.getElementById('global-loader');
+  if (!el) return;
+  el.style.transition = 'opacity 0.4s ease';
+  if (show) { el.style.opacity = '1'; el.style.pointerEvents = 'all'; }
+  else { el.style.opacity = '0'; el.style.pointerEvents = 'none'; setTimeout(() => el.style.display = 'none', 400); }
+}
+
+// Init
+window.addEventListener('load', async () => {
+  setTimeout(() => showLoader(false), 800);
+  initSearch();
+  renderBrands();
+  initAuthState();
+  loadFeaturedListings();
+  loadFeaturedDealers();
+  loadRecentBlogs();
+  initScrollAnimations();
+  loadStats();
+  initMobileMenu();
+});
+
+// Auth State
+function initAuthState() {
+  auth.onAuthStateChanged(async (user) => {
+    if (user) {
+      document.getElementById('nav-auth-guest').classList.add('hidden');
+      document.getElementById('nav-auth-user').classList.remove('hidden');
+      document.getElementById('nav-user-name').textContent = user.displayName?.split(' ')[0] || 'User';
+      document.getElementById('nav-avatar').textContent = (user.displayName?.[0] || user.email?.[0] || 'U').toUpperCase();
+    } else {
+      document.getElementById('nav-auth-guest').classList.remove('hidden');
+      document.getElementById('nav-auth-user').classList.add('hidden');
+    }
+  });
+}
+
+function signOut() {
+  auth.signOut().then(() => showToast('Signed out successfully'));
+}
+
+// Mobile Menu
+function initMobileMenu() {
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+}
+
+// Search Initialization
+function initSearch() {
+  const makeSelect = document.getElementById('search-make');
+  const citySelect = document.getElementById('search-city');
+  const yearSelect = document.getElementById('search-year');
+
+  // Populate makes
+  Object.keys(CAR_DATA.makes).forEach(make => {
+    makeSelect.innerHTML += `<option value="${make}">${make}</option>`;
+  });
+
+  // Populate cities
+  Object.values(INDIA_LOCATIONS).flat().sort().forEach(city => {
+    citySelect.innerHTML += `<option value="${city}">${city}</option>`;
+  });
+
+  // Populate years
+  CAR_DATA.years.slice(0, 30).forEach(year => {
+    yearSelect.innerHTML += `<option value="${year}">${year}</option>`;
+  });
+}
+
+function updateModels() {
+  const make = document.getElementById('search-make').value;
+  const modelSelect = document.getElementById('search-model');
+  modelSelect.innerHTML = '<option value="">All Models</option>';
+  if (make && CAR_DATA.makes[make]) {
+    CAR_DATA.makes[make].forEach(model => {
+      modelSelect.innerHTML += `<option value="${model}">${model}</option>`;
+    });
+  }
+}
+
+function setListingType(type, btn) {
+  currentListingType = type;
+  document.querySelectorAll('.filter-tab').forEach(t => {
+    if (t.parentElement === btn.parentElement) t.classList.remove('active');
+  });
+  btn.classList.add('active');
+}
+
+function doSearch() {
+  const make = document.getElementById('search-make').value;
+  const model = document.getElementById('search-model').value;
+  const year = document.getElementById('search-year').value;
+  const city = document.getElementById('search-city').value;
+  const params = new URLSearchParams();
+  if (currentListingType) params.set('type', currentListingType);
+  if (make) params.set('make', make);
+  if (model) params.set('model', model);
+  if (year) params.set('year', year);
+  if (city) params.set('city', city);
+  window.location.href = `pages/listings.html?${params.toString()}`;
+}
+
+// Brand Grid
+function renderBrands() {
+  const brands = Object.keys(CAR_DATA.makes).slice(0, 16);
+  const brandEmojis = { 'Maruti Suzuki':'🏎', 'Hyundai':'🚗', 'Tata':'🦁', 'Mahindra':'🐆', 'Honda':'⚡', 'Toyota':'🔶', 'Kia':'🎯', 'Skoda':'🔷', 'Volkswagen':'🔵', 'MG':'🌟', 'Renault':'💎', 'Nissan':'🔹', 'BMW':'🏆', 'Mercedes-Benz':'⭐', 'Audi':'💫', 'Ford':'🔴' };
+  const grid = document.getElementById('brand-grid');
+  grid.innerHTML = brands.map(brand => `
+    <a href="pages/listings.html?make=${encodeURIComponent(brand)}" class="group flex flex-col items-center p-3 rounded-xl bg-gray-50 hover:bg-teal-50 border border-gray-100 hover:border-teal-200 transition-all text-center">
+      <span class="text-2xl mb-1 group-hover:scale-110 transition-transform">${brandEmojis[brand] || '🚗'}</span>
+      <span class="text-xs font-semibold text-gray-700 leading-tight">${brand}</span>
+    </a>
+  `).join('');
+}
+
+// Featured Listings
+async function loadFeaturedListings(filter = 'all') {
+  const grid = document.getElementById('featured-grid');
+  grid.innerHTML = '<div class="col-span-full flex justify-center py-10"><div class="loader-ring" style="border-top-color:#0d9488;"></div></div>';
+
+  try {
+    let query = db.collection(COLLECTIONS.LISTINGS)
+      .where('status', '==', 'active')
+      .where('featured', '==', true)
+      .orderBy('createdAt', 'desc')
+      .limit(8);
+
+    if (filter !== 'all') query = query.where('condition', '==', filter);
+
+    const snap = await query.get();
+
+    if (snap.empty) {
+      grid.innerHTML = renderSampleCars();
+      return;
+    }
+
+    grid.innerHTML = snap.docs.map(doc => renderCarCard({ id: doc.id, ...doc.data() })).join('');
+  } catch (e) {
+    // Show sample data if Firebase not configured
+    grid.innerHTML = renderSampleCars();
+  }
+}
+
+function renderSampleCars() {
+  const sampleCars = [
+    { id:'1', make:'Hyundai', model:'Creta', year:2023, price:1450000, mileage:12000, fuel:'Petrol', transmission:'Automatic', city:'Mumbai', condition:'used', featured:true, images:[null] },
+    { id:'2', make:'Maruti Suzuki', model:'Baleno', year:2024, price:850000, mileage:5000, fuel:'Petrol', transmission:'Manual', city:'Delhi', condition:'cpo', featured:true, images:[null] },
+    { id:'3', make:'Tata', model:'Nexon EV', year:2023, price:1700000, mileage:8000, fuel:'Electric', transmission:'Automatic', city:'Bangalore', condition:'used', featured:true, images:[null] },
+    { id:'4', make:'Mahindra', model:'Scorpio-N', year:2024, price:2200000, mileage:3000, fuel:'Diesel', transmission:'Automatic', city:'Hyderabad', condition:'new', featured:true, images:[null] },
+    { id:'5', make:'Kia', model:'Seltos', year:2023, price:1650000, mileage:9000, fuel:'Petrol', transmission:'DCT', city:'Pune', condition:'used', featured:true, images:[null] },
+    { id:'6', make:'Toyota', model:'Fortuner', year:2023, price:3800000, mileage:15000, fuel:'Diesel', transmission:'Automatic', city:'Chennai', condition:'used', featured:true, images:[null] },
+    { id:'7', make:'Honda', model:'City', year:2024, price:1200000, mileage:0, fuel:'Petrol', transmission:'CVT', city:'Kolkata', condition:'new', featured:true, images:[null] },
+    { id:'8', make:'Skoda', model:'Kushaq', year:2023, price:1550000, mileage:11000, fuel:'Petrol', transmission:'DSG', city:'Ahmedabad', condition:'cpo', featured:true, images:[null] },
+  ];
+  return sampleCars.map(car => renderCarCard(car)).join('');
+}
+
+function renderCarCard(car) {
+  const conditionColors = { new: 'badge-new', used: 'badge-used', cpo: 'badge-cpo' };
+  const conditionLabels = { new: 'New', used: 'Used', cpo: 'Certified Pre-Owned' };
+  const slug = generateListingSlug(car);
+
+  return `
+    <article class="car-card rounded-2xl overflow-hidden" itemscope itemtype="https://schema.org/Car">
+      <div class="relative overflow-hidden" style="height: 180px; background: linear-gradient(135deg, #e2e8f0, #f1f5f9);">
+        ${car.images?.[0]
+          ? `<img src="${car.images[0]}" alt="${car.year} ${car.make} ${car.model}" class="w-full h-full object-cover" loading="lazy" itemprop="image" />`
+          : `<div class="w-full h-full flex items-center justify-center text-6xl">🚗</div>`
+        }
+        ${car.featured ? `<span class="featured-badge absolute top-3 left-3 text-white px-2 py-1 rounded-lg font-bold uppercase tracking-wider">⭐ Featured</span>` : ''}
+        <span class="absolute top-3 right-3 text-white text-xs font-bold px-2 py-1 rounded-lg ${conditionColors[car.condition] || 'badge-used'}">${conditionLabels[car.condition] || 'Used'}</span>
+        <button onclick="toggleWishlist('${car.id}', this)" class="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-white/90 flex items-center justify-center hover:bg-white transition-colors shadow-md" aria-label="Save to wishlist">
+          <svg class="w-4 h-4 text-gray-400 hover:text-red-500 transition-colors wishlist-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+        </button>
+      </div>
+      <div class="p-4">
+        <h3 class="font-display font-bold text-gray-900 text-base leading-tight mb-1" itemprop="name">${car.year} ${car.make} ${car.model}</h3>
+        <p class="price-tag text-xl font-bold mb-3">${formatPrice(car.price)}</p>
+        <div class="flex gap-3 text-xs text-gray-500 mb-4 flex-wrap">
+          <span class="flex items-center gap-1">⛽ ${car.fuel}</span>
+          <span class="flex items-center gap-1">⚙️ ${car.transmission}</span>
+          ${car.mileage > 0 ? `<span class="flex items-center gap-1">📍 ${formatKm(car.mileage)}</span>` : '<span class="flex items-center gap-1">✨ 0 km</span>'}
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="flex items-center gap-1 text-xs text-gray-400">📍 ${car.city}</span>
+          <a href="pages/car-detail.html?id=${car.id}&slug=${slug}" class="text-xs font-bold text-teal-600 hover:text-teal-700 transition-colors">View Details →</a>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function filterFeatured(type, btn) {
+  document.querySelectorAll('[onclick^="filterFeatured"]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadFeaturedListings(type);
+}
+
+// Featured Dealers
+async function loadFeaturedDealers() {
+  const grid = document.getElementById('dealers-grid');
+  try {
+    const snap = await db.collection(COLLECTIONS.DEALERS)
+      .where('status', '==', 'approved')
+      .where('featured', '==', true)
+      .orderBy('plan', 'desc')
+      .limit(6)
+      .get();
+
+    if (snap.empty) {
+      grid.innerHTML = renderSampleDealers();
+      return;
+    }
+    grid.innerHTML = snap.docs.map(doc => renderDealerCard({ id: doc.id, ...doc.data() })).join('');
+  } catch(e) {
+    grid.innerHTML = renderSampleDealers();
+  }
+}
+
+function renderSampleDealers() {
+  const dealers = [
+    { id:'1', name:'AutoMax Mumbai', city:'Mumbai', state:'Maharashtra', plan:'premium', totalListings: 145, rating: 4.8, reviews: 230 },
+    { id:'2', name:'DriveKing Delhi', city:'Delhi', state:'Delhi', plan:'pro', totalListings: 87, rating: 4.6, reviews: 145 },
+    { id:'3', name:'CarZone Bangalore', city:'Bangalore', state:'Karnataka', plan:'pro', totalListings: 62, rating: 4.7, reviews: 98 },
+  ];
+  return dealers.map(d => renderDealerCard(d)).join('');
+}
+
+function renderDealerCard(dealer) {
+  const planBadge = { premium: { label: '👑 Premium', cls: 'bg-yellow-50 text-yellow-700 border-yellow-200' }, pro: { label: '🚀 Pro', cls: 'bg-teal-50 text-teal-700 border-teal-200' }, basic: { label: '🏪 Basic', cls: 'bg-gray-50 text-gray-700 border-gray-200' } };
+  const badge = planBadge[dealer.plan] || planBadge.basic;
+
+  return `
+    <div class="dealer-card rounded-2xl p-6" itemscope itemtype="https://schema.org/AutoDealer">
+      <div class="flex items-start justify-between mb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-14 h-14 rounded-xl flex items-center justify-center text-2xl font-bold text-white" style="background: linear-gradient(135deg, #0d9488, #0284c7);">
+            ${dealer.name[0]}
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-gray-900 text-base" itemprop="name">${dealer.name}</h3>
+            <p class="text-gray-500 text-xs flex items-center gap-1">📍 ${dealer.city}, ${dealer.state}</p>
+          </div>
+        </div>
+        <span class="text-xs font-bold px-2 py-1 rounded-lg border ${badge.cls}">${badge.label}</span>
+      </div>
+      <div class="flex gap-4 text-sm mb-4">
+        <div class="text-center">
+          <div class="font-display font-bold text-gray-900">${dealer.totalListings || 0}</div>
+          <div class="text-gray-400 text-xs">Listings</div>
+        </div>
+        <div class="text-center">
+          <div class="font-display font-bold text-gray-900">⭐ ${dealer.rating || '4.5'}</div>
+          <div class="text-gray-400 text-xs">${dealer.reviews || 0} Reviews</div>
+        </div>
+        <div class="text-center">
+          <div class="font-display font-bold text-teal-600 text-xs flex items-center gap-1">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Verified
+          </div>
+          <div class="text-gray-400 text-xs">Dealer</div>
+        </div>
+      </div>
+      <a href="pages/dealer-profile.html?id=${dealer.id}" class="block w-full py-2.5 rounded-xl text-center text-sm font-semibold border border-teal-200 text-teal-600 hover:bg-teal-50 transition-all">View Dealer</a>
+    </div>
+  `;
+}
+
+// Blog Posts
+async function loadRecentBlogs() {
+  const grid = document.getElementById('blog-grid');
+  try {
+    const snap = await db.collection(COLLECTIONS.BLOGS)
+      .where('status', '==', 'published')
+      .orderBy('publishedAt', 'desc')
+      .limit(3)
+      .get();
+
+    if (snap.empty) {
+      grid.innerHTML = renderSampleBlogs();
+      return;
+    }
+    grid.innerHTML = snap.docs.map(doc => renderBlogCard({ id: doc.id, ...doc.data() })).join('');
+  } catch(e) {
+    grid.innerHTML = renderSampleBlogs();
+  }
+}
+
+function renderSampleBlogs() {
+  const posts = [
+    { id:'1', title:'Top 10 Best-Selling Cars in India 2025', excerpt:'Discover which cars Indians are buying the most in 2025 and why they dominate the market.', category:'Market Trends', readTime:'5 min', date:'Dec 15, 2024' },
+    { id:'2', title:'Electric Cars vs Petrol: Which is Right for You?', excerpt:'A complete comparison of running costs, range, charging infrastructure, and ownership experience.', category:'Buying Guide', readTime:'8 min', date:'Dec 10, 2024' },
+    { id:'3', title:'How to Get the Best Price for Your Used Car', excerpt:'Expert tips to maximize your car\'s resale value and attract serious buyers quickly.', category:'Selling Tips', readTime:'6 min', date:'Dec 5, 2024' },
+  ];
+  return posts.map(p => renderBlogCard(p)).join('');
+}
+
+function renderBlogCard(post) {
+  return `
+    <article class="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all group" itemscope itemtype="https://schema.org/BlogPosting">
+      <div class="h-44 flex items-center justify-center text-6xl" style="background: linear-gradient(135deg, #e2e8f0, #f0fdfb);">📰</div>
+      <div class="p-5">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-xs font-bold px-2 py-1 rounded-lg" style="background: rgba(13,148,136,0.1); color: #0d9488;">${post.category}</span>
+          <span class="text-xs text-gray-400">${post.readTime} read</span>
+        </div>
+        <h3 class="font-display font-bold text-gray-900 text-base leading-tight mb-2 group-hover:text-teal-600 transition-colors" itemprop="headline">${post.title}</h3>
+        <p class="text-gray-500 text-sm leading-relaxed mb-4" itemprop="description">${post.excerpt}</p>
+        <a href="pages/blog-post.html?id=${post.id}" class="text-sm font-bold text-teal-600 hover:text-teal-700 transition-colors">Read Article →</a>
+      </div>
+    </article>
+  `;
+}
+
+// Stats
+async function loadStats() {
+  try {
+    const [listings, dealers] = await Promise.all([
+      db.collection(COLLECTIONS.LISTINGS).where('status', '==', 'active').get(),
+      db.collection(COLLECTIONS.DEALERS).where('status', '==', 'approved').get()
+    ]);
+    document.getElementById('stat-listings').textContent = listings.size > 1000 ? `${(listings.size/1000).toFixed(0)}K+` : listings.size || '10K+';
+    document.getElementById('stat-dealers').textContent = dealers.size || '500+';
+  } catch(e) { /* use defaults */ }
+}
+
+// Billing Toggle
+function toggleBilling() {
+  billingYearly = !billingYearly;
+  const dot = document.getElementById('toggle-dot');
+  dot.style.transform = billingYearly ? 'translateX(24px)' : 'translateX(0)';
+
+  const plans = { basic: { m: '₹1,999', y: '₹19,990' }, pro: { m: '₹4,999', y: '₹49,990' }, premium: { m: '₹9,999', y: '₹99,990' } };
+  Object.entries(plans).forEach(([plan, prices]) => {
+    document.getElementById(`${plan}-price`).textContent = billingYearly ? prices.y : prices.m;
+    document.getElementById(`${plan}-period`).textContent = billingYearly ? '/year' : '/month';
+  });
+}
+
+// Wishlist
+function toggleWishlist(id, btn) {
+  if (!auth.currentUser) { window.location.href = 'pages/login.html'; return; }
+  const icon = btn.querySelector('.wishlist-icon');
+  const isSaved = icon.getAttribute('fill') === 'currentColor';
+  icon.setAttribute('fill', isSaved ? 'none' : 'currentColor');
+  icon.classList.toggle('text-red-500', !isSaved);
+  icon.classList.toggle('text-gray-400', isSaved);
+  showToast(isSaved ? 'Removed from wishlist' : 'Added to wishlist ❤️');
+}
+
+// Scroll Animations
+function initScrollAnimations() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+}
+</script>
+</body>
+</html>

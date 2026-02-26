@@ -1,0 +1,170 @@
+// ═══════════════════════════════════════════════════════
+// MileVaahan — Firestore Security Rules
+// ═══════════════════════════════════════════════════════
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helper Functions ──
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return request.auth.uid == uid;
+    }
+
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    function isSuperAdmin() {
+      return isSignedIn() && getUserRole() == 'super_admin';
+    }
+
+    function isDealer() {
+      return isSignedIn() && getUserRole() == 'dealer';
+    }
+
+    function isBuyer() {
+      return isSignedIn() && getUserRole() == 'buyer';
+    }
+
+    function isDealerOf(dealerId) {
+      return isDealer() && get(/databases/$(database)/documents/dealers/$(dealerId)).data.uid == request.auth.uid;
+    }
+
+    // ══════════════════════════════════
+    // USERS COLLECTION
+    // ══════════════════════════════════
+    match /users/{userId} {
+      // Users can read and write their own document
+      allow read: if isSignedIn() && (isOwner(userId) || isSuperAdmin());
+      allow create: if isSignedIn() && isOwner(userId);
+      allow update: if isSignedIn() && (isOwner(userId) || isSuperAdmin());
+      allow delete: if isSuperAdmin();
+    }
+
+    // ══════════════════════════════════
+    // DEALERS COLLECTION
+    // ══════════════════════════════════
+    match /dealers/{dealerId} {
+      // Public can read approved dealers
+      allow read: if resource.data.status == 'approved' || isSuperAdmin() || isDealerOf(dealerId);
+      // Any signed-in user can create dealer registration
+      allow create: if isSignedIn();
+      // Dealers can update their own profile; admin can update any
+      allow update: if isDealerOf(dealerId) || isSuperAdmin();
+      allow delete: if isSuperAdmin();
+    }
+
+    // ══════════════════════════════════
+    // LISTINGS COLLECTION
+    // ══════════════════════════════════
+    match /listings/{listingId} {
+      // Public can read active listings
+      allow read: if resource.data.status == 'active' || isSuperAdmin() ||
+                     (isDealer() && resource.data.dealerId == getDealerIdForUser());
+
+      // Dealers can create listings
+      allow create: if isDealer() && request.resource.data.dealerId != null;
+
+      // Dealers can update their own listings; admin can update any
+      allow update: if isSuperAdmin() ||
+                     (isDealer() && resource.data.dealerId == getDealerIdForUser());
+
+      // Only admin can delete
+      allow delete: if isSuperAdmin();
+    }
+
+    // ══════════════════════════════════
+    // INQUIRIES COLLECTION
+    // ══════════════════════════════════
+    match /inquiries/{inquiryId} {
+      // Buyers can create; dealers can read their inquiries; admin reads all
+      allow read: if isSuperAdmin() ||
+                     (isDealer() && resource.data.dealerId == getDealerIdForUser()) ||
+                     (isSignedIn() && resource.data.buyerId == request.auth.uid);
+      allow create: if isSignedIn();
+      allow update: if isSuperAdmin() ||
+                     (isDealer() && resource.data.dealerId == getDealerIdForUser());
+      allow delete: if isSuperAdmin();
+    }
+
+    // ══════════════════════════════════
+    // MESSAGES COLLECTION
+    // ══════════════════════════════════
+    match /messages/{messageId} {
+      allow read: if isSignedIn() && (
+        resource.data.senderId == request.auth.uid ||
+        resource.data.receiverId == request.auth.uid ||
+        isSuperAdmin()
+      );
+      allow create: if isSignedIn() && request.resource.data.senderId == request.auth.uid;
+      allow update: if isSignedIn() && resource.data.receiverId == request.auth.uid;
+      allow delete: if isSuperAdmin();
+    }
+
+    // ══════════════════════════════════
+    // REVIEWS COLLECTION
+    // ══════════════════════════════════
+    match /reviews/{reviewId} {
+      allow read: if resource.data.status == 'approved' || isSuperAdmin() ||
+                     (isDealer() && resource.data.dealerId == getDealerIdForUser());
+      allow create: if isSignedIn() && request.resource.data.buyerId == request.auth.uid;
+      allow update: if isSuperAdmin() ||
+                     (isSignedIn() && resource.data.buyerId == request.auth.uid);
+      allow delete: if isSuperAdmin();
+    }
+
+    // ══════════════════════════════════
+    // BLOGS COLLECTION
+    // ══════════════════════════════════
+    match /blogs/{blogId} {
+      allow read: if resource.data.status == 'published' || isSuperAdmin();
+      allow create, update, delete: if isSuperAdmin();
+    }
+
+    // ══════════════════════════════════
+    // SUBSCRIPTIONS COLLECTION
+    // ══════════════════════════════════
+    match /subscriptions/{subId} {
+      allow read: if isSuperAdmin() ||
+                     (isDealer() && resource.data.dealerId == getDealerIdForUser());
+      allow create: if isDealer();
+      allow update, delete: if isSuperAdmin();
+    }
+
+    // ══════════════════════════════════
+    // SEO SETTINGS (Admin only)
+    // ══════════════════════════════════
+    match /seo_settings/{docId} {
+      allow read: if true; // Public read for meta tags
+      allow write: if isSuperAdmin();
+    }
+
+    // ══════════════════════════════════
+    // FEATURED SLOTS
+    // ══════════════════════════════════
+    match /featured_slots/{slotId} {
+      allow read: if true;
+      allow write: if isSuperAdmin() || isDealer();
+    }
+
+    // ══════════════════════════════════
+    // ANALYTICS EVENTS
+    // ══════════════════════════════════
+    match /analytics_events/{eventId} {
+      allow read: if isSuperAdmin() || isDealer();
+      allow create: if true; // Anyone can log events
+      allow update, delete: if isSuperAdmin();
+    }
+
+    // Helper: get dealer ID for current user
+    function getDealerIdForUser() {
+      // This needs a query — handled at application level
+      return request.auth.uid; // Simplified
+    }
+  }
+}

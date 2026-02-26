@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dealer Dashboard – MileVaahan</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    *{font-family:'DM Sans',sans-serif;} .font-display,h1,h2,h3{font-family:'Syne',sans-serif;}
+    body{background:#f1f5f9;}
+    .sidebar{background:linear-gradient(175deg,#0a1628 0%,#0f2040 60%,#0f766e 100%);width:260px;min-height:100vh;flex-shrink:0;transition:transform 0.3s;}
+    .sidebar-link{display:flex;align-items:center;gap:12px;padding:10px 20px;border-radius:10px;color:rgba(255,255,255,0.65);font-size:14px;font-weight:500;transition:all 0.2s;cursor:pointer;margin-bottom:4px;border:none;background:transparent;width:100%;text-align:left;}
+    .sidebar-link:hover{background:rgba(255,255,255,0.1);color:white;}
+    .sidebar-link.active{background:rgba(13,148,136,0.35);color:white;border-left:3px solid #0d9488;}
+    .stat-card{background:white;border-radius:16px;padding:24px;border:1px solid #e2e8f0;}
+    .content-panel{display:none;}
+    .content-panel.active{display:block;}
+    .form-input{width:100%;padding:10px 14px;border:1px solid #e2e8f0;border-radius:10px;font-size:14px;color:#374151;transition:border-color 0.2s;background:white;}
+    .form-input:focus{outline:none;border-color:#0d9488;box-shadow:0 0 0 3px rgba(13,148,136,0.1);}
+    .form-label{display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px;}
+    .btn-primary{background:linear-gradient(135deg,#0d9488,#0284c7);color:white;border:none;padding:10px 24px;border-radius:10px;font-weight:600;font-size:14px;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px;}
+    .btn-primary:hover{opacity:0.9;transform:translateY(-1px);}
+    .btn-secondary{background:white;color:#374151;border:1px solid #e2e8f0;padding:10px 24px;border-radius:10px;font-weight:600;font-size:14px;cursor:pointer;}
+    .btn-danger{background:#fee2e2;color:#dc2626;border:1px solid #fecaca;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;}
+    .btn-edit{background:#f0fdfb;color:#0d9488;border:1px solid #ccfbf1;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;}
+    .listing-row{background:white;border:1px solid #e2e8f0;border-radius:12px;padding:16px;display:flex;align-items:center;gap:16px;margin-bottom:10px;transition:all 0.2s;}
+    .listing-row:hover{box-shadow:0 4px 15px rgba(13,148,136,0.08);border-color:#0d9488;}
+    .status-badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.5px;}
+    .status-active{background:#dcfce7;color:#16a34a;}
+    .status-pending{background:#fef3c7;color:#d97706;}
+    .status-rejected{background:#fee2e2;color:#dc2626;}
+    .status-draft{background:#f1f5f9;color:#64748b;}
+    .status-sold{background:#ede9fe;color:#7c3aed;}
+    .tab-btn{padding:8px 18px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid #e2e8f0;background:white;color:#64748b;transition:all 0.2s;}
+    .tab-btn.active{background:linear-gradient(135deg,#0d9488,#0284c7);color:white;border-color:transparent;}
+    .plan-bar{height:8px;border-radius:4px;background:#e2e8f0;overflow:hidden;}
+    .plan-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#0d9488,#0284c7);transition:width 0.5s ease;}
+    .image-upload-zone{border:2px dashed #cbd5e1;border-radius:12px;padding:32px;text-align:center;cursor:pointer;transition:all 0.2s;}
+    .image-upload-zone:hover,.image-upload-zone.dragover{border-color:#0d9488;background:#f0fdfb;}
+    .img-thumb{width:80px;height:64px;object-fit:cover;border-radius:8px;border:2px solid #e2e8f0;position:relative;}
+    .inquiry-card{background:white;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin-bottom:10px;transition:all 0.2s;}
+    .inquiry-card.unread{border-left:4px solid #0d9488;}
+    .inquiry-card:hover{box-shadow:0 4px 15px rgba(0,0,0,0.05);}
+    .chart-bar{border-radius:4px 4px 0 0;transition:height 0.6s cubic-bezier(0.34,1.56,0.64,1);}
+    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;}
+    .modal-box{background:white;border-radius:20px;padding:32px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;}
+    #global-loader{position:fixed;inset:0;z-index:9999;background:rgba(10,22,40,0.95);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+    .loader-ring{width:44px;height:44px;border:3px solid rgba(180,140,11,0.2);border-top-color:#B8860B;border-radius:50%;animation:spin 0.8s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .notification-dot{width:8px;height:8px;background:#ef4444;border-radius:50%;position:absolute;top:-2px;right:-2px;}
+    .review-star{color:#f59e0b;}
+    .whatsapp-btn{background:#25D366;color:white;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;border:none;}
+  </style>
+</head>
+<body>
+
+<div class="flex min-h-screen">
+
+  <!-- ══════════════════════════════════════
+       SIDEBAR
+  ══════════════════════════════════════ -->
+  <aside class="sidebar fixed lg:relative z-50 flex flex-col p-5 overflow-y-auto" id="sidebar" style="top:0;left:0;bottom:0;">
+    <a href="../index.html" class="flex items-center gap-3 mb-8 px-2">
+      <img src="../MaileVaahan.png" alt="MileVaahan" class="h-20 w-20 object-contain" />
+      <div>
+        <div class="font-display font-bold text-white text-lg leading-none">mile<span style="color:#B8860B">vaahan</span></div>
+        <div class="text-xs text-gray-400 mt-0.5">Dealer Portal</div>
+      </div>
+    </a>
+
+    <!-- Plan Widget -->
+    <div class="mb-5 px-3 py-3 rounded-xl" style="background:rgba(180,140,11,0.12);border:1px solid rgba(180,140,11,0.25);">
+      <div class="text-xs text-gray-400 mb-1">Current Plan</div>
+      <div class="font-display font-bold text-white text-sm flex items-center gap-2" id="sidebar-plan-label">👑 Pro Plan</div>
+      <div class="mt-2">
+        <div class="plan-bar"><div class="plan-bar-fill" id="plan-bar" style="width:0%"></div></div>
+        <div class="flex justify-between text-xs text-gray-400 mt-1">
+          <span id="plan-used">0</span><span id="plan-max">— listings</span>
+        </div>
+      </div>
+    </div>
+
+    <nav class="flex-1 space-y-1">
+      <p class="text-xs font-bold text-gray-500 uppercase tracking-widest px-2 mb-2">Main</p>
+      <button class="sidebar-link active" onclick="showPanel('dashboard',this)">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </button>
+      <button class="sidebar-link" onclick="showPanel('listings',this)">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        My Listings
+        <span class="ml-auto bg-teal-600 text-white text-xs px-2 py-0.5 rounded-full" id="listing-count-badge">0</span>
+      </button>
+      <button class="sidebar-link" onclick="showPanel('add',this)">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        Add Listing
+      </button>
+      <button class="sidebar-link relative" onclick="showPanel('inquiries',this)">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+        Inquiries
+        <div class="notification-dot" id="inq-dot" style="display:none;"></div>
+        <span class="ml-auto text-xs text-gray-400" id="inq-count">0</span>
+      </button>
+      <button class="sidebar-link" onclick="showPanel('analytics',this)">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        Analytics
+      </button>
+      <button class="sidebar-link" onclick="showPanel('featured',this)">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+        Featured Slots
+      </button>
+      <button class="sidebar-link" onclick="showPanel('reviews',this)">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+        Reviews
+      </button>
+      <p class="text-xs font-bold text-gray-500 uppercase tracking-widest px-2 mb-2 mt-4">Account</p>
+      <button class="sidebar-link" onclick="showPanel('profile',this)">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2m8-10a4 4 0 100-8 4 4 0 000 8z"/></svg>
+        Dealer Profile
+      </button>
+      <button class="sidebar-link" onclick="showPanel('billing',this)">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+        Subscription & Billing
+      </button>
+    </nav>
+
+    <button onclick="doSignOut()" class="sidebar-link mt-4 hover:text-red-300">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+      Sign Out
+    </button>
+  </aside>
+
+  <!-- ══════════════════════════════════════
+       MAIN CONTENT
+  ══════════════════════════════════════ -->
+  <div class="flex-1 flex flex-col min-w-0">
+
+    <!-- Top Header -->
+    <header class="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between sticky top-0 z-40 shadow-sm">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="lg:hidden text-gray-500 hover:text-gray-800">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <h1 class="font-display font-bold text-gray-900 text-lg" id="panel-title">Dashboard</h1>
+          <p class="text-xs text-gray-400" id="panel-subtitle">Overview of your dealership</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button onclick="showPanel('add', document.querySelector('.sidebar-link:nth-child(3)'))" class="btn-primary text-sm hidden sm:inline-flex">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          Add Listing
+        </button>
+        <div class="w-9 h-9 rounded-full text-white font-bold text-sm flex items-center justify-center" style="background:linear-gradient(135deg,#0d9488,#0284c7);" id="user-avatar">D</div>
+      </div>
+    </header>
+
+    <main class="flex-1 p-4 md:p-6 overflow-auto">
+
+      <!-- ╔══════════════════════════════════╗
+           ║       DASHBOARD PANEL           ║
+           ╚══════════════════════════════════╝ -->
+      <div id="panel-dashboard" class="content-panel active">
+        <!-- Stats -->
+        <div class="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+          <div class="stat-card">
+            <div class="flex items-center justify-between mb-3">
+              <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl" style="background:linear-gradient(135deg,rgba(13,148,136,0.12),rgba(2,132,199,0.12));">🚗</div>
+              <span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">+2 this week</span>
+            </div>
+            <div class="font-display font-bold text-3xl text-gray-900" id="d-active">—</div>
+            <div class="text-gray-500 text-sm">Active Listings</div>
+          </div>
+          <div class="stat-card">
+            <div class="flex items-center justify-between mb-3">
+              <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl" style="background:linear-gradient(135deg,rgba(180,140,11,0.12),rgba(212,160,23,0.12));">👁️</div>
+              <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">+18%</span>
+            </div>
+            <div class="font-display font-bold text-3xl text-gray-900" id="d-views">—</div>
+            <div class="text-gray-500 text-sm">Total Views</div>
+          </div>
+          <div class="stat-card">
+            <div class="flex items-center justify-between mb-3">
+              <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl" style="background:linear-gradient(135deg,rgba(2,132,199,0.12),rgba(13,148,136,0.12));">📩</div>
+              <span class="text-xs font-bold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full" id="new-inq-badge">0 new</span>
+            </div>
+            <div class="font-display font-bold text-3xl text-gray-900" id="d-inquiries">—</div>
+            <div class="text-gray-500 text-sm">Inquiries</div>
+          </div>
+          <div class="stat-card">
+            <div class="flex items-center justify-between mb-3">
+              <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl" style="background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(139,92,246,0.1));">✅</div>
+              <span class="text-xs font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full">All time</span>
+            </div>
+            <div class="font-display font-bold text-3xl text-gray-900" id="d-sold">—</div>
+            <div class="text-gray-500 text-sm">Cars Sold</div>
+          </div>
+        </div>
+
+        <!-- Chart + Top Listings -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+          <div class="stat-card">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="font-display font-bold text-gray-800">Views — Last 7 Days</h3>
+            </div>
+            <div class="flex items-end gap-2 h-28" id="views-chart"></div>
+            <div class="flex gap-2 mt-2 text-xs text-gray-400 text-center" id="views-labels"></div>
+          </div>
+          <div class="stat-card">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="font-display font-bold text-gray-800">Top Listings by Views</h3>
+            </div>
+            <div id="top-listings-widget" class="space-y-3">
+              <div class="text-gray-400 text-sm text-center py-4">Loading...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="stat-card mb-5">
+          <h3 class="font-display font-bold text-gray-800 mb-4">Quick Actions</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <button onclick="showPanel('add',null)" class="flex flex-col items-center gap-2 py-4 rounded-xl border-2 border-dashed border-teal-200 hover:bg-teal-50 hover:border-teal-400 transition-all text-teal-600 font-semibold text-sm">
+              <span class="text-2xl">➕</span>Add Listing
+            </button>
+            <button onclick="showPanel('featured',null)" class="flex flex-col items-center gap-2 py-4 rounded-xl border-2 border-dashed border-yellow-200 hover:bg-yellow-50 hover:border-yellow-400 transition-all text-yellow-700 font-semibold text-sm">
+              <span class="text-2xl">⭐</span>Feature a Car
+            </button>
+            <button onclick="showPanel('inquiries',null)" class="flex flex-col items-center gap-2 py-4 rounded-xl border-2 border-dashed border-blue-200 hover:bg-blue-50 hover:border-blue-400 transition-all text-blue-600 font-semibold text-sm">
+              <span class="text-2xl">📩</span>View Inquiries
+            </button>
+            <button onclick="showPanel('billing',null)" class="flex flex-col items-center gap-2 py-4 rounded-xl border-2 border-dashed border-gray-200 hover:bg-gray-50 hover:border-gray-400 transition-all text-gray-600 font-semibold text-sm">
+              <span class="text-2xl">👑</span>Upgrade Plan
+            </button>
+          </div>
+        </div>
+
+        <!-- Recent Inquiries -->
+        <div class="stat-card">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-display font-bold text-gray-800">Recent Inquiries</h3>
+            <button onclick="showPanel('inquiries',null)" class="text-xs text-teal-600 font-semibold hover:underline">View All →</button>
+          </div>
+          <div id="recent-inq-widget" class="space-y-2">
+            <div class="text-gray-400 text-sm text-center py-4">Loading...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ╔══════════════════════════════════╗
+           ║       LISTINGS PANEL            ║
+           ╚══════════════════════════════════╝ -->
+      <div id="panel-listings" class="content-panel">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+          <div class="flex gap-2 flex-wrap">
+            <button class="tab-btn active" onclick="filterListings('all',this)">All</button>
+            <button class="tab-btn" onclick="filterListings('active',this)">Active</button>
+            <button class="tab-btn" onclick="filterListings('pending',this)">Pending</button>
+            <button class="tab-btn" onclick="filterListings('draft',this)">Draft</button>
+            <button class="tab-btn" onclick="filterListings('sold',this)">Sold</button>
+          </div>
+          <button onclick="showPanel('add',null)" class="btn-primary text-sm">+ Add New Listing</button>
+        </div>
+        <div class="mb-4">
+          <input type="text" placeholder="Search listings by make, model…" class="form-input max-w-sm" oninput="searchListings(this.value)" />
+        </div>
+        <div id="listings-container">
+          <div class="text-center py-12 text-gray-400">Loading your listings…</div>
+        </div>
+      </div>
+
+      <!-- ╔══════════════════════════════════╗
+           ║       ADD / EDIT LISTING        ║
+           ╚══════════════════════════════════╝ -->
+      <div id="panel-add" class="content-panel">
+        <div class="max-w-3xl mx-auto">
+          <input type="hidden" id="edit-id" />
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="font-display font-bold text-xl text-gray-900" id="form-title">Add New Listing</h2>
+            <div class="flex gap-2">
+              <button onclick="submitListing('draft')" class="btn-secondary text-sm">💾 Save Draft</button>
+              <button onclick="submitListing('active')" class="btn-primary text-sm">🚀 Submit for Review</button>
+            </div>
+          </div>
+
+          <!-- Car Info -->
+          <div class="stat-card mb-4">
+            <h3 class="font-display font-bold text-gray-800 mb-4">Vehicle Information</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="form-label">Listing Type *</label>
+                <select id="f-condition" class="form-input">
+                  <option value="">Select type</option>
+                  <option value="new">New Car</option>
+                  <option value="used">Used Car</option>
+                  <option value="cpo">Certified Pre-Owned</option>
+                  <option value="parts">Part / Accessory</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Make *</label>
+                <select id="f-make" class="form-input" onchange="populateModels()">
+                  <option value="">Select Make</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Model *</label>
+                <select id="f-model" class="form-input">
+                  <option value="">Select Model</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Year *</label>
+                <select id="f-year" class="form-input">
+                  <option value="">Select Year</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Variant / Trim</label>
+                <input id="f-variant" class="form-input" placeholder="e.g. SX(O), ZX, VXi" />
+              </div>
+              <div>
+                <label class="form-label">Price (₹) *</label>
+                <input type="number" id="f-price" class="form-input" placeholder="e.g. 850000" />
+              </div>
+              <div>
+                <label class="form-label">Fuel Type *</label>
+                <select id="f-fuel" class="form-input"><option value="">Select</option></select>
+              </div>
+              <div>
+                <label class="form-label">Transmission *</label>
+                <select id="f-transmission" class="form-input"><option value="">Select</option></select>
+              </div>
+              <div>
+                <label class="form-label">Body Type</label>
+                <select id="f-body" class="form-input"><option value="">Select</option></select>
+              </div>
+              <div>
+                <label class="form-label">Color</label>
+                <select id="f-color" class="form-input"><option value="">Select</option></select>
+              </div>
+              <div>
+                <label class="form-label">Mileage (km)</label>
+                <input type="number" id="f-mileage" class="form-input" placeholder="e.g. 25000" />
+              </div>
+              <div>
+                <label class="form-label">Engine</label>
+                <input id="f-engine" class="form-input" placeholder="e.g. 1498cc Turbo" />
+              </div>
+              <div>
+                <label class="form-label">Owner Type</label>
+                <select id="f-owner" class="form-input"><option value="">Select</option></select>
+              </div>
+              <div>
+                <label class="form-label">Registration State</label>
+                <select id="f-reg-state" class="form-input"><option value="">Select</option></select>
+              </div>
+            </div>
+            <div class="mt-4">
+              <label class="form-label">Description * <span class="text-xs text-gray-400">(min 50 chars — more detail = more inquiries)</span></label>
+              <textarea id="f-description" rows="4" class="form-input resize-none" placeholder="Describe condition, service history, features, modifications, reason for sale…"></textarea>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-4">
+              <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-700">
+                <input type="checkbox" id="f-negotiable" class="w-4 h-4 rounded" style="accent-color:#0d9488;" /> Price Negotiable
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-700">
+                <input type="checkbox" id="f-exchange" class="w-4 h-4 rounded" style="accent-color:#0d9488;" /> Exchange Accepted
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-700">
+                <input type="checkbox" id="f-finance" class="w-4 h-4 rounded" style="accent-color:#0d9488;" /> Finance Available
+              </label>
+            </div>
+          </div>
+
+          <!-- Location -->
+          <div class="stat-card mb-4">
+            <h3 class="font-display font-bold text-gray-800 mb-4">Location</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="form-label">State *</label>
+                <select id="f-state" class="form-input" onchange="populateCities('f-state','f-city')">
+                  <option value="">Select State</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">City *</label>
+                <select id="f-city" class="form-input"><option value="">Select City</option></select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Photos -->
+          <div class="stat-card mb-4">
+            <h3 class="font-display font-bold text-gray-800 mb-1">Photos</h3>
+            <p class="text-xs text-gray-400 mb-4">Up to 20 photos, max 5 MB each. First image = cover photo.</p>
+            <div class="image-upload-zone" id="drop-zone"
+                 ondragover="event.preventDefault();this.classList.add('dragover')"
+                 ondragleave="this.classList.remove('dragover')"
+                 ondrop="handleDrop(event)"
+                 onclick="document.getElementById('img-input').click()">
+              <div class="text-4xl mb-2">📷</div>
+              <p class="text-sm text-gray-600 font-medium">Click to upload or drag & drop</p>
+              <p class="text-xs text-gray-400 mt-1">PNG, JPG, WebP — up to 5 MB each</p>
+              <input type="file" id="img-input" multiple accept="image/*" class="hidden" onchange="previewImages(this.files)" />
+            </div>
+            <div class="flex gap-3 mt-4 flex-wrap" id="img-previews"></div>
+          </div>
+
+          <!-- Contact -->
+          <div class="stat-card mb-4">
+            <h3 class="font-display font-bold text-gray-800 mb-4">Contact Details for this Listing</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="form-label">Phone</label>
+                <input type="tel" id="f-phone" class="form-input" placeholder="+91 98765 43210" />
+              </div>
+              <div>
+                <label class="form-label">WhatsApp</label>
+                <input type="tel" id="f-whatsapp" class="form-input" placeholder="+91 98765 43210" />
+              </div>
+            </div>
+          </div>
+
+          <!-- SEO -->
+          <div class="stat-card mb-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="font-display font-bold text-gray-800">SEO Settings</h3>
+              <span class="text-xs bg-teal-50 text-teal-700 font-bold px-2 py-1 rounded-lg">Auto-generated if blank</span>
+            </div>
+            <div class="space-y-3">
+              <div>
+                <label class="form-label">Meta Title <span class="text-gray-400 font-normal">(50-60 chars recommended)</span></label>
+                <input id="f-seo-title" class="form-input" placeholder="2024 Hyundai Creta SX for Sale in Mumbai | MileVaahan" />
+              </div>
+              <div>
+                <label class="form-label">Meta Description <span class="text-gray-400 font-normal">(150-160 chars recommended)</span></label>
+                <textarea id="f-seo-desc" rows="2" class="form-input resize-none" placeholder="Buy 2024 Hyundai Creta SX petrol automatic in Mumbai. First owner, 12,000 km, full service history. Price ₹14.5 lakh, negotiable."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end gap-3">
+            <button onclick="resetForm()" class="btn-secondary">Clear</button>
+            <button onclick="submitListing('draft')" class="btn-secondary">💾 Save Draft</button>
+            <button onclick="submitListing('pending')" class="btn-primary">🚀 Submit for Review</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ╔══════════════════════════════════╗
+           ║       INQUIRIES PANEL           ║
+           ╚══════════════════════════════════╝ -->
+      <div id="panel-inquiries" class="content-panel">
+        <div class="flex gap-2 mb-5 flex-wrap">
+          <button class="tab-btn active" onclick="filterInquiries('all',this)">All</button>
+          <button class="tab-btn" onclick="filterInquiries('unread',this)">Unread</button>
+          <button class="tab-btn" onclick="filterInquiries('replied',this)">Replied</button>
+          <button class="tab-btn" onclick="filterInquiries('whatsapp',this)">WhatsApp</button>
+        </div>
+        <div id="inquiries-list" class="space-y-3">
+          <div class="text-center py-12 text-gray-400">Loading inquiries…</div>
+        </div>
+      </div>
+
+      <!-- ╔══════════════════════════════════╗
+           ║       ANALYTICS PANEL           ║
+           ╚══════════════════════════════════╝ -->
+      <div id="panel-analytics" class="content-panel">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+          <div class="stat-card">
+            <h3 class="font-display font-bold text-gray-800 mb-4">Top Listings by Views</h3>
+            <div id="analytics-top" class="space-y-3">
+              <div class="text-gray-400 text-sm text-center py-4">Loading…</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <h3 class="font-display font-bold text-gray-800 mb-4">Inquiry Sources</h3>
+            <div class="space-y-3" id="inq-sources"></div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <h3 class="font-display font-bold text-gray-800 mb-4">Monthly Performance (Views)</h3>
+          <div class="flex items-end gap-3 h-36" id="monthly-chart"></div>
+          <div class="flex gap-3 mt-2 text-xs text-gray-400 text-center" id="monthly-labels"></div>
+        </div>
+      </div>
+
+      <!-- ╔══════════════════════════════════╗
+           ║       FEATURED SLOTS            ║
+           ╚══════════════════════════════════╝ -->
+      <div id="panel-featured" class="content-panel">
+        <div class="stat-card mb-5">
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 class="font-display font-bold text-gray-800">Featured Listing Slots</h3>
+              <p class="text-sm text-gray-500 mt-1">Featured cars appear at the top of search & on the homepage. Massive visibility boost.</p>
+            </div>
+            <div class="text-right">
+              <div class="font-display font-bold text-3xl text-teal-700" id="feat-slots">3</div>
+              <div class="text-xs text-gray-400">slots remaining</div>
+            </div>
+          </div>
+        </div>
+        <div id="featured-list" class="space-y-3">
+          <div class="text-center py-12 text-gray-400">Loading your listings…</div>
+        </div>
+      </div>
+
+      <!-- ╔══════════════════════════════════╗
+           ║       REVIEWS PANEL             ║
+           ╚══════════════════════════════════╝ -->
+      <div id="panel-reviews" class="content-panel">
+        <div class="stat-card mb-5">
+          <div class="flex items-center gap-8">
+            <div class="text-center">
+              <div class="font-display font-bold text-5xl text-gray-900" id="avg-rating">—</div>
+              <div class="text-yellow-400 text-2xl mt-1">★★★★★</div>
+              <div class="text-xs text-gray-400 mt-1" id="review-total">0 reviews</div>
+            </div>
+            <div class="flex-1 space-y-2" id="rating-bars"></div>
+          </div>
+        </div>
+        <div id="reviews-list" class="space-y-4">
+          <div class="text-center py-12 text-gray-400">No reviews yet.</div>
+        </div>
+      </div>
+
+      <!-- ╔══════════════════════════════════╗
+           ║       PROFILE PANEL             ║
+           ╚══════════════════════════════════╝ -->
+      <div id="panel-profile" class="content-panel">
+        <div class="max-w-2xl">
+          <div class="stat-card mb-4">
+            <h3 class="font-display font-bold text-gray-800 mb-4">Dealership Information</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div><label class="form-label">Dealership Name *</label><input id="p-name" class="form-input" placeholder="Your Dealership" /></div>
+              <div><label class="form-label">Contact Person</label><input id="p-person" class="form-input" placeholder="Name" /></div>
+              <div><label class="form-label">Email</label><input id="p-email" class="form-input" disabled /></div>
+              <div><label class="form-label">Phone *</label><input type="tel" id="p-phone" class="form-input" placeholder="+91 98765 43210" /></div>
+              <div><label class="form-label">WhatsApp</label><input type="tel" id="p-wa" class="form-input" placeholder="+91 98765 43210" /></div>
+              <div><label class="form-label">GST Number</label><input id="p-gst" class="form-input" placeholder="27AABCU9603R1ZP" /></div>
+              <div class="sm:col-span-2"><label class="form-label">Address</label><textarea id="p-address" rows="2" class="form-input resize-none" placeholder="Full dealership address"></textarea></div>
+              <div>
+                <label class="form-label">State</label>
+                <select id="p-state" class="form-input" onchange="populateCities('p-state','p-city')"><option value="">Select State</option></select>
+              </div>
+              <div><label class="form-label">City</label><select id="p-city" class="form-input"><option value="">Select City</option></select></div>
+              <div class="sm:col-span-2"><label class="form-label">About Your Dealership</label><textarea id="p-about" rows="3" class="form-input resize-none" placeholder="Tell buyers about your dealership, brands, experience…"></textarea></div>
+              <div><label class="form-label">Website</label><input type="url" id="p-website" class="form-input" placeholder="https://yoursite.com" /></div>
+              <div><label class="form-label">Working Hours</label><input id="p-hours" class="form-input" placeholder="Mon–Sat: 9AM–7PM" /></div>
+            </div>
+            <div class="flex justify-end mt-5">
+              <button onclick="saveProfile()" class="btn-primary">Save Profile</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ╔══════════════════════════════════╗
+           ║       BILLING PANEL             ║
+           ╚══════════════════════════════════╝ -->
+      <div id="panel-billing" class="content-panel">
+        <div class="max-w-4xl">
+          <!-- Current Plan -->
+          <div class="stat-card mb-5">
+            <div class="flex justify-between items-start">
+              <div>
+                <h3 class="font-display font-bold text-gray-800">Current Plan</h3>
+                <div class="flex items-center gap-3 mt-2">
+                  <span class="font-display font-bold text-2xl text-teal-700" id="cur-plan">Pro</span>
+                  <span class="text-xs font-bold text-white px-2 py-1 rounded-full" style="background:linear-gradient(135deg,#0d9488,#0284c7);">ACTIVE</span>
+                </div>
+                <p class="text-sm text-gray-500 mt-1">Renews on <span id="renew-date">—</span></p>
+              </div>
+              <div class="text-right">
+                <div class="font-display font-bold text-2xl text-gray-900" id="cur-price">₹4,999</div>
+                <div class="text-gray-400 text-sm">/month</div>
+              </div>
+            </div>
+            <div class="mt-4 p-3 rounded-xl bg-gray-50">
+              <div class="flex justify-between text-sm mb-1">
+                <span class="text-gray-600">Listing quota</span>
+                <span class="font-bold text-gray-900" id="quota-text">— / —</span>
+              </div>
+              <div class="plan-bar"><div class="plan-bar-fill" id="quota-bar" style="width:0%"></div></div>
+            </div>
+          </div>
+          <!-- Plan cards -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
+            <div class="stat-card border-2 border-gray-200 hover:border-teal-300 transition-all">
+              <div class="text-2xl mb-2">🏪</div>
+              <h3 class="font-display font-bold text-xl text-gray-800">Basic</h3>
+              <div class="font-display font-bold text-3xl text-gray-900 my-2">₹1,999<span class="text-sm font-normal text-gray-400">/mo</span></div>
+              <ul class="text-xs text-gray-600 space-y-1 mb-4">
+                <li>✅ 10 Active Listings</li><li>✅ Basic Profile</li><li>❌ Featured Listings</li><li>❌ Analytics</li>
+              </ul>
+              <button onclick="initPayment('basic',1999)" class="w-full py-2.5 rounded-xl border-2 border-gray-200 font-semibold text-sm hover:border-teal-400 hover:text-teal-600 transition-all">Select Basic</button>
+            </div>
+            <div class="stat-card border-2 relative" style="border-color:#0d9488;background:linear-gradient(145deg,#0a1628,#0f2040);">
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-xs font-bold text-white" style="background:linear-gradient(135deg,#B8860B,#D4A017);">POPULAR</div>
+              <div class="text-2xl mb-2">🚀</div>
+              <h3 class="font-display font-bold text-xl text-white">Pro</h3>
+              <div class="font-display font-bold text-3xl text-white my-2">₹4,999<span class="text-sm font-normal text-gray-400">/mo</span></div>
+              <ul class="text-xs text-gray-300 space-y-1 mb-4">
+                <li>✅ 50 Active Listings</li><li>✅ 3 Featured/month</li><li>✅ Verified Badge</li><li>✅ Analytics Dashboard</li>
+              </ul>
+              <button onclick="initPayment('pro',4999)" class="w-full py-2.5 rounded-xl font-bold text-sm text-white" style="background:linear-gradient(135deg,#0d9488,#0284c7);">Select Pro</button>
+            </div>
+            <div class="stat-card border-2 border-yellow-200 hover:border-yellow-400 transition-all">
+              <div class="text-2xl mb-2">👑</div>
+              <h3 class="font-display font-bold text-xl text-gray-800">Premium</h3>
+              <div class="font-display font-bold text-3xl text-yellow-700 my-2">₹9,999<span class="text-sm font-normal text-gray-400">/mo</span></div>
+              <ul class="text-xs text-gray-600 space-y-1 mb-4">
+                <li>✅ Unlimited Listings</li><li>✅ 10 Featured/month</li><li>✅ Homepage Banner</li><li>✅ Priority Support</li>
+              </ul>
+              <button onclick="initPayment('premium',9999)" class="w-full py-2.5 rounded-xl border-2 border-yellow-400 text-yellow-700 font-bold text-sm hover:bg-yellow-50 transition-all">Select Premium</button>
+            </div>
+          </div>
+          <!-- Billing history -->
+          <div class="stat-card">
+            <h3 class="font-display font-bold text-gray-800 mb-4">Billing History</h3>
+            <div id="billing-history">
+              <div class="text-center text-gray-400 text-sm py-6">No billing records yet.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ══ REPLY MODAL ══ -->
+<div id="reply-modal" class="modal-bg" style="display:none;">
+  <div class="modal-box">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="font-display font-bold text-gray-900 text-lg">Reply to Inquiry</h3>
+      <button onclick="closeModal('reply-modal')" class="text-gray-400 hover:text-gray-700 text-2xl leading-none">×</button>
+    </div>
+    <div id="reply-inquiry-preview" class="p-4 rounded-xl bg-gray-50 text-sm text-gray-700 mb-4"></div>
+    <textarea id="reply-text" rows="4" class="form-input resize-none mb-4" placeholder="Type your reply to the buyer…"></textarea>
+    <div class="flex justify-end gap-3">
+      <button onclick="closeModal('reply-modal')" class="btn-secondary">Cancel</button>
+      <button onclick="sendReply()" class="btn-primary">Send Reply</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DELETE MODAL ══ -->
+<div id="delete-modal" class="modal-bg" style="display:none;">
+  <div class="modal-box text-center">
+    <div class="text-5xl mb-4">🗑️</div>
+    <h3 class="font-display font-bold text-xl text-gray-900 mb-2">Delete this listing?</h3>
+    <p class="text-gray-500 text-sm mb-6">This cannot be undone. The listing will be permanently removed.</p>
+    <div class="flex gap-3 justify-center">
+      <button onclick="closeModal('delete-modal')" class="btn-secondary">Cancel</button>
+      <button onclick="confirmDelete()" class="bg-red-500 hover:bg-red-600 text-white px-8 py-2.5 rounded-xl font-bold text-sm transition-colors">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════
+   DEALER DASHBOARD — COMPLETE LOGIC
+═══════════════════════════════════════════════════════════ */
+let dealerData = null, allListings = [], allInquiries = [], deleteTarget = null, replyTarget = null, uploadedFiles = [];
+
+// ── INIT ──
+window.addEventListener('load', async () => {
+  try {
+    await new Promise(resolve => auth.onAuthStateChanged(u => { if(u) resolve(u); else window.location.href='../pages/login.html'; }));
+    const user = auth.currentUser;
+    document.getElementById('user-avatar').textContent = (user.displayName?.[0] || user.email?.[0] || 'D').toUpperCase();
+    await loadDealer(user.uid);
+    initDropdowns();
+    loadDashboard();
+  } catch(e) { console.error(e); }
+  finally { setTimeout(() => showLoader(false), 700); }
+});
+
+async function loadDealer(uid) {
+  try {
+    const snap = await db.collection(COLLECTIONS.DEALERS).where('uid','==',uid).limit(1).get();
+    if (!snap.empty) { dealerData = { id: snap.docs[0].id, ...snap.docs[0].data() }; }
+    else { dealerData = { id:'demo', name:'Demo Dealer', plan:'pro', listingCount:30, uid }; }
+  } catch { dealerData = { id:'demo', name:'Demo Dealer', plan:'pro', listingCount:30, uid }; }
+  updatePlanWidget();
+  prefillProfile();
+}
+
+function updatePlanWidget() {
+  const plan = SUBSCRIPTION_PLANS[dealerData.plan] || SUBSCRIPTION_PLANS.pro;
+  document.getElementById('sidebar-plan-label').textContent = `👑 ${plan.name} Plan`;
+  const used = dealerData.listingCount || 0;
+  const max = plan.listings;
+  document.getElementById('plan-used').textContent = used;
+  document.getElementById('plan-max').textContent = max === -1 ? '∞ listings' : `${max} listings`;
+  document.getElementById('plan-bar').style.width = max > 0 ? `${Math.min(100,(used/max)*100)}%` : '100%';
+  document.getElementById('listing-count-badge').textContent = used;
+  // billing panel
+  document.getElementById('cur-plan').textContent = plan.name;
+  document.getElementById('cur-price').textContent = `₹${plan.price.toLocaleString('en-IN')}`;
+  document.getElementById('quota-text').textContent = max === -1 ? `${used} / ∞` : `${used} / ${max}`;
+  document.getElementById('quota-bar').style.width = max > 0 ? `${Math.min(100,(used/max)*100)}%` : '5%';
+  document.getElementById('renew-date').textContent = '1 Feb 2026';
+}
+
+// ── PANEL NAVIGATION ──
+function showPanel(name, btn) {
+  document.querySelectorAll('.content-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(`panel-${name}`).classList.add('active');
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const titles = { dashboard:'Dashboard', listings:'My Listings', add:'Add New Listing', inquiries:'Inquiries', analytics:'Analytics', featured:'Featured Slots', reviews:'Reviews', profile:'Dealer Profile', billing:'Subscription & Billing' };
+  document.getElementById('panel-title').textContent = titles[name] || name;
+  if (name==='listings') loadListingsPanel();
+  if (name==='inquiries') loadInquiriesPanel();
+  if (name==='analytics') loadAnalyticsPanel();
+  if (name==='featured') loadFeaturedPanel();
+  if (name==='reviews') loadReviewsPanel();
+  if (name==='add') { resetForm(); document.getElementById('form-title').textContent='Add New Listing'; }
+  // Close mobile sidebar
+  document.getElementById('sidebar').classList.remove('mobile-open');
+}
+
+function toggleSidebar() {
+  const s = document.getElementById('sidebar');
+  s.style.transform = s.style.transform === 'translateX(0px)' ? 'translateX(-260px)' : 'translateX(0px)';
+}
+
+// ── DASHBOARD ──
+function loadDashboard() {
+  document.getElementById('d-active').textContent = dealerData.listingCount || 30;
+  document.getElementById('d-views').textContent = '3,241';
+  document.getElementById('d-inquiries').textContent = '56';
+  document.getElementById('d-sold').textContent = '14';
+  document.getElementById('new-inq-badge').textContent = '4 new';
+  document.getElementById('inq-dot').style.display = 'block';
+  document.getElementById('inq-count').textContent = '56';
+
+  // Views chart
+  const vals = [92, 134, 108, 161, 125, 197, 148];
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const max = Math.max(...vals);
+  document.getElementById('views-chart').innerHTML = vals.map((v,i)=>`
+    <div class="flex-1 flex flex-col items-center gap-1">
+      <span class="text-xs text-gray-400">${v}</span>
+      <div class="chart-bar w-full" style="height:${(v/max)*100}%;background:linear-gradient(180deg,#0d9488,#0284c7);"></div>
+    </div>`).join('');
+  document.getElementById('views-labels').innerHTML = days.map(d=>`<span class="flex-1">${d}</span>`).join('');
+
+  // Top listings widget
+  document.getElementById('top-listings-widget').innerHTML = [
+    {name:'2023 Hyundai Creta SX',views:312,inq:18},
+    {name:'2024 Tata Nexon EV',views:248,inq:11},
+    {name:'2022 Kia Seltos HTX',views:201,inq:9},
+  ].map(l=>`
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-lg">🚗</div>
+      <div class="flex-1">
+        <div class="text-sm font-semibold text-gray-800">${l.name}</div>
+        <div class="text-xs text-gray-400">👁 ${l.views} views &nbsp;•&nbsp; 📩 ${l.inq} inquiries</div>
+      </div>
+    </div>`).join('');
+
+  // Recent inquiries widget
+  document.getElementById('recent-inq-widget').innerHTML = [
+    {name:'Rahul M.',car:'2023 Creta',msg:'Is this still available?',time:'2h ago'},
+    {name:'Priya S.',car:'Tata Nexon EV',msg:'What is the best price?',time:'5h ago'},
+    {name:'Arjun K.',car:'Kia Seltos',msg:'Can I see it this weekend?',time:'1d ago'},
+  ].map(i=>`
+    <div class="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 cursor-pointer transition-colors" onclick="showPanel('inquiries',null)">
+      <div class="w-9 h-9 rounded-full text-white text-xs font-bold flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#0d9488,#0284c7);">${i.name[0]}</div>
+      <div class="flex-1">
+        <div class="flex justify-between"><span class="text-sm font-semibold text-gray-800">${i.name}</span><span class="text-xs text-gray-400">${i.time}</span></div>
+        <div class="text-xs text-gray-500">${i.car}</div>
+        <div class="text-xs text-gray-600 mt-0.5">"${i.msg}"</div>
+      </div>
+    </div>`).join('');
+}
+
+// ── LISTINGS ──
+async function loadListingsPanel(filter='all') {
+  document.getElementById('listings-container').innerHTML = '<div class="text-center py-10 text-gray-400">Loading…</div>';
+  try {
+    let q = db.collection(COLLECTIONS.LISTINGS).where('dealerId','==',dealerData.id);
+    if (filter !== 'all') q = q.where('status','==',filter);
+    const snap = await q.orderBy('createdAt','desc').get();
+    allListings = snap.docs.map(d=>({id:d.id,...d.data()}));
+  } catch {
+    allListings = mockListings();
+  }
+  renderListings(allListings);
+}
+
+function mockListings() {
+  return ['Hyundai Creta','Tata Nexon EV','Kia Seltos HTX+','Maruti Baleno Zeta'].map((name,i)=>{
+    const [make,...rest] = name.split(' ');
+    return { id:`l${i}`, make, model:rest.join(' '), year:2021+i, price:800000+(i*300000), condition:['used','cpo','new','used'][i], status:['active','pending','active','draft'][i], featured:i<2, views:120+i*45, city:'Mumbai', createdAt:{toDate:()=>new Date(Date.now()-i*86400000)} };
+  });
+}
+
+function renderListings(list) {
+  if (!list.length) {
+    document.getElementById('listings-container').innerHTML = `
+      <div class="text-center py-16">
+        <div class="text-5xl mb-4">🚗</div>
+        <p class="text-gray-500 mb-4">No listings yet.</p>
+        <button onclick="showPanel('add',null)" class="btn-primary text-sm">Add Your First Listing</button>
+      </div>`;
+    return;
+  }
+  document.getElementById('listings-container').innerHTML = list.map(l=>`
+    <div class="listing-row">
+      <div class="w-16 h-12 rounded-xl bg-gray-100 flex items-center justify-center text-2xl flex-shrink-0">🚗</div>
+      <div class="flex-1 min-w-0">
+        <div class="font-display font-bold text-gray-900 text-sm">${l.year} ${l.make} ${l.model}</div>
+        <div class="flex items-center gap-2 mt-1 flex-wrap">
+          <span class="text-sm font-bold" style="color:#0f766e">${formatPrice(l.price)}</span>
+          <span class="status-badge status-${l.status}">${(l.status||'active').toUpperCase()}</span>
+          ${l.featured?'<span class="text-xs font-bold text-yellow-600">⭐ Featured</span>':''}
+        </div>
+        <div class="text-xs text-gray-400 mt-1">👁 ${l.views||0} views &nbsp;•&nbsp; 📍 ${l.city||''} &nbsp;•&nbsp; ${timeAgo(l.createdAt)}</div>
+      </div>
+      <div class="flex gap-2 flex-shrink-0 flex-wrap">
+        <button class="btn-edit" onclick="editListing('${l.id}')">✏️ Edit</button>
+        <button class="btn-edit" style="background:#f0f9ff;color:#0369a1;border-color:#bae6fd;" onclick="toggleStatus('${l.id}','${l.status}')">${l.status==='active'?'⏸ Pause':'▶ Activate'}</button>
+        <button class="btn-danger" onclick="openDelete('${l.id}')">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+function filterListings(status, btn) {
+  document.querySelectorAll('#panel-listings .tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  loadListingsPanel(status);
+}
+
+function searchListings(q) {
+  const filtered = q ? allListings.filter(l=>`${l.make} ${l.model} ${l.year}`.toLowerCase().includes(q.toLowerCase())) : allListings;
+  renderListings(filtered);
+}
+
+// ── ADD / EDIT LISTING ──
+function initDropdowns() {
+  const ids = { '#f-make':null, '#f-year':null, '#f-fuel':null, '#f-transmission':null, '#f-body':null, '#f-color':null, '#f-owner':null, '#f-reg-state':null, '#f-state':null, '#p-state':null };
+
+  const makeEl = document.getElementById('f-make');
+  Object.keys(CAR_DATA.makes).forEach(m=>{ makeEl.innerHTML += `<option value="${m}">${m}</option>`; });
+
+  const yearEl = document.getElementById('f-year');
+  CAR_DATA.years.slice(0,35).forEach(y=>{ yearEl.innerHTML += `<option value="${y}">${y}</option>`; });
+
+  document.getElementById('f-fuel').innerHTML += CAR_DATA.fuelTypes.map(f=>`<option value="${f}">${f}</option>`).join('');
+  document.getElementById('f-transmission').innerHTML += CAR_DATA.transmissions.map(t=>`<option value="${t}">${t}</option>`).join('');
+  document.getElementById('f-body').innerHTML += CAR_DATA.bodyTypes.map(b=>`<option value="${b}">${b}</option>`).join('');
+  document.getElementById('f-color').innerHTML += CAR_DATA.colors.map(c=>`<option value="${c}">${c}</option>`).join('');
+  document.getElementById('f-owner').innerHTML += CAR_DATA.ownerTypes.map(o=>`<option value="${o}">${o}</option>`).join('');
+
+  const stateOptions = Object.keys(INDIA_LOCATIONS).map(s=>`<option value="${s}">${s}</option>`).join('');
+  document.getElementById('f-state').innerHTML += stateOptions;
+  document.getElementById('f-reg-state').innerHTML += stateOptions;
+  document.getElementById('p-state').innerHTML += stateOptions;
+}
+
+function populateModels() {
+  const make = document.getElementById('f-make').value;
+  const modelEl = document.getElementById('f-model');
+  modelEl.innerHTML = '<option value="">Select Model</option>';
+  if (make && CAR_DATA.makes[make]) {
+    CAR_DATA.makes[make].forEach(m=>{ modelEl.innerHTML += `<option value="${m}">${m}</option>`; });
+  }
+}
+
+function populateCities(stateId, cityId) {
+  const state = document.getElementById(stateId).value;
+  const cityEl = document.getElementById(cityId);
+  cityEl.innerHTML = '<option value="">Select City</option>';
+  if (state && INDIA_LOCATIONS[state]) {
+    INDIA_LOCATIONS[state].forEach(c=>{ cityEl.innerHTML += `<option value="${c}">${c}</option>`; });
+  }
+}
+
+function previewImages(files) {
+  const container = document.getElementById('img-previews');
+  Array.from(files).forEach(file => {
+    uploadedFiles.push(file);
+    const reader = new FileReader();
+    reader.onload = e => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'relative';
+      wrapper.innerHTML = `
+        <img src="${e.target.result}" class="img-thumb" alt="preview" />
+        <button onclick="this.parentElement.remove()" class="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full text-xs font-bold flex items-center justify-center leading-none">×</button>`;
+      container.appendChild(wrapper);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('drop-zone').classList.remove('dragover');
+  previewImages(e.dataTransfer.files);
+}
+
+function resetForm() {
+  document.getElementById('edit-id').value = '';
+  ['f-condition','f-make','f-model','f-year','f-variant','f-price','f-fuel','f-transmission','f-body','f-color','f-mileage','f-engine','f-owner','f-reg-state','f-state','f-city','f-description','f-phone','f-whatsapp','f-seo-title','f-seo-desc'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  ['f-negotiable','f-exchange','f-finance'].forEach(id=>{ const el=document.getElementById(id); if(el) el.checked=false; });
+  document.getElementById('img-previews').innerHTML = '';
+  uploadedFiles = [];
+}
+
+async function editListing(id) {
+  showPanel('add', null);
+  document.getElementById('form-title').textContent = 'Edit Listing';
+  document.getElementById('edit-id').value = id;
+  try {
+    const doc = await db.collection(COLLECTIONS.LISTINGS).doc(id).get();
+    if (!doc.exists) return;
+    const d = doc.data();
+    const setVal = (elId, val) => { const el = document.getElementById(elId); if (el && val !== undefined) el.value = val; };
+    setVal('f-condition', d.condition); setVal('f-make', d.make);
+    if (d.make) { populateModels(); setTimeout(()=>setVal('f-model',d.model), 100); }
+    setVal('f-year',d.year); setVal('f-variant',d.variant); setVal('f-price',d.price);
+    setVal('f-fuel',d.fuel); setVal('f-transmission',d.transmission); setVal('f-body',d.bodyType);
+    setVal('f-color',d.color); setVal('f-mileage',d.mileage); setVal('f-engine',d.engine);
+    setVal('f-owner',d.ownerType); setVal('f-reg-state',d.regState); setVal('f-state',d.state);
+    if (d.state) { populateCities('f-state','f-city'); setTimeout(()=>setVal('f-city',d.city),100); }
+    setVal('f-description',d.description); setVal('f-phone',d.phone); setVal('f-whatsapp',d.whatsApp);
+    setVal('f-seo-title',d.seo?.title); setVal('f-seo-desc',d.seo?.description);
+    if (d.negotiable) document.getElementById('f-negotiable').checked = true;
+    if (d.exchange) document.getElementById('f-exchange').checked = true;
+    if (d.finance) document.getElementById('f-finance').checked = true;
+  } catch { showToast('Could not load listing data','error'); }
+}
+
+async function submitListing(status) {
+  const make = document.getElementById('f-make').value;
+  const model = document.getElementById('f-model').value;
+  const year = document.getElementById('f-year').value;
+  const price = document.getElementById('f-price').value;
+  const condition = document.getElementById('f-condition').value;
+  const city = document.getElementById('f-city').value;
+
+  if (!make || !model || !year || !price || !condition || !city) {
+    showToast('Please fill all required fields (*)','error'); return;
+  }
+
+  const seoTitle = document.getElementById('f-seo-title').value ||
+    `${year} ${make} ${model} for Sale in ${city} | MileVaahan`;
+  const seoDesc = document.getElementById('f-seo-desc').value ||
+    `Buy ${year} ${make} ${model} ${document.getElementById('f-variant').value} in ${city}. ${document.getElementById('f-fuel').value}, ${document.getElementById('f-transmission').value}. Price ₹${parseInt(price).toLocaleString('en-IN')}.`;
+
+  const data = {
+    make, model, year:parseInt(year), price:parseInt(price), condition,
+    variant: document.getElementById('f-variant').value,
+    fuel: document.getElementById('f-fuel').value,
+    transmission: document.getElementById('f-transmission').value,
+    bodyType: document.getElementById('f-body').value,
+    color: document.getElementById('f-color').value,
+    mileage: parseInt(document.getElementById('f-mileage').value)||0,
+    engine: document.getElementById('f-engine').value,
+    ownerType: document.getElementById('f-owner').value,
+    regState: document.getElementById('f-reg-state').value,
+    state: document.getElementById('f-state').value,
+    city,
+    description: document.getElementById('f-description').value,
+    phone: document.getElementById('f-phone').value,
+    whatsApp: document.getElementById('f-whatsapp').value,
+    negotiable: document.getElementById('f-negotiable').checked,
+    exchange: document.getElementById('f-exchange').checked,
+    finance: document.getElementById('f-finance').checked,
+    dealerId: dealerData.id,
+    dealerName: dealerData.name,
+    status: status === 'pending' ? 'pending' : 'draft',
+    featured: false, views: 0, images: [],
+    seo: { title: seoTitle, description: seoDesc },
+    slug: generateSlug(`${year}-${make}-${model}-${city}`),
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+  };
+
+  showLoader(true);
+  try {
+    const editId = document.getElementById('edit-id').value;
+    if (editId) {
+      await db.collection(COLLECTIONS.LISTINGS).doc(editId).update(data);
+      showToast('✅ Listing updated!');
+    } else {
+      data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+      await db.collection(COLLECTIONS.LISTINGS).add(data);
+      await db.collection(COLLECTIONS.DEALERS).doc(dealerData.id).update({ listingCount: firebase.firestore.FieldValue.increment(1) });
+      showToast(status==='draft' ? '💾 Saved as draft' : '🚀 Submitted for admin review!');
+    }
+    showPanel('listings', null);
+  } catch(e) {
+    showToast('Error saving listing','error');
+    console.error(e);
+  } finally { showLoader(false); }
+}
+
+async function toggleStatus(id, current) {
+  const newStatus = current === 'active' ? 'paused' : 'active';
+  try {
+    await db.collection(COLLECTIONS.LISTINGS).doc(id).update({ status: newStatus });
+    showToast(`Listing ${newStatus === 'active' ? 'activated' : 'paused'}`);
+    loadListingsPanel();
+  } catch { showToast('Could not update status','error'); }
+}
+
+function openDelete(id) {
+  deleteTarget = id;
+  document.getElementById('delete-modal').style.display = 'flex';
+}
+
+async function confirmDelete() {
+  if (!deleteTarget) return;
+  try {
+    await db.collection(COLLECTIONS.LISTINGS).doc(deleteTarget).delete();
+    await db.collection(COLLECTIONS.DEALERS).doc(dealerData.id).update({ listingCount: firebase.firestore.FieldValue.increment(-1) });
+    showToast('Listing deleted');
+    closeModal('delete-modal');
+    loadListingsPanel();
+  } catch { showToast('Could not delete','error'); }
+}
+
+// ── INQUIRIES ──
+async function loadInquiriesPanel(filter='all') {
+  document.getElementById('inquiries-list').innerHTML = '<div class="text-center py-10 text-gray-400">Loading…</div>';
+  try {
+    let q = db.collection(COLLECTIONS.INQUIRIES).where('dealerId','==',dealerData.id).orderBy('createdAt','desc');
+    const snap = await q.get();
+    allInquiries = snap.docs.map(d=>({id:d.id,...d.data()}));
+  } catch {
+    allInquiries = mockInquiries();
+  }
+  renderInquiries(allInquiries, filter);
+}
+
+function mockInquiries() {
+  return [
+    {id:'i1',buyerName:'Rahul Mehta',buyerPhone:'+91 98765 43210',car:'2023 Hyundai Creta SX',message:'Is this still available? Can we schedule a test drive this Saturday?',source:'whatsapp',read:false,replied:false,createdAt:{toDate:()=>new Date(Date.now()-7200000)}},
+    {id:'i2',buyerName:'Priya Sharma',buyerPhone:'+91 87654 32109',car:'2024 Tata Nexon EV',message:'What is the lowest price you can offer? Also is finance available?',source:'email',read:true,replied:true,createdAt:{toDate:()=>new Date(Date.now()-18000000)}},
+    {id:'i3',buyerName:'Arjun Kumar',buyerPhone:'+91 76543 21098',car:'2022 Kia Seltos HTX',message:'Can you share more photos of the interior and boot space?',source:'chat',read:false,replied:false,createdAt:{toDate:()=>new Date(Date.now()-86400000)}},
+  ];
+}
+
+function renderInquiries(list, filter='all') {
+  const filtered = filter === 'all' ? list : filter === 'unread' ? list.filter(i=>!i.read) : filter === 'replied' ? list.filter(i=>i.replied) : filter === 'whatsapp' ? list.filter(i=>i.source==='whatsapp') : list;
+  const container = document.getElementById('inquiries-list');
+  if (!filtered.length) { container.innerHTML = '<div class="text-center py-12 text-gray-400">No inquiries found.</div>'; return; }
+  container.innerHTML = filtered.map(inq=>`
+    <div class="inquiry-card ${!inq.read?'unread':''}">
+      <div class="flex items-start justify-between gap-3">
+        <div class="flex items-start gap-3">
+          <div class="w-10 h-10 rounded-full text-white font-bold text-sm flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#0d9488,#0284c7);">${inq.buyerName?.[0]||'?'}</div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-semibold text-gray-900 text-sm">${inq.buyerName}</span>
+              ${!inq.read?'<span class="w-2 h-2 rounded-full bg-teal-500"></span>':''}
+              ${inq.replied?'<span class="text-xs text-green-600 font-bold bg-green-50 px-2 py-0.5 rounded-full">Replied</span>':''}
+            </div>
+            <div class="text-xs text-gray-500">🚗 ${inq.car}</div>
+            <div class="text-sm text-gray-700 mt-1">"${inq.message}"</div>
+          </div>
+        </div>
+        <div class="text-xs text-gray-400 flex-shrink-0">${timeAgo(inq.createdAt)}</div>
+      </div>
+      <div class="flex gap-2 mt-3 ml-13">
+        <button onclick="openReply('${inq.id}','${inq.buyerName}','${inq.car}','${inq.message.replace(/'/g,"\\'")}')" class="btn-edit text-xs">💬 Reply</button>
+        ${inq.buyerPhone?`<button onclick="window.open('https://wa.me/${inq.buyerPhone.replace(/\D/g,'')}?text=Hi%20${encodeURIComponent(inq.buyerName)}%2C%20regarding%20your%20inquiry%20on%20${encodeURIComponent(inq.car)}','_blank')" class="whatsapp-btn text-xs">WhatsApp</button>`:''}
+        ${inq.buyerPhone?`<a href="tel:${inq.buyerPhone}" class="btn-edit text-xs">📞 Call</a>`:''}
+        <button onclick="markRead('${inq.id}')" class="btn-secondary text-xs px-3 py-1.5 rounded-lg text-xs">Mark Read</button>
+      </div>
+    </div>`).join('');
+}
+
+function filterInquiries(filter, btn) {
+  document.querySelectorAll('#panel-inquiries .tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderInquiries(allInquiries, filter);
+}
+
+function openReply(id, name, car, message) {
+  replyTarget = id;
+  document.getElementById('reply-inquiry-preview').innerHTML = `
+    <strong>${name}</strong> asked about <em>${car}</em>:<br/>
+    <span class="text-gray-600">"${message}"</span>`;
+  document.getElementById('reply-text').value = '';
+  document.getElementById('reply-modal').style.display = 'flex';
+}
+
+async function sendReply() {
+  const text = document.getElementById('reply-text').value.trim();
+  if (!text) { showToast('Please type a reply','error'); return; }
+  try {
+    await db.collection(COLLECTIONS.INQUIRIES).doc(replyTarget).update({ replied:true, replyText:text, repliedAt:firebase.firestore.FieldValue.serverTimestamp() });
+    showToast('Reply sent!'); closeModal('reply-modal'); loadInquiriesPanel();
+  } catch { showToast('Reply sent! (demo mode)'); closeModal('reply-modal'); }
+}
+
+async function markRead(id) {
+  try { await db.collection(COLLECTIONS.INQUIRIES).doc(id).update({ read:true }); } catch {}
+}
+
+// ── ANALYTICS ──
+function loadAnalyticsPanel() {
+  // Top by views
+  document.getElementById('analytics-top').innerHTML = [
+    {name:'2023 Hyundai Creta SX',views:312},{name:'2024 Tata Nexon EV',views:248},{name:'2022 Kia Seltos HTX',views:201},{name:'Maruti Baleno Zeta',views:156}
+  ].map((l,i)=>`
+    <div class="flex items-center gap-3">
+      <span class="font-display font-bold text-gray-400 w-5">#${i+1}</span>
+      <div class="flex-1">
+        <div class="flex justify-between mb-1"><span class="text-sm text-gray-700">${l.name}</span><span class="text-sm font-bold text-teal-700">${l.views}</span></div>
+        <div class="plan-bar"><div class="plan-bar-fill" style="width:${Math.round(l.views/312*100)}%"></div></div>
+      </div>
+    </div>`).join('');
+
+  // Inquiry sources
+  document.getElementById('inq-sources').innerHTML = [
+    {src:'WhatsApp',count:28,pct:50,color:'#25D366'},{src:'Email',count:16,pct:29,color:'#0284c7'},{src:'In-app Chat',count:8,pct:14,color:'#0d9488'},{src:'Phone',count:4,pct:7,color:'#B8860B'}
+  ].map(s=>`
+    <div class="flex items-center gap-3">
+      <span class="text-xs font-semibold text-gray-600 w-24">${s.src}</span>
+      <div class="flex-1 plan-bar"><div class="plan-bar-fill" style="width:${s.pct}%;background:${s.color}"></div></div>
+      <span class="text-sm font-bold text-gray-700 w-8 text-right">${s.count}</span>
+    </div>`).join('');
+
+  // Monthly chart
+  const months = ['Aug','Sep','Oct','Nov','Dec','Jan'];
+  const vals = [820,1240,985,1680,1450,2100];
+  const max = Math.max(...vals);
+  document.getElementById('monthly-chart').innerHTML = vals.map((v,i)=>`
+    <div class="flex-1 flex flex-col items-center gap-1">
+      <span class="text-xs text-gray-400">${v}</span>
+      <div class="w-full rounded-t" style="height:${(v/max)*100}%;background:linear-gradient(180deg,#0d9488,#0284c7);border-radius:4px 4px 0 0;"></div>
+    </div>`).join('');
+  document.getElementById('monthly-labels').innerHTML = months.map(m=>`<span class="flex-1 text-center">${m}</span>`).join('');
+}
+
+// ── FEATURED ──
+async function loadFeaturedPanel() {
+  const plan = SUBSCRIPTION_PLANS[dealerData.plan] || SUBSCRIPTION_PLANS.pro;
+  document.getElementById('feat-slots').textContent = plan.featured;
+  const listings = allListings.length ? allListings : mockListings();
+  document.getElementById('featured-list').innerHTML = listings.map(l=>`
+    <div class="listing-row">
+      <div class="w-14 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-xl">🚗</div>
+      <div class="flex-1">
+        <div class="font-semibold text-gray-900 text-sm">${l.year} ${l.make} ${l.model}</div>
+        <div class="text-xs text-gray-500 mt-0.5">${formatPrice(l.price)} &nbsp;•&nbsp; 📍 ${l.city||''}</div>
+      </div>
+      <button onclick="toggleFeatured('${l.id}',${l.featured})" class="text-xs font-bold px-4 py-2 rounded-xl transition-all ${l.featured ? 'bg-yellow-100 text-yellow-700 border border-yellow-300 hover:bg-yellow-200' : 'btn-primary text-xs'}">
+        ${l.featured ? '⭐ Remove Featured' : '⭐ Make Featured'}
+      </button>
+    </div>`).join('');
+}
+
+async function toggleFeatured(id, current) {
+  if (!current && SUBSCRIPTION_PLANS[dealerData.plan]?.featured === 0) {
+    showToast('Upgrade your plan to feature listings','error'); return;
+  }
+  try {
+    await db.collection(COLLECTIONS.LISTINGS).doc(id).update({ featured: !current });
+    showToast(current ? 'Removed from featured' : '⭐ Listing featured!');
+    allListings = allListings.map(l=>l.id===id?{...l,featured:!current}:l);
+    loadFeaturedPanel();
+  } catch { showToast(current?'Removed from featured':'⭐ Featured! (demo)'); }
+}
+
+// ── REVIEWS ──
+async function loadReviewsPanel() {
+  const mockReviews = [
+    {buyer:'Rahul M.',rating:5,comment:'Excellent service! The car was exactly as described. Very professional team.',date:'Dec 15, 2024'},
+    {buyer:'Priya S.',rating:4,comment:'Good experience overall. Could have been more transparent about the service history.',date:'Dec 10, 2024'},
+    {buyer:'Arjun K.',rating:5,comment:'Best car buying experience in Mumbai. Highly recommend MileVaahan and this dealer!',date:'Dec 5, 2024'},
+  ];
+  const avg = (mockReviews.reduce((s,r)=>s+r.rating,0)/mockReviews.length).toFixed(1);
+  document.getElementById('avg-rating').textContent = avg;
+  document.getElementById('review-total').textContent = `${mockReviews.length} reviews`;
+
+  // Rating bars
+  const counts = [0,0,0,0,0];
+  mockReviews.forEach(r=>counts[r.rating-1]++);
+  document.getElementById('rating-bars').innerHTML = [5,4,3,2,1].map(star=>`
+    <div class="flex items-center gap-2">
+      <span class="text-xs text-gray-500 w-4">${star}★</span>
+      <div class="flex-1 plan-bar"><div class="plan-bar-fill" style="width:${Math.round(counts[star-1]/mockReviews.length*100)}%"></div></div>
+      <span class="text-xs text-gray-500 w-4">${counts[star-1]}</span>
+    </div>`).join('');
+
+  document.getElementById('reviews-list').innerHTML = mockReviews.map(r=>`
+    <div class="stat-card">
+      <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-full text-white text-xs font-bold flex items-center justify-center" style="background:linear-gradient(135deg,#0d9488,#0284c7);">${r.buyer[0]}</div>
+          <div>
+            <div class="font-semibold text-gray-900 text-sm">${r.buyer}</div>
+            <div class="text-yellow-400 text-xs">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+          </div>
+        </div>
+        <span class="text-xs text-gray-400">${r.date}</span>
+      </div>
+      <p class="text-sm text-gray-600">"${r.comment}"</p>
+    </div>`).join('');
+}
+
+// ── PROFILE ──
+function prefillProfile() {
+  if (!dealerData) return;
+  const setVal=(id,v)=>{const el=document.getElementById(id);if(el&&v)el.value=v;};
+  setVal('p-name',dealerData.name); setVal('p-email',auth.currentUser?.email||'');
+  setVal('p-phone',dealerData.phone); setVal('p-wa',dealerData.whatsApp);
+  setVal('p-gst',dealerData.gst); setVal('p-address',dealerData.address);
+  setVal('p-about',dealerData.about); setVal('p-website',dealerData.website);
+  setVal('p-hours',dealerData.hours);
+}
+
+async function saveProfile() {
+  const data = {
+    name: document.getElementById('p-name').value,
+    phone: document.getElementById('p-phone').value,
+    whatsApp: document.getElementById('p-wa').value,
+    gst: document.getElementById('p-gst').value,
+    address: document.getElementById('p-address').value,
+    state: document.getElementById('p-state').value,
+    city: document.getElementById('p-city').value,
+    about: document.getElementById('p-about').value,
+    website: document.getElementById('p-website').value,
+    hours: document.getElementById('p-hours').value,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+  try {
+    await db.collection(COLLECTIONS.DEALERS).doc(dealerData.id).update(data);
+    Object.assign(dealerData, data);
+    showToast('Profile updated!');
+  } catch { showToast('Profile saved! (demo mode)'); }
+}
+
+// ── PAYMENT (RAZORPAY) ──
+function initPayment(plan, amount) {
+  const options = {
+    key: 'YOUR_RAZORPAY_KEY_ID', // Replace with actual key
+    amount: amount * 100, // paise
+    currency: 'INR',
+    name: 'MileVaahan',
+    description: `${plan.charAt(0).toUpperCase()+plan.slice(1)} Plan Subscription`,
+    image: '../images/logo.png',
+    handler: async function(response) {
+      try {
+        await db.collection(COLLECTIONS.SUBSCRIPTIONS).add({
+          dealerId: dealerData.id, plan, amount,
+          razorpayPaymentId: response.razorpay_payment_id,
+          status: 'active',
+          startDate: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+        await db.collection(COLLECTIONS.DEALERS).doc(dealerData.id).update({ plan });
+        dealerData.plan = plan;
+        updatePlanWidget();
+        showToast(`🎉 Upgraded to ${plan.charAt(0).toUpperCase()+plan.slice(1)} plan!`);
+      } catch(e) { showToast('Payment recorded!'); }
+    },
+    prefill: { name: dealerData.name, email: auth.currentUser?.email, contact: dealerData.phone },
+    theme: { color: '#0d9488' }
+  };
+  const rzp = new Razorpay(options);
+  rzp.open();
+}
+
+// ── UTILS ──
+function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+function doSignOut() {
+  auth.signOut().then(() => { showToast('Signed out'); setTimeout(()=>window.location.href='../pages/login.html', 800); });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title id="pg-title">Dealer Profile | MileVaahan</title>
+  <meta name="description" id="pg-desc" content="View dealer profile on MileVaahan – browse inventory, contact details, and reviews.">
+  <link rel="canonical" id="pg-canon" href="https://www.milevaahan.com/pages/dealer-profile.html">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>*{font-family:'DM Sans',sans-serif;}h1,h2,h3,.font-display{font-family:'Syne',sans-serif;}body{background:#0a0f1e;color:#e2e8f0;margin:0;}.car-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;transition:all 0.3s;}.car-card:hover{border-color:rgba(13,148,136,0.35);transform:translateY(-3px);}</style>
+</head>
+<body>
+<nav class="sticky top-0 z-50 px-6 py-4 flex items-center justify-between" style="background:rgba(10,15,30,0.95);border-bottom:1px solid rgba(180,140,11,0.1);backdrop-filter:blur(12px)">
+  <a href="../index.html" class="flex items-center gap-3"><img src="../images/logo.png" class="h-9 w-9 object-contain"><span class="font-display font-bold text-xl text-white">mile<span style="color:#B8860B">vaahan</span></span></a>
+  <a href="dealers.html" class="text-sm" style="color:rgba(255,255,255,0.5)">← All Dealers</a>
+</nav>
+
+<div id="page-content">
+  <!-- Hero -->
+  <div id="dealer-hero" style="background:linear-gradient(180deg,rgba(13,148,136,0.1),transparent);border-bottom:1px solid rgba(255,255,255,0.06)" class="px-4 pt-10 pb-8">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-start gap-6 flex-wrap">
+        <div class="w-24 h-24 rounded-3xl flex items-center justify-center text-white font-display font-bold text-3xl flex-shrink-0" style="background:linear-gradient(135deg,#B8860B,#D4A017)" id="d-logo">MV</div>
+        <div class="flex-1">
+          <div class="flex items-center gap-3 mb-1 flex-wrap">
+            <h1 class="font-display font-bold text-3xl text-white" id="d-name">Loading...</h1>
+            <span id="d-plan-badge"></span>
+            <span id="d-verified"></span>
+          </div>
+          <p class="mb-3" style="color:rgba(255,255,255,0.5)" id="d-sub">—</p>
+          <div class="flex flex-wrap gap-4">
+            <div class="flex items-center gap-1"><span style="color:#F59E0B">★★★★★</span><span class="text-white font-bold text-sm" id="d-rating">4.8</span><span class="text-sm" style="color:rgba(255,255,255,0.4)" id="d-reviews">(124 reviews)</span></div>
+            <span class="text-sm" style="color:rgba(255,255,255,0.4)" id="d-city">Mumbai, Maharashtra</span>
+            <span class="text-sm" style="color:rgba(255,255,255,0.4)" id="d-since">Since 2018</span>
+            <span class="text-sm" style="color:rgba(255,255,255,0.4)" id="d-listings-count">87 listings</span>
+          </div>
+        </div>
+        <div class="flex gap-3 flex-wrap">
+          <button id="d-call-btn" class="px-5 py-2.5 rounded-xl font-semibold text-sm" style="background:rgba(13,148,136,0.15);color:#0d9488;border:1px solid rgba(13,148,136,0.3)">📞 Call</button>
+          <button id="d-wa-btn" class="px-5 py-2.5 rounded-xl font-semibold text-sm" style="background:rgba(37,211,102,0.1);color:#25d366;border:1px solid rgba(37,211,102,0.2)">💬 WhatsApp</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <div class="flex gap-8">
+      <div class="flex-1 min-w-0">
+        <!-- Brands -->
+        <div class="flex flex-wrap gap-2 mb-6" id="d-brands"></div>
+        <!-- Tabs -->
+        <div class="flex gap-2 mb-6">
+          <button class="px-4 py-2 rounded-xl text-sm font-semibold" style="background:linear-gradient(135deg,#0d9488,#0284c7);color:white">🚗 Inventory</button>
+          <button class="px-4 py-2 rounded-xl text-sm font-semibold" style="background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1)">⭐ Reviews</button>
+        </div>
+        <div class="grid grid-cols-2 lg:grid-cols-3 gap-4" id="d-cars-grid"><div class="text-center py-12 col-span-3" style="color:rgba(255,255,255,0.3)">Loading inventory...</div></div>
+      </div>
+      <aside class="w-64 flex-shrink-0 hidden lg:block space-y-4">
+        <div class="p-5 rounded-2xl" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08)">
+          <h3 class="font-display font-bold text-white mb-3">Dealer Info</h3>
+          <div class="space-y-2 text-sm" style="color:rgba(255,255,255,0.5)" id="d-info"></div>
+        </div>
+        <div class="p-5 rounded-2xl" style="background:rgba(13,148,136,0.08);border:1px solid rgba(13,148,136,0.2)">
+          <h3 class="font-display font-bold text-white mb-2">Make an Enquiry</h3>
+          <p class="text-xs mb-3" style="color:rgba(255,255,255,0.4)">Send this dealer a message</p>
+          <textarea rows="3" placeholder="Hi, I'm interested in..." style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:8px 12px;color:white;font-size:13px;margin-bottom:8px;resize:none"></textarea>
+          <button style="width:100%;background:linear-gradient(135deg,#0d9488,#0284c7);color:white;border:none;padding:9px;border-radius:10px;font-weight:700;cursor:pointer" onclick="this.textContent='✅ Sent!'">Send Message</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script>
+function formatPrice(n){if(n>=10000000)return '₹'+(n/10000000).toFixed(2)+' Cr';if(n>=100000)return '₹'+(n/100000).toFixed(1)+' L';return '₹'+n.toLocaleString('en-IN');}
+
+const SAMPLE={id:'d1',name:'AutoMax Motors',city:'Mumbai',state:'Maharashtra',plan:'premium',types:['new','cpo'],brands:['Hyundai','Kia','MG'],rating:4.8,reviews:124,listings:87,phone:'9988776655',since:2018,verified:true,gst:'27AABCU1234R1ZP',address:'Andheri West, Mumbai 400058',email:'automax@email.com'};
+
+async function init(){
+  const id=new URLSearchParams(window.location.search).get('id')||'d1';
+  let d=SAMPLE;
+  try{const snap=await db.collection('dealers').doc(id).get();if(snap.exists)d={id:snap.id,...snap.data()};}catch(e){}
+  
+  document.getElementById('pg-title').textContent=`${d.name} – Car Dealer in ${d.city} | MileVaahan`;
+  document.getElementById('d-logo').textContent=(d.logo||(d.name||'D').substring(0,2).toUpperCase());
+  document.getElementById('d-name').textContent=d.name||'—';
+  document.getElementById('d-rating').textContent=d.rating||'4.0';
+  document.getElementById('d-reviews').textContent=`(${d.reviews||0} reviews)`;
+  document.getElementById('d-city').textContent=`📍 ${d.city}, ${d.state}`;
+  document.getElementById('d-since').textContent=`Since ${d.since||2020}`;
+  document.getElementById('d-listings-count').textContent=`📋 ${d.listings||0} listings`;
+  document.getElementById('d-sub').textContent=`${(d.types||[]).map(t=>t.toUpperCase()).join(' · ')} Dealer`;
+  document.getElementById('d-plan-badge').innerHTML=`<span class="px-3 py-1 rounded-full text-xs font-bold" style="background:${d.plan==='premium'?'rgba(180,140,11,0.15)':d.plan==='pro'?'rgba(13,148,136,0.15)':'rgba(100,116,139,0.15)'};color:${d.plan==='premium'?'#B8860B':d.plan==='pro'?'#0d9488':'#94a3b8'}">${d.plan.toUpperCase()}</span>`;
+  document.getElementById('d-verified').innerHTML=d.verified?'<span class="text-sm font-bold" style="color:#0d9488">✓ Verified</span>':'';
+  document.getElementById('d-call-btn').onclick=()=>window.location.href=`tel:${d.phone}`;
+  document.getElementById('d-wa-btn').onclick=()=>window.open(`https://wa.me/91${d.phone}?text=Hi, I found you on MileVaahan`);
+  document.getElementById('d-brands').innerHTML=(d.brands||[]).map(b=>`<span class="px-3 py-1 rounded-lg text-xs font-semibold" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6)">${b}</span>`).join('');
+  document.getElementById('d-info').innerHTML=[
+    `📍 ${d.address||d.city}`,`📧 ${d.email||'—'}`,`📱 ${d.phone||'—'}`,`🏢 GST: ${d.gst||'N/A'}`,`🗓️ Member since ${d.since||'—'}`
+  ].map(l=>`<div>${l}</div>`).join('');
+  loadInventory(id,d);
+}
+
+async function loadInventory(dealerId,dealer){
+  const sampleCars=Array.from({length:6},(_,i)=>({id:'c'+i,make:dealer.brands?.[i%dealer.brands.length]||'Hyundai',model:['Creta','i20','Seltos','Nexon','Hector','Sonet'][i],year:2022+(i%3),price:900000+i*200000,fuel:['Petrol','Diesel','Electric'][i%3],transmission:['Automatic','Manual'][i%2],km:20000+i*10000,condition:['new','used','cpo'][i%3]}));
+  let cars=sampleCars;
+  try{const snap=await db.collection('listings').where('dealerId','==',dealerId).where('status','==','active').limit(12).get();if(snap.size)cars=snap.docs.map(d=>({id:d.id,...d.data()}));}catch(e){}
+  document.getElementById('d-cars-grid').innerHTML=cars.map(c=>`
+    <a href="car-detail.html?id=${c.id}" class="car-card">
+      <div class="h-28 flex items-center justify-center text-4xl" style="background:rgba(255,255,255,0.03)">🚗</div>
+      <div class="p-4">
+        <div class="font-bold text-white text-sm">${c.year} ${c.make} ${c.model}</div>
+        <div class="font-display font-bold text-base mt-1" style="color:#0d9488">${formatPrice(c.price)}</div>
+        <div class="flex gap-2 mt-2 text-xs" style="color:rgba(255,255,255,0.4)"><span>${c.fuel}</span><span>•</span><span>${c.transmission}</span><span>•</span><span>${(c.km/1000).toFixed(0)}k km</span></div>
+        <div class="mt-2"><span class="text-xs px-2 py-0.5 rounded-full font-bold" style="background:${c.condition==='cpo'?'rgba(180,140,11,0.15)':c.condition==='new'?'rgba(22,163,74,0.15)':'rgba(255,255,255,0.06)'};color:${c.condition==='cpo'?'#B8860B':c.condition==='new'?'#4ade80':'rgba(255,255,255,0.5)'}">${c.condition.toUpperCase()}</span></div>
+      </div>
+    </a>`).join('');
+}
+
+init();
+</script>
+</body>
+</html>

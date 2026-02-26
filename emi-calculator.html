@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EMI Calculator – MileVaahan | Calculate Car Loan EMI India</title>
+  <meta name="description" content="Calculate your car loan EMI instantly. Enter loan amount, interest rate and tenure to get monthly EMI. Free car finance calculator by MileVaahan." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://www.milevaahan.com/pages/emi-calculator.html" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"MileVaahan EMI Calculator","url":"https://www.milevaahan.com/pages/emi-calculator.html","applicationCategory":"FinanceApplication"}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    *{font-family:'DM Sans',sans-serif;} h1,h2,h3{font-family:'Syne',sans-serif;}
+    body{background:#f8fafc;} .nav-glass{background:rgba(10,22,40,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(180,140,11,0.2);}
+    input[type=range]{accent-color:#0d9488;width:100%;cursor:pointer;}
+    .calc-card{background:white;border:1px solid #e2e8f0;border-radius:20px;padding:28px;}
+    .result-ring{width:180px;height:180px;border-radius:50%;border:12px solid #e2e8f0;display:flex;align-items:center;justify-content:center;flex-direction:column;margin:0 auto;position:relative;}
+    .result-ring::after{content:'';position:absolute;inset:-12px;border-radius:50%;border:12px solid transparent;border-top-color:#0d9488;border-right-color:#0d9488;transform:rotate(-90deg);}
+    .amort-row{display:flex;gap:8px;font-size:12px;padding:8px 0;border-bottom:1px solid #f8fafc;}
+  </style>
+</head>
+<body>
+<nav class="nav-glass fixed top-0 left-0 right-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+    <a href="../index.html" class="flex items-center gap-3">
+      <img src="../images/logo.png" alt="MileVaahan" class="h-9 w-9 object-contain" />
+      <span class="text-white font-display font-bold text-lg">mile<span style="color:#B8860B">vaahan</span></span>
+    </a>
+    <div class="flex gap-4 text-sm">
+      <a href="emi-calculator.html" class="text-white font-semibold">EMI Calc</a>
+      <a href="compare.html" class="text-gray-300 hover:text-white">Compare</a>
+      <a href="valuation.html" class="text-gray-300 hover:text-white">Valuation</a>
+      <a href="vin-lookup.html" class="text-gray-300 hover:text-white">VIN Lookup</a>
+    </div>
+  </div>
+</nav>
+
+<div class="pt-24 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+  <div class="text-center mb-10">
+    <p class="text-xs font-bold tracking-widest text-teal-600 uppercase mb-2">Financial Tool</p>
+    <h1 class="font-display text-4xl font-bold text-gray-900 mb-3">Car Loan EMI Calculator</h1>
+    <p class="text-gray-500">Plan your car purchase with our instant EMI calculator</p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Input Card -->
+    <div class="calc-card">
+      <h2 class="font-display font-bold text-gray-900 text-lg mb-6">Loan Details</h2>
+      <div class="space-y-6">
+        <div>
+          <div class="flex justify-between mb-2">
+            <label class="text-sm font-semibold text-gray-700">Car Price</label>
+            <span class="font-bold text-teal-600" id="price-display">₹10,00,000</span>
+          </div>
+          <input type="range" id="car-price" min="100000" max="10000000" step="50000" value="1000000" oninput="update()" />
+          <div class="flex justify-between text-xs text-gray-400 mt-1"><span>₹1L</span><span>₹1Cr</span></div>
+        </div>
+        <div>
+          <div class="flex justify-between mb-2">
+            <label class="text-sm font-semibold text-gray-700">Down Payment</label>
+            <span class="font-bold text-teal-600" id="down-display">₹2,00,000 (20%)</span>
+          </div>
+          <input type="range" id="down-payment" min="0" max="100" step="5" value="20" oninput="update()" />
+          <div class="flex justify-between text-xs text-gray-400 mt-1"><span>0%</span><span>100%</span></div>
+        </div>
+        <div>
+          <div class="flex justify-between mb-2">
+            <label class="text-sm font-semibold text-gray-700">Interest Rate</label>
+            <span class="font-bold text-teal-600" id="rate-display">8.5% p.a.</span>
+          </div>
+          <input type="range" id="interest-rate" min="5" max="20" step="0.1" value="8.5" oninput="update()" />
+          <div class="flex justify-between text-xs text-gray-400 mt-1"><span>5%</span><span>20%</span></div>
+        </div>
+        <div>
+          <div class="flex justify-between mb-2">
+            <label class="text-sm font-semibold text-gray-700">Loan Tenure</label>
+            <span class="font-bold text-teal-600" id="tenure-display">5 Years (60 months)</span>
+          </div>
+          <input type="range" id="tenure" min="12" max="84" step="12" value="60" oninput="update()" />
+          <div class="flex justify-between text-xs text-gray-400 mt-1"><span>1 yr</span><span>7 yrs</span></div>
+        </div>
+
+        <!-- Top Banks -->
+        <div class="pt-4 border-t border-gray-100">
+          <p class="text-xs font-semibold text-gray-500 mb-3 uppercase tracking-wider">Quick Bank Rates</p>
+          <div class="flex gap-2 flex-wrap">
+            <button onclick="setRate(8.5)" class="text-xs px-3 py-1.5 rounded-full border border-teal-200 text-teal-600 hover:bg-teal-50 transition-colors">SBI 8.5%</button>
+            <button onclick="setRate(8.7)" class="text-xs px-3 py-1.5 rounded-full border border-gray-200 hover:border-teal-200 hover:text-teal-600 transition-colors">HDFC 8.7%</button>
+            <button onclick="setRate(8.9)" class="text-xs px-3 py-1.5 rounded-full border border-gray-200 hover:border-teal-200 hover:text-teal-600 transition-colors">ICICI 8.9%</button>
+            <button onclick="setRate(9.2)" class="text-xs px-3 py-1.5 rounded-full border border-gray-200 hover:border-teal-200 hover:text-teal-600 transition-colors">Axis 9.2%</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Card -->
+    <div class="space-y-4">
+      <div class="calc-card text-center">
+        <h2 class="font-display font-bold text-gray-900 text-lg mb-5">Monthly EMI</h2>
+        <div class="result-ring mb-5">
+          <div class="font-display font-bold text-2xl text-gray-900" id="emi-amount">₹0</div>
+          <div class="text-xs text-gray-400">per month</div>
+        </div>
+        <div class="grid grid-cols-3 gap-3 text-center">
+          <div class="p-3 rounded-xl" style="background:#f0fdfb;">
+            <div class="font-display font-bold text-teal-700 text-sm" id="loan-amount-display">₹0</div>
+            <div class="text-xs text-gray-400 mt-0.5">Loan Amount</div>
+          </div>
+          <div class="p-3 rounded-xl" style="background:#fff7ed;">
+            <div class="font-display font-bold text-orange-600 text-sm" id="total-interest">₹0</div>
+            <div class="text-xs text-gray-400 mt-0.5">Total Interest</div>
+          </div>
+          <div class="p-3 rounded-xl" style="background:#faf5ff;">
+            <div class="font-display font-bold text-purple-600 text-sm" id="total-payment">₹0</div>
+            <div class="text-xs text-gray-400 mt-0.5">Total Payment</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Amortization -->
+      <div class="calc-card">
+        <h3 class="font-display font-bold text-gray-900 mb-3">Amortization Schedule</h3>
+        <div class="flex gap-3 text-xs font-bold text-gray-500 pb-2 border-b border-gray-100">
+          <span class="w-10">Year</span><span class="flex-1">Principal</span><span class="flex-1">Interest</span><span class="flex-1">Balance</span>
+        </div>
+        <div id="amort-table" class="max-h-48 overflow-y-auto mt-1"></div>
+      </div>
+
+      <a href="listings.html" class="block w-full py-3 rounded-xl text-center text-white font-bold text-sm" style="background:linear-gradient(135deg,#0d9488,#0284c7);">Browse Cars Within Your Budget →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function formatPrice(amount) {
+  if (amount >= 10000000) return `₹${(amount/10000000).toFixed(2)} Cr`;
+  if (amount >= 100000) return `₹${(amount/100000).toFixed(2)} L`;
+  if (amount >= 1000) return `₹${(amount/1000).toFixed(1)}K`;
+  return `₹${Math.round(amount).toLocaleString('en-IN')}`;
+}
+
+function setRate(r) {
+  document.getElementById('interest-rate').value = r;
+  update();
+}
+
+function update() {
+  const carPrice = parseInt(document.getElementById('car-price').value);
+  const downPct = parseInt(document.getElementById('down-payment').value);
+  const rate = parseFloat(document.getElementById('interest-rate').value);
+  const tenure = parseInt(document.getElementById('tenure').value);
+
+  const downAmount = Math.round(carPrice * downPct / 100);
+  const loanAmount = carPrice - downAmount;
+  const monthlyRate = rate / 100 / 12;
+  const emi = loanAmount * monthlyRate * Math.pow(1 + monthlyRate, tenure) / (Math.pow(1 + monthlyRate, tenure) - 1);
+  const totalPayment = emi * tenure;
+  const totalInterest = totalPayment - loanAmount;
+
+  document.getElementById('price-display').textContent = formatPrice(carPrice);
+  document.getElementById('down-display').textContent = `${formatPrice(downAmount)} (${downPct}%)`;
+  document.getElementById('rate-display').textContent = `${rate}% p.a.`;
+  document.getElementById('tenure-display').textContent = `${tenure/12} Year${tenure>12?'s':''} (${tenure} months)`;
+  document.getElementById('emi-amount').textContent = formatPrice(Math.round(emi));
+  document.getElementById('loan-amount-display').textContent = formatPrice(loanAmount);
+  document.getElementById('total-interest').textContent = formatPrice(Math.round(totalInterest));
+  document.getElementById('total-payment').textContent = formatPrice(Math.round(totalPayment));
+
+  // Amortization
+  let balance = loanAmount;
+  let html = '';
+  for (let yr = 1; yr <= tenure/12; yr++) {
+    let yearPrincipal = 0, yearInterest = 0;
+    for (let m = 0; m < 12 && balance > 0; m++) {
+      const int = balance * monthlyRate;
+      const prin = Math.min(emi - int, balance);
+      yearInterest += int; yearPrincipal += prin; balance -= prin;
+    }
+    html += `<div class="amort-row"><span class="w-10 text-gray-500">Yr${yr}</span><span class="flex-1 text-teal-600 font-medium">${formatPrice(Math.round(yearPrincipal))}</span><span class="flex-1 text-orange-500">${formatPrice(Math.round(yearInterest))}</span><span class="flex-1 text-gray-700 font-medium">${formatPrice(Math.max(0,Math.round(balance)))}</span></div>`;
+  }
+  document.getElementById('amort-table').innerHTML = html;
+}
+update();
+</script>
+</body>
+</html>

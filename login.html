@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In – MileVaahan</title>
+  <meta name="robots" content="noindex" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    *{font-family:'DM Sans',sans-serif;} .font-display,h1,h2{font-family:'Syne',sans-serif;}
+    body{background:linear-gradient(135deg,#0a1628 0%,#0f2040 50%,#0f766e 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;}
+    .auth-card{background:rgba(255,255,255,0.97);border-radius:24px;padding:40px;width:100%;max-width:420px;box-shadow:0 30px 80px rgba(0,0,0,0.4);}
+    .form-input{width:100%;padding:12px 16px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:14px;color:#1e293b;transition:all 0.2s;background:white;}
+    .form-input:focus{outline:none;border-color:#0d9488;box-shadow:0 0 0 3px rgba(13,148,136,0.1);}
+    .btn-main{width:100%;padding:13px;border-radius:12px;font-weight:700;font-size:15px;color:white;border:none;cursor:pointer;transition:all 0.2s;background:linear-gradient(135deg,#0d9488,#0284c7);}
+    .btn-main:hover{opacity:0.9;transform:translateY(-1px);}
+    .tab{padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;border:none;background:transparent;color:#64748b;flex:1;}
+    .tab.active{background:linear-gradient(135deg,#0d9488,#0284c7);color:white;}
+    .divider{display:flex;align-items:center;gap:12px;margin:20px 0;}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:#e2e8f0;}
+    .google-btn{width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:12px;font-weight:600;font-size:14px;color:#374151;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.2s;}
+    .google-btn:hover{background:#f8fafc;border-color:#0d9488;}
+    #global-loader{position:fixed;inset:0;z-index:9999;background:rgba(10,22,40,0.95);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+    .loader-ring{width:44px;height:44px;border:3px solid rgba(180,140,11,0.2);border-top-color:#B8860B;border-radius:50%;animation:spin 0.8s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .error-msg{background:#fee2e2;border:1px solid #fecaca;color:#dc2626;padding:10px 14px;border-radius:10px;font-size:13px;display:none;margin-bottom:16px;}
+    .form-panel{display:none;} .form-panel.active{display:block;}
+  </style>
+</head>
+<body>
+
+<div class="px-4 w-full flex justify-center">
+  <div class="auth-card">
+    <!-- Logo -->
+    <div class="text-center mb-6">
+      <a href="../index.html" class="inline-flex items-center gap-2 justify-center">
+        <img src="../images/logo.png" alt="MileVaahan" class="h-12 w-12 object-contain" />
+        <span class="font-display font-bold text-2xl text-gray-900">mile<span style="color:#B8860B">vaahan</span></span>
+      </a>
+      <p class="text-gray-500 text-sm mt-2">India's Premium Car Marketplace</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="flex gap-1 bg-gray-100 rounded-xl p-1 mb-6">
+      <button class="tab active" onclick="switchTab('login',this)">Sign In</button>
+      <button class="tab" onclick="switchTab('register',this)">Create Account</button>
+    </div>
+
+    <!-- Error -->
+    <div class="error-msg" id="error-msg"></div>
+
+    <!-- LOGIN FORM -->
+    <div class="form-panel active" id="form-login">
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email Address</label>
+          <input type="email" id="login-email" class="form-input" placeholder="your@email.com" />
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Password</label>
+          <input type="password" id="login-pass" class="form-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()" />
+          <div class="text-right mt-1.5">
+            <button onclick="forgotPassword()" class="text-xs text-teal-600 hover:text-teal-700 font-medium">Forgot password?</button>
+          </div>
+        </div>
+        <button onclick="doLogin()" class="btn-main">Sign In</button>
+      </div>
+
+      <div class="divider"><span class="text-xs text-gray-400">or continue with</span></div>
+      <button onclick="googleSignIn()" class="google-btn">
+        <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Sign in with Google
+      </button>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div class="form-panel" id="form-register">
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Full Name</label>
+          <input type="text" id="reg-name" class="form-input" placeholder="Your full name" />
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email Address</label>
+          <input type="email" id="reg-email" class="form-input" placeholder="your@email.com" />
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Password</label>
+          <input type="password" id="reg-pass" class="form-input" placeholder="Min 8 characters" />
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Phone Number</label>
+          <input type="tel" id="reg-phone" class="form-input" placeholder="+91 98765 43210" />
+        </div>
+        <label class="flex items-start gap-2 cursor-pointer">
+          <input type="checkbox" id="reg-terms" class="mt-1 w-4 h-4 rounded flex-shrink-0" style="accent-color:#0d9488;" />
+          <span class="text-xs text-gray-500">I agree to MileVaahan's <a href="terms.html" class="text-teal-600 hover:underline">Terms of Service</a> and <a href="privacy.html" class="text-teal-600 hover:underline">Privacy Policy</a></span>
+        </label>
+        <button onclick="doRegister()" class="btn-main">Create Account</button>
+      </div>
+      <div class="divider"><span class="text-xs text-gray-400">or</span></div>
+      <button onclick="googleSignIn()" class="google-btn">
+        <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Sign up with Google
+      </button>
+    </div>
+
+    <!-- Dealer link -->
+    <p class="text-center text-xs text-gray-400 mt-6">
+      Are you a dealer? <a href="dealer-register.html" class="text-teal-600 font-semibold hover:underline">Register as Dealer →</a>
+    </p>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script>
+window.addEventListener('load', () => {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('tab') === 'register') switchTab('register', document.querySelectorAll('.tab')[1]);
+  auth.onAuthStateChanged(async user => {
+    if (user) {
+      const role = await getUserRole(user.uid);
+      if (role === ROLES.SUPER_ADMIN) window.location.href = '../admin/dashboard.html';
+      else if (role === ROLES.DEALER) window.location.href = '../dealer/dashboard.html';
+      else window.location.href = params.get('redirect') || '../index.html';
+    }
+  });
+  setTimeout(() => showLoader(false), 500);
+});
+
+function showLoader(show){const el=document.getElementById("global-loader");if(!el)return;if(show){el.style.display="flex";el.style.opacity="1";}else{el.style.transition="opacity 0.4s";el.style.opacity="0";setTimeout(()=>el.style.display="none",400);}}
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.form-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(`form-${tab}`).classList.add('active');
+  hideError();
+}
+
+function showError(msg) {
+  const el = document.getElementById('error-msg');
+  el.textContent = msg; el.style.display = 'block';
+}
+function hideError() { document.getElementById('error-msg').style.display = 'none'; }
+
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  if (!email || !pass) { showError('Please enter email and password'); return; }
+  showLoader(true); hideError();
+  try {
+    const cred = await auth.signInWithEmailAndPassword(email, pass);
+    const role = await getUserRole(cred.user.uid);
+    showToast('Welcome back! 👋');
+    setTimeout(() => {
+      if (role === ROLES.SUPER_ADMIN) window.location.href = '../admin/dashboard.html';
+      else if (role === ROLES.DEALER) window.location.href = '../dealer/dashboard.html';
+      else window.location.href = '../index.html';
+    }, 600);
+  } catch(e) {
+    showLoader(false);
+    const msgs = { 'auth/user-not-found':'No account found with this email.', 'auth/wrong-password':'Incorrect password. Please try again.', 'auth/too-many-requests':'Too many failed attempts. Please try later.' };
+    showError(msgs[e.code] || 'Sign in failed. Please try again.');
+  }
+}
+
+async function doRegister() {
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const pass = document.getElementById('reg-pass').value;
+  const phone = document.getElementById('reg-phone').value.trim();
+  if (!name || !email || !pass) { showError('Please fill all required fields'); return; }
+  if (pass.length < 8) { showError('Password must be at least 8 characters'); return; }
+  if (!document.getElementById('reg-terms').checked) { showError('Please accept the terms and conditions'); return; }
+  showLoader(true); hideError();
+  try {
+    const cred = await auth.createUserWithEmailAndPassword(email, pass);
+    await cred.user.updateProfile({ displayName: name });
+    await db.collection(COLLECTIONS.USERS).doc(cred.user.uid).set({
+      name, email, phone, role: ROLES.BUYER,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      wishlist: [], status: 'active'
+    });
+    showToast('Account created! Welcome to MileVaahan 🎉');
+    setTimeout(() => window.location.href = '../index.html', 800);
+  } catch(e) {
+    showLoader(false);
+    const msgs = { 'auth/email-already-in-use':'An account with this email already exists.', 'auth/weak-password':'Password is too weak.' };
+    showError(msgs[e.code] || 'Registration failed. Please try again.');
+  }
+}
+
+async function googleSignIn() {
+  showLoader(true); hideError();
+  const provider = new firebase.auth.GoogleAuthProvider();
+  try {
+    const result = await auth.signInWithPopup(provider);
+    const user = result.user;
+    const existing = await db.collection(COLLECTIONS.USERS).doc(user.uid).get();
+    if (!existing.exists) {
+      await db.collection(COLLECTIONS.USERS).doc(user.uid).set({
+        name: user.displayName, email: user.email, role: ROLES.BUYER,
+        photo: user.photoURL, createdAt: firebase.firestore.FieldValue.serverTimestamp(), status: 'active'
+      });
+    }
+    const role = await getUserRole(user.uid);
+    showToast('Signed in successfully! 👋');
+    setTimeout(() => {
+      if (role === ROLES.SUPER_ADMIN) window.location.href = '../admin/dashboard.html';
+      else if (role === ROLES.DEALER) window.location.href = '../dealer/dashboard.html';
+      else window.location.href = '../index.html';
+    }, 600);
+  } catch(e) {
+    showLoader(false);
+    showError('Google sign-in failed. Please try again.');
+  }
+}
+
+async function forgotPassword() {
+  const email = document.getElementById('login-email').value.trim();
+  if (!email) { showError('Please enter your email address first'); return; }
+  try {
+    await auth.sendPasswordResetEmail(email);
+    showToast('Password reset email sent! Check your inbox.');
+  } catch { showError('Could not send reset email. Please check the address.'); }
+}
+</script>
+</body>
+</html>

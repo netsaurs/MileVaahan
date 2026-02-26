@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="page-title">Car Listings – MileVaahan | Buy Cars Online India</title>
+  <meta name="description" id="page-desc" content="Browse thousands of new, used and certified pre-owned cars across India. Filter by make, model, price, city and more. Find your perfect car on MileVaahan." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" id="page-canonical" href="https://www.milevaahan.com/pages/listings.html" />
+
+  <meta property="og:title" id="og-title" content="Car Listings – MileVaahan" />
+  <meta property="og:description" id="og-desc" content="Browse thousands of cars across India." />
+  <meta property="og:type" content="website" />
+
+  <script type="application/ld+json" id="listings-schema">
+  { "@context": "https://schema.org", "@type": "ItemList", "name": "Car Listings on MileVaahan", "url": "https://www.milevaahan.com/pages/listings.html" }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { peacock: { 600:'#0d9488', 700:'#0f766e' }, gold: { DEFAULT:'#B8860B' } }, fontFamily: { display: ['Syne','sans-serif'], body: ['DM Sans','sans-serif'] } } }
+    }
+  </script>
+  <style>
+    *{font-family:'DM Sans',sans-serif;} h1,h2,h3,.font-display{font-family:'Syne',sans-serif;}
+    body{background:#f8fafc;color:#1e293b;}
+    .nav-glass{background:rgba(10,22,40,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(180,140,11,0.2);}
+    .filter-sidebar{background:white;border:1px solid #e2e8f0;border-radius:16px;}
+    .car-card{background:white;border:1px solid #e2e8f0;border-radius:16px;transition:all 0.3s ease;overflow:hidden;position:relative;}
+    .car-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#0d9488,#0284c7,#B8860B);transform:scaleX(0);transition:transform 0.3s;}
+    .car-card:hover{transform:translateY(-4px);box-shadow:0 15px 40px rgba(13,148,136,0.12);border-color:#0d9488;}
+    .car-card:hover::after{transform:scaleX(1);}
+    .car-card-list{display:flex;background:white;border:1px solid #e2e8f0;border-radius:16px;overflow:hidden;transition:all 0.3s;margin-bottom:12px;}
+    .car-card-list:hover{box-shadow:0 8px 25px rgba(13,148,136,0.1);border-color:#0d9488;}
+    .filter-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:12px;background:rgba(13,148,136,0.1);color:#0d9488;border:1px solid rgba(13,148,136,0.2);}
+    .sort-select{background:white;border:1px solid #e2e8f0;border-radius:10px;padding:8px 16px;font-size:14px;color:#374151;}
+    .pagination-btn{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;border:1px solid #e2e8f0;cursor:pointer;transition:all 0.2s;}
+    .pagination-btn.active{background:linear-gradient(135deg,#0d9488,#0284c7);color:white;border-color:transparent;}
+    .pagination-btn:hover:not(.active){background:#f0fdfb;border-color:#0d9488;}
+    input[type=range]{accent-color:#0d9488;width:100%;}
+    .filter-section{padding:16px 0;border-bottom:1px solid #f1f5f9;}
+    .checkbox-label{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:#374151;padding:4px 0;}
+    .checkbox-label input{accent-color:#0d9488;width:16px;height:16px;}
+    #global-loader{position:fixed;inset:0;z-index:9999;background:rgba(10,22,40,0.95);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+    .loader-ring{width:40px;height:40px;border:3px solid rgba(180,140,11,0.2);border-top-color:#B8860B;border-radius:50%;animation:spin 0.8s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .view-btn{padding:8px;border-radius:8px;border:1px solid #e2e8f0;cursor:pointer;transition:all 0.2s;}
+    .view-btn.active{background:linear-gradient(135deg,#0d9488,#0284c7);border-color:transparent;color:white;}
+    .ai-recommend{background:linear-gradient(135deg,rgba(13,148,136,0.08),rgba(2,132,199,0.08));border:1px solid rgba(13,148,136,0.2);border-radius:16px;padding:16px;}
+  </style>
+</head>
+<body>
+
+<div id="global-loader">
+  <img src="../images/logo.png" alt="MileVaahan" style="height:60px;" />
+  <div class="loader-ring"></div>
+</div>
+
+<!-- NAV -->
+<nav class="nav-glass fixed top-0 left-0 right-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <a href="../index.html" class="flex items-center gap-3">
+        <img src="../images/logo.png" alt="MileVaahan" class="h-9 w-9 object-contain" />
+        <span class="text-white font-display font-bold text-lg">mile<span style="color:#B8860B">vaahan</span></span>
+      </a>
+      <div class="hidden md:flex items-center gap-6 text-sm">
+        <a href="listings.html?type=new" class="text-gray-300 hover:text-white">New Cars</a>
+        <a href="listings.html?type=used" class="text-gray-300 hover:text-white">Used Cars</a>
+        <a href="listings.html?type=cpo" class="text-gray-300 hover:text-white">CPO</a>
+        <a href="listings.html?type=parts" class="text-gray-300 hover:text-white">Parts</a>
+        <a href="dealers.html" class="text-gray-300 hover:text-white">Dealers</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="post-listing.html" class="px-4 py-2 rounded-lg text-white text-sm font-semibold" style="background:linear-gradient(135deg,#0d9488,#0284c7);">+ Post Listing</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="pt-16">
+  <!-- Breadcrumb -->
+  <div class="bg-white border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <nav class="flex items-center gap-2 text-sm text-gray-500" aria-label="Breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+        <a href="../index.html" class="hover:text-teal-600" itemprop="itemListElement">Home</a>
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        <span id="breadcrumb-current" class="text-gray-900 font-medium" itemprop="itemListElement">All Cars</span>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Active Filters Bar -->
+  <div class="bg-white border-b border-gray-100 py-3" id="active-filters-bar" style="display:none;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-3 flex-wrap">
+      <span class="text-sm font-semibold text-gray-600">Filters:</span>
+      <div id="active-filters-list" class="flex gap-2 flex-wrap"></div>
+      <button onclick="clearAllFilters()" class="text-xs text-red-500 hover:text-red-600 font-medium ml-2">Clear All</button>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="flex gap-6">
+
+      <!-- ═══ SIDEBAR FILTERS ═══ -->
+      <aside class="w-72 flex-shrink-0 hidden lg:block" role="complementary" aria-label="Search filters">
+        <div class="filter-sidebar p-6 sticky top-20">
+          <div class="flex items-center justify-between mb-5">
+            <h2 class="font-display font-bold text-gray-900">Filters</h2>
+            <button onclick="clearAllFilters()" class="text-xs text-teal-600 hover:text-teal-700 font-medium">Reset All</button>
+          </div>
+
+          <!-- AI Recommendation -->
+          <div class="ai-recommend mb-5">
+            <p class="text-xs font-bold text-teal-700 mb-2">🤖 AI Smart Filter</p>
+            <input type="text" id="ai-query" placeholder='e.g. "SUV under 15L in Delhi"' class="w-full px-3 py-2 text-sm border border-teal-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-300" />
+            <button onclick="applyAIFilter()" class="w-full mt-2 py-2 rounded-lg text-xs font-bold text-white" style="background:linear-gradient(135deg,#0d9488,#0284c7);">Apply AI Filter</button>
+          </div>
+
+          <!-- Listing Type -->
+          <div class="filter-section">
+            <h3 class="font-semibold text-gray-800 text-sm mb-3">Listing Type</h3>
+            <div class="space-y-2">
+              <label class="checkbox-label"><input type="radio" name="f-type" value="" onchange="applyFilters()"> All Types</label>
+              <label class="checkbox-label"><input type="radio" name="f-type" value="new" onchange="applyFilters()"> ✨ New Cars</label>
+              <label class="checkbox-label"><input type="radio" name="f-type" value="used" onchange="applyFilters()"> 🚗 Used Cars</label>
+              <label class="checkbox-label"><input type="radio" name="f-type" value="cpo" onchange="applyFilters()"> 🏆 Certified Pre-Owned</label>
+              <label class="checkbox-label"><input type="radio" name="f-type" value="parts" onchange="applyFilters()"> 🔧 Parts & Accessories</label>
+            </div>
+          </div>
+
+          <!-- Budget -->
+          <div class="filter-section">
+            <h3 class="font-semibold text-gray-800 text-sm mb-3">Budget</h3>
+            <div class="space-y-3">
+              <div>
+                <label class="text-xs text-gray-500">Min Price</label>
+                <input type="range" id="min-price" min="0" max="10000000" step="50000" value="0" onchange="updatePriceDisplay(); applyFilters();" />
+                <span class="text-xs font-bold text-teal-600" id="min-price-display">₹0</span>
+              </div>
+              <div>
+                <label class="text-xs text-gray-500">Max Price</label>
+                <input type="range" id="max-price" min="0" max="10000000" step="50000" value="10000000" onchange="updatePriceDisplay(); applyFilters();" />
+                <span class="text-xs font-bold text-teal-600" id="max-price-display">₹1 Cr+</span>
+              </div>
+            </div>
+            <div class="flex gap-2 mt-3 flex-wrap">
+              <button onclick="setBudget(0,500000)" class="text-xs px-2 py-1 rounded border border-gray-200 hover:border-teal-400 hover:text-teal-600 transition-colors">Under 5L</button>
+              <button onclick="setBudget(500000,1000000)" class="text-xs px-2 py-1 rounded border border-gray-200 hover:border-teal-400 hover:text-teal-600 transition-colors">5–10L</button>
+              <button onclick="setBudget(1000000,2000000)" class="text-xs px-2 py-1 rounded border border-gray-200 hover:border-teal-400 hover:text-teal-600 transition-colors">10–20L</button>
+              <button onclick="setBudget(2000000,10000000)" class="text-xs px-2 py-1 rounded border border-gray-200 hover:border-teal-400 hover:text-teal-600 transition-colors">20L+</button>
+            </div>
+          </div>
+
+          <!-- Make -->
+          <div class="filter-section">
+            <h3 class="font-semibold text-gray-800 text-sm mb-3">Make</h3>
+            <input type="text" id="make-search" placeholder="Search make..." class="w-full px-3 py-2 text-xs border border-gray-200 rounded-lg mb-2 focus:outline-none focus:ring-1 focus:ring-teal-400" oninput="filterMakeList(this.value)" />
+            <div id="make-list" class="space-y-1 max-h-40 overflow-y-auto">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Model (dynamic) -->
+          <div class="filter-section" id="model-filter-section" style="display:none;">
+            <h3 class="font-semibold text-gray-800 text-sm mb-3">Model</h3>
+            <div id="model-list" class="space-y-1 max-h-40 overflow-y-auto"></div>
+          </div>
+
+          <!-- Fuel Type -->
+          <div class="filter-section">
+            <h3 class="font-semibold text-gray-800 text-sm mb-3">Fuel Type</h3>
+            <div class="space-y-2" id="fuel-list">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Transmission -->
+          <div class="filter-section">
+            <h3 class="font-semibold text-gray-800 text-sm mb-3">Transmission</h3>
+            <div class="space-y-2" id="transmission-list"></div>
+          </div>
+
+          <!-- Year Range -->
+          <div class="filter-section">
+            <h3 class="font-semibold text-gray-800 text-sm mb-3">Year</h3>
+            <div class="flex gap-2 items-center">
+              <select id="year-from" onchange="applyFilters()" class="flex-1 text-xs border border-gray-200 rounded-lg px-2 py-2 focus:outline-none">
+                <option value="">From</option>
+              </select>
+              <span class="text-gray-400 text-xs">–</span>
+              <select id="year-to" onchange="applyFilters()" class="flex-1 text-xs border border-gray-200 rounded-lg px-2 py-2 focus:outline-none">
+                <option value="">To</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Location -->
+          <div class="filter-section">
+            <h3 class="font-semibold text-gray-800 text-sm mb-3">Location</h3>
+            <select id="f-state" onchange="updateCities(); applyFilters();" class="w-full text-xs border border-gray-200 rounded-lg px-3 py-2 mb-2 focus:outline-none">
+              <option value="">All States</option>
+            </select>
+            <select id="f-city" onchange="applyFilters()" class="w-full text-xs border border-gray-200 rounded-lg px-3 py-2 focus:outline-none">
+              <option value="">All Cities</option>
+            </select>
+          </div>
+
+          <!-- Mileage -->
+          <div class="filter-section">
+            <h3 class="font-semibold text-gray-800 text-sm mb-3">Mileage (km)</h3>
+            <input type="range" id="max-km" min="0" max="200000" step="5000" value="200000" onchange="document.getElementById('km-display').textContent = this.value == 200000 ? 'Any' : formatKm(this.value); applyFilters();" />
+            <span class="text-xs font-bold text-teal-600" id="km-display">Any</span>
+          </div>
+
+          <!-- Body Type -->
+          <div class="filter-section">
+            <h3 class="font-semibold text-gray-800 text-sm mb-3">Body Type</h3>
+            <div class="grid grid-cols-2 gap-2" id="body-type-list"></div>
+          </div>
+
+          <!-- Color -->
+          <div class="filter-section">
+            <h3 class="font-semibold text-gray-800 text-sm mb-3">Color</h3>
+            <div class="flex flex-wrap gap-2" id="color-list"></div>
+          </div>
+
+          <!-- Owner Type -->
+          <div class="filter-section">
+            <h3 class="font-semibold text-gray-800 text-sm mb-3">Owner Type</h3>
+            <div class="space-y-2" id="owner-list"></div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- ═══ MAIN CONTENT ═══ -->
+      <main class="flex-1 min-w-0">
+
+        <!-- Results Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+          <div>
+            <h1 class="font-display text-2xl font-bold text-gray-900" id="results-heading">All Cars</h1>
+            <p class="text-sm text-gray-500 mt-1"><span id="results-count">0</span> listings found</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <!-- Mobile Filter Button -->
+            <button onclick="document.getElementById('mobile-filter').classList.toggle('hidden')" class="lg:hidden flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 2v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+              Filters
+            </button>
+            <!-- Sort -->
+            <select id="sort-select" onchange="applyFilters()" class="sort-select text-sm">
+              <option value="newest">Newest First</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="year-new">Year: Newest First</option>
+              <option value="mileage-low">Lowest Mileage</option>
+              <option value="relevance">Most Relevant</option>
+            </select>
+            <!-- View Toggle -->
+            <div class="flex gap-1">
+              <button class="view-btn active" id="grid-view-btn" onclick="setView('grid')" title="Grid view">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 3h7v7H3zm11 0h7v7h-7zM3 14h7v7H3zm11 0h7v7h-7z"/></svg>
+              </button>
+              <button class="view-btn" id="list-view-btn" onclick="setView('list')" title="List view">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grid/List Container -->
+        <div id="listings-container" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+          <div class="col-span-full flex justify-center py-20">
+            <div class="loader-ring" style="border-top-color:#0d9488;"></div>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex items-center justify-center gap-2 mt-10" id="pagination">
+          <!-- Populated by JS -->
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile Filter Drawer -->
+<div id="mobile-filter" class="hidden fixed inset-0 z-50 bg-black/50 lg:hidden" onclick="this.classList.add('hidden')">
+  <div class="absolute right-0 top-0 bottom-0 w-80 bg-white overflow-y-auto p-6" onclick="event.stopPropagation()">
+    <div class="flex items-center justify-between mb-5">
+      <h2 class="font-display font-bold text-lg">Filters</h2>
+      <button onclick="document.getElementById('mobile-filter').classList.add('hidden')" class="text-gray-400 hover:text-gray-600">✕</button>
+    </div>
+    <p class="text-sm text-gray-500 text-center py-10">Mobile filter panel — mirrors desktop sidebar</p>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// LISTINGS PAGE
+// ═══════════════════════════════════════════════════════════
+let allListings = [];
+let filteredListings = [];
+let currentView = 'grid';
+let currentPage = 1;
+const PAGE_SIZE = 12;
+let selectedMakes = [];
+let selectedFuels = [];
+let selectedTransmissions = [];
+let selectedBodyTypes = [];
+let selectedColors = [];
+let selectedOwners = [];
+
+window.addEventListener('load', async () => {
+  function showLoader(show){const el=document.getElementById("global-loader");if(!el)return;if(show){el.style.display="flex";el.style.opacity="1";}else{el.style.transition="opacity 0.4s";el.style.opacity="0";setTimeout(()=>el.style.display="none",400);}}
+  setTimeout(() => showLoader(false), 600);
+  initFilters();
+  parseURLParams();
+  await loadListings();
+  updateSEO();
+});
+
+function parseURLParams() {
+  const params = new URLSearchParams(window.location.search);
+  const type = params.get('type');
+  const make = params.get('make');
+  const model = params.get('model');
+  const fuel = params.get('fuel');
+  const city = params.get('city');
+  const year = params.get('year');
+
+  if (type) {
+    const radio = document.querySelector(`input[name="f-type"][value="${type}"]`);
+    if (radio) radio.checked = true;
+  }
+  if (make) {
+    selectedMakes = [make];
+    const cb = document.querySelector(`#make-list input[value="${make}"]`);
+    if (cb) cb.checked = true;
+  }
+  if (fuel) {
+    selectedFuels = [fuel];
+    const cb = document.querySelector(`#fuel-list input[value="${fuel}"]`);
+    if (cb) cb.checked = true;
+  }
+}
+
+function initFilters() {
+  // Makes
+  const makeList = document.getElementById('make-list');
+  Object.keys(CAR_DATA.makes).forEach(make => {
+    makeList.innerHTML += `<label class="checkbox-label"><input type="checkbox" value="${make}" onchange="toggleMake('${make}', this.checked)"> ${make}</label>`;
+  });
+
+  // Fuels
+  const fuelList = document.getElementById('fuel-list');
+  CAR_DATA.fuelTypes.forEach(f => {
+    fuelList.innerHTML += `<label class="checkbox-label"><input type="checkbox" value="${f}" onchange="toggleFuel('${f}', this.checked)"> ${f}</label>`;
+  });
+
+  // Transmissions
+  const transList = document.getElementById('transmission-list');
+  CAR_DATA.transmissions.forEach(t => {
+    transList.innerHTML += `<label class="checkbox-label"><input type="checkbox" value="${t}" onchange="toggleTrans('${t}', this.checked)"> ${t}</label>`;
+  });
+
+  // Body Types
+  const bodyList = document.getElementById('body-type-list');
+  CAR_DATA.bodyTypes.forEach(b => {
+    bodyList.innerHTML += `<button onclick="toggleBodyType('${b}', this)" class="body-type-btn text-xs px-2 py-1 rounded-lg border border-gray-200 hover:border-teal-400 hover:text-teal-600 transition-all">${b}</button>`;
+  });
+
+  // Colors
+  const colorMap = { White:'#ffffff', Black:'#000000', Silver:'#C0C0C0', Grey:'#808080', Red:'#DC2626', Blue:'#2563EB', Brown:'#92400e', Green:'#15803d', Yellow:'#ca8a04', Orange:'#ea580c', Maroon:'#881337', Gold:'#B8860B', Beige:'#f5f5dc' };
+  const colorList = document.getElementById('color-list');
+  CAR_DATA.colors.forEach(c => {
+    colorList.innerHTML += `<button onclick="toggleColor('${c}', this)" title="${c}" class="w-7 h-7 rounded-full border-2 border-gray-200 hover:border-teal-500 transition-all" style="background:${colorMap[c]||'#ccc'};"></button>`;
+  });
+
+  // Owner Types
+  const ownerList = document.getElementById('owner-list');
+  CAR_DATA.ownerTypes.forEach(o => {
+    ownerList.innerHTML += `<label class="checkbox-label"><input type="checkbox" value="${o}" onchange="toggleOwner('${o}', this.checked)"> ${o}</label>`;
+  });
+
+  // Years
+  const yearFrom = document.getElementById('year-from');
+  const yearTo = document.getElementById('year-to');
+  CAR_DATA.years.slice(0, 30).forEach(y => {
+    yearFrom.innerHTML += `<option value="${y}">${y}</option>`;
+    yearTo.innerHTML += `<option value="${y}">${y}</option>`;
+  });
+
+  // States
+  const stateSelect = document.getElementById('f-state');
+  Object.keys(INDIA_LOCATIONS).forEach(s => {
+    stateSelect.innerHTML += `<option value="${s}">${s}</option>`;
+  });
+
+  updatePriceDisplay();
+}
+
+function filterMakeList(query) {
+  const labels = document.querySelectorAll('#make-list .checkbox-label');
+  labels.forEach(l => {
+    l.style.display = l.textContent.toLowerCase().includes(query.toLowerCase()) ? 'flex' : 'none';
+  });
+}
+
+function toggleMake(make, checked) {
+  if (checked) selectedMakes.push(make);
+  else selectedMakes = selectedMakes.filter(m => m !== make);
+  updateModelFilter();
+  applyFilters();
+}
+
+function updateModelFilter() {
+  const section = document.getElementById('model-filter-section');
+  const modelList = document.getElementById('model-list');
+  if (selectedMakes.length === 1) {
+    section.style.display = 'block';
+    modelList.innerHTML = '';
+    CAR_DATA.makes[selectedMakes[0]]?.forEach(model => {
+      modelList.innerHTML += `<label class="checkbox-label"><input type="checkbox" value="${model}" onchange="applyFilters()"> ${model}</label>`;
+    });
+  } else {
+    section.style.display = 'none';
+  }
+}
+
+function toggleFuel(fuel, checked) {
+  if (checked) selectedFuels.push(fuel); else selectedFuels = selectedFuels.filter(f => f !== fuel);
+  applyFilters();
+}
+
+function toggleTrans(t, checked) {
+  if (checked) selectedTransmissions.push(t); else selectedTransmissions = selectedTransmissions.filter(x => x !== t);
+  applyFilters();
+}
+
+function toggleBodyType(type, btn) {
+  if (selectedBodyTypes.includes(type)) {
+    selectedBodyTypes = selectedBodyTypes.filter(b => b !== type);
+    btn.classList.remove('bg-teal-50','border-teal-400','text-teal-600');
+  } else {
+    selectedBodyTypes.push(type);
+    btn.classList.add('bg-teal-50','border-teal-400','text-teal-600');
+  }
+  applyFilters();
+}
+
+function toggleColor(color, btn) {
+  if (selectedColors.includes(color)) {
+    selectedColors = selectedColors.filter(c => c !== color);
+    btn.classList.remove('ring-2','ring-teal-500');
+  } else {
+    selectedColors.push(color);
+    btn.classList.add('ring-2','ring-teal-500');
+  }
+  applyFilters();
+}
+
+function toggleOwner(owner, checked) {
+  if (checked) selectedOwners.push(owner); else selectedOwners = selectedOwners.filter(o => o !== owner);
+  applyFilters();
+}
+
+function updateCities() {
+  const state = document.getElementById('f-state').value;
+  const citySelect = document.getElementById('f-city');
+  citySelect.innerHTML = '<option value="">All Cities</option>';
+  if (state && INDIA_LOCATIONS[state]) {
+    INDIA_LOCATIONS[state].forEach(c => { citySelect.innerHTML += `<option value="${c}">${c}</option>`; });
+  }
+}
+
+function setBudget(min, max) {
+  document.getElementById('min-price').value = min;
+  document.getElementById('max-price').value = max;
+  updatePriceDisplay();
+  applyFilters();
+}
+
+function updatePriceDisplay() {
+  const min = parseInt(document.getElementById('min-price').value);
+  const max = parseInt(document.getElementById('max-price').value);
+  document.getElementById('min-price-display').textContent = formatPrice(min);
+  document.getElementById('max-price-display').textContent = max >= 10000000 ? '₹1 Cr+' : formatPrice(max);
+}
+
+function setView(view) {
+  currentView = view;
+  document.getElementById('grid-view-btn').classList.toggle('active', view === 'grid');
+  document.getElementById('list-view-btn').classList.toggle('active', view === 'list');
+  const container = document.getElementById('listings-container');
+  if (view === 'grid') {
+    container.className = 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5';
+  } else {
+    container.className = 'flex flex-col gap-3';
+  }
+  renderListings();
+}
+
+async function loadListings() {
+  try {
+    const snap = await db.collection(COLLECTIONS.LISTINGS)
+      .where('status', '==', 'active')
+      .orderBy('createdAt', 'desc')
+      .limit(100)
+      .get();
+
+    if (snap.empty) {
+      allListings = generateSampleListings(48);
+    } else {
+      allListings = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    }
+  } catch(e) {
+    allListings = generateSampleListings(48);
+  }
+  applyFilters();
+}
+
+function generateSampleListings(count) {
+  const makes = Object.keys(CAR_DATA.makes);
+  const cities = Object.values(INDIA_LOCATIONS).flat();
+  const conditions = ['new', 'used', 'cpo'];
+  return Array.from({ length: count }, (_, i) => {
+    const make = makes[i % makes.length];
+    const models = CAR_DATA.makes[make];
+    const model = models[i % models.length];
+    const year = 2020 + (i % 5);
+    const condition = conditions[i % 3];
+    const price = 200000 + (i * 87654) % 8000000;
+    return {
+      id: `sample-${i}`,
+      make, model, year, condition,
+      price,
+      mileage: condition === 'new' ? 0 : (i * 3456) % 80000,
+      fuel: CAR_DATA.fuelTypes[i % CAR_DATA.fuelTypes.length],
+      transmission: CAR_DATA.transmissions[i % CAR_DATA.transmissions.length],
+      bodyType: CAR_DATA.bodyTypes[i % CAR_DATA.bodyTypes.length],
+      color: CAR_DATA.colors[i % CAR_DATA.colors.length],
+      city: cities[i % cities.length],
+      state: Object.keys(INDIA_LOCATIONS)[i % Object.keys(INDIA_LOCATIONS).length],
+      featured: i < 8,
+      ownerType: CAR_DATA.ownerTypes[i % 3],
+      images: [],
+      createdAt: { toDate: () => new Date(Date.now() - i * 86400000) }
+    };
+  });
+}
+
+function applyFilters() {
+  const type = document.querySelector('input[name="f-type"]:checked')?.value || '';
+  const minPrice = parseInt(document.getElementById('min-price').value);
+  const maxPrice = parseInt(document.getElementById('max-price').value);
+  const yearFrom = parseInt(document.getElementById('year-from').value) || 0;
+  const yearTo = parseInt(document.getElementById('year-to').value) || 9999;
+  const maxKm = parseInt(document.getElementById('max-km').value);
+  const city = document.getElementById('f-city').value;
+  const state = document.getElementById('f-state').value;
+  const selectedModels = Array.from(document.querySelectorAll('#model-list input:checked')).map(i => i.value);
+  const sort = document.getElementById('sort-select').value;
+
+  filteredListings = allListings.filter(car => {
+    if (type && car.condition !== type) return false;
+    if (car.price < minPrice || car.price > maxPrice) return false;
+    if (yearFrom && car.year < yearFrom) return false;
+    if (yearTo < 9999 && car.year > yearTo) return false;
+    if (maxKm < 200000 && car.mileage > maxKm) return false;
+    if (selectedMakes.length && !selectedMakes.includes(car.make)) return false;
+    if (selectedModels.length && !selectedModels.includes(car.model)) return false;
+    if (selectedFuels.length && !selectedFuels.includes(car.fuel)) return false;
+    if (selectedTransmissions.length && !selectedTransmissions.includes(car.transmission)) return false;
+    if (selectedBodyTypes.length && !selectedBodyTypes.includes(car.bodyType)) return false;
+    if (selectedColors.length && !selectedColors.includes(car.color)) return false;
+    if (selectedOwners.length && !selectedOwners.includes(car.ownerType)) return false;
+    if (city && car.city !== city) return false;
+    if (state && car.state !== state) return false;
+    return true;
+  });
+
+  // Sort
+  filteredListings.sort((a, b) => {
+    if (sort === 'price-low') return a.price - b.price;
+    if (sort === 'price-high') return b.price - a.price;
+    if (sort === 'year-new') return b.year - a.year;
+    if (sort === 'mileage-low') return a.mileage - b.mileage;
+    return 0; // newest by default (already sorted from Firebase)
+  });
+
+  currentPage = 1;
+  updateActiveFiltersBar();
+  renderListings();
+  renderPagination();
+  updateResultsHeading();
+}
+
+function renderListings() {
+  const container = document.getElementById('listings-container');
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const page = filteredListings.slice(start, start + PAGE_SIZE);
+
+  if (page.length === 0) {
+    container.innerHTML = `
+      <div class="col-span-full text-center py-20">
+        <div class="text-6xl mb-4">🔍</div>
+        <h3 class="font-display text-xl font-bold text-gray-700 mb-2">No cars found</h3>
+        <p class="text-gray-500 text-sm mb-6">Try adjusting your filters or search criteria</p>
+        <button onclick="clearAllFilters()" class="px-6 py-3 rounded-xl text-white font-semibold" style="background:linear-gradient(135deg,#0d9488,#0284c7);">Clear All Filters</button>
+      </div>`;
+    return;
+  }
+
+  if (currentView === 'grid') {
+    container.innerHTML = page.map(car => renderGridCard(car)).join('');
+  } else {
+    container.innerHTML = page.map(car => renderListCard(car)).join('');
+  }
+}
+
+function renderGridCard(car) {
+  const slug = generateListingSlug(car);
+  const conditionColors = { new:'linear-gradient(135deg,#0d9488,#0284c7)', used:'linear-gradient(135deg,#64748b,#475569)', cpo:'linear-gradient(135deg,#B8860B,#d97706)' };
+  const conditionLabels = { new:'✨ New', used:'Used', cpo:'🏆 CPO' };
+
+  return `
+    <article class="car-card" itemscope itemtype="https://schema.org/Car">
+      <div class="relative overflow-hidden" style="height:190px;background:linear-gradient(135deg,#e2e8f0,#f0fdfb);">
+        ${car.images?.[0] ? `<img src="${car.images[0]}" alt="${car.year} ${car.make} ${car.model}" class="w-full h-full object-cover" loading="lazy" itemprop="image" />` : `<div class="w-full h-full flex items-center justify-center text-7xl">🚗</div>`}
+        <span class="absolute top-3 left-3 text-white text-xs font-bold px-2 py-1 rounded-lg" style="background:${conditionColors[car.condition]||conditionColors.used}">${conditionLabels[car.condition]||'Used'}</span>
+        ${car.featured ? '<span class="absolute top-3 right-3 text-white text-xs font-bold px-2 py-1 rounded-lg" style="background:linear-gradient(135deg,#B8860B,#D4A017)">⭐ Featured</span>' : ''}
+        <button onclick="event.preventDefault(); toggleWishlist('${car.id}', this)" class="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-white/90 flex items-center justify-center hover:bg-white transition-colors shadow-md">
+          <svg class="w-4 h-4 text-gray-400 wishlist-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+        </button>
+      </div>
+      <div class="p-4">
+        <h3 class="font-display font-bold text-gray-900 text-sm leading-tight mb-1" itemprop="name">${car.year} ${car.make} ${car.model}</h3>
+        <p class="text-xl font-display font-bold mb-2" style="color:#0f766e" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price" content="${car.price}">${formatPrice(car.price)}</span><meta itemprop="priceCurrency" content="INR"/></p>
+        <div class="flex gap-2 text-xs text-gray-500 mb-3 flex-wrap">
+          <span>⛽ ${car.fuel}</span><span>⚙️ ${car.transmission}</span><span>${car.mileage > 0 ? '📍 '+formatKm(car.mileage) : '✨ 0 km'}</span>
+        </div>
+        <div class="flex items-center justify-between border-t border-gray-50 pt-3">
+          <span class="text-xs text-gray-400">📍 ${car.city}</span>
+          <a href="car-detail.html?id=${car.id}&slug=${slug}" class="text-xs font-bold text-teal-600 hover:text-teal-700">View →</a>
+        </div>
+      </div>
+    </article>`;
+}
+
+function renderListCard(car) {
+  const slug = generateListingSlug(car);
+  return `
+    <article class="car-card-list" itemscope itemtype="https://schema.org/Car">
+      <div style="width:180px;flex-shrink:0;background:linear-gradient(135deg,#e2e8f0,#f0fdfb);display:flex;align-items:center;justify-content:center;font-size:48px;">
+        ${car.images?.[0] ? `<img src="${car.images[0]}" alt="${car.year} ${car.make} ${car.model}" class="w-full h-full object-cover" style="height:140px;" itemprop="image" />` : '🚗'}
+      </div>
+      <div class="p-4 flex-1 flex flex-col justify-between">
+        <div>
+          <div class="flex items-start justify-between">
+            <h3 class="font-display font-bold text-gray-900" itemprop="name">${car.year} ${car.make} ${car.model}</h3>
+            <span class="text-xl font-display font-bold ml-4 flex-shrink-0" style="color:#0f766e">${formatPrice(car.price)}</span>
+          </div>
+          <div class="flex gap-3 text-xs text-gray-500 mt-2 flex-wrap">
+            <span>⛽ ${car.fuel}</span><span>⚙️ ${car.transmission}</span><span>${car.mileage > 0 ? formatKm(car.mileage) : '0 km'}</span><span>${car.bodyType || ''}</span><span>${car.color || ''}</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-4 mt-3">
+          <span class="text-xs text-gray-400">📍 ${car.city}, ${car.state}</span>
+          <span class="text-xs text-gray-400">${timeAgo(car.createdAt)}</span>
+          <a href="car-detail.html?id=${car.id}&slug=${slug}" class="ml-auto px-4 py-1.5 rounded-lg text-xs font-bold text-white" style="background:linear-gradient(135deg,#0d9488,#0284c7);">View Details</a>
+        </div>
+      </div>
+    </article>`;
+}
+
+function renderPagination() {
+  const totalPages = Math.ceil(filteredListings.length / PAGE_SIZE);
+  const container = document.getElementById('pagination');
+  if (totalPages <= 1) { container.innerHTML = ''; return; }
+
+  let html = '';
+  if (currentPage > 1) html += `<button class="pagination-btn" onclick="goToPage(${currentPage-1})">‹</button>`;
+
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+      html += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+    } else if (i === currentPage - 3 || i === currentPage + 3) {
+      html += `<span class="text-gray-400 px-2">...</span>`;
+    }
+  }
+
+  if (currentPage < totalPages) html += `<button class="pagination-btn" onclick="goToPage(${currentPage+1})">›</button>`;
+  container.innerHTML = html;
+}
+
+function goToPage(page) {
+  currentPage = page;
+  renderListings();
+  renderPagination();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateResultsHeading() {
+  const type = document.querySelector('input[name="f-type"]:checked')?.value || '';
+  const labels = { new: 'New Cars', used: 'Used Cars', cpo: 'Certified Pre-Owned Cars', parts: 'Parts & Accessories' };
+  document.getElementById('results-heading').textContent = labels[type] || 'All Cars';
+  document.getElementById('results-count').textContent = filteredListings.length.toLocaleString('en-IN');
+}
+
+function updateActiveFiltersBar() {
+  const bar = document.getElementById('active-filters-bar');
+  const list = document.getElementById('active-filters-list');
+  const chips = [];
+
+  const type = document.querySelector('input[name="f-type"]:checked')?.value;
+  if (type) chips.push({ label: type.toUpperCase(), key: 'type' });
+  selectedMakes.forEach(m => chips.push({ label: m, key: 'make', val: m }));
+  selectedFuels.forEach(f => chips.push({ label: f, key: 'fuel', val: f }));
+
+  list.innerHTML = chips.map(c => `<span class="filter-chip">${c.label} <button onclick="removeFilter('${c.key}','${c.val||''}')" class="ml-1 hover:text-red-500">✕</button></span>`).join('');
+  bar.style.display = chips.length > 0 ? 'block' : 'none';
+}
+
+function removeFilter(key, val) {
+  if (key === 'type') document.querySelector('input[name="f-type"][value=""]').checked = true;
+  if (key === 'make') { selectedMakes = selectedMakes.filter(m => m !== val); document.querySelector(`#make-list input[value="${val}"]`).checked = false; }
+  if (key === 'fuel') { selectedFuels = selectedFuels.filter(f => f !== val); document.querySelector(`#fuel-list input[value="${val}"]`).checked = false; }
+  applyFilters();
+}
+
+function clearAllFilters() {
+  document.querySelector('input[name="f-type"][value=""]').checked = true;
+  document.querySelectorAll('#make-list input, #fuel-list input, #transmission-list input, #model-list input, #owner-list input').forEach(i => i.checked = false);
+  selectedMakes = []; selectedFuels = []; selectedTransmissions = []; selectedBodyTypes = []; selectedColors = []; selectedOwners = [];
+  document.getElementById('min-price').value = 0;
+  document.getElementById('max-price').value = 10000000;
+  document.getElementById('max-km').value = 200000;
+  document.getElementById('f-state').value = '';
+  document.getElementById('f-city').value = '';
+  document.getElementById('year-from').value = '';
+  document.getElementById('year-to').value = '';
+  document.getElementById('km-display').textContent = 'Any';
+  updatePriceDisplay();
+  applyFilters();
+}
+
+function updateSEO() {
+  const params = new URLSearchParams(window.location.search);
+  const type = params.get('type');
+  const make = params.get('make');
+  const labels = { new: 'New Cars', used: 'Used Cars', cpo: 'Certified Pre-Owned Cars', parts: 'Parts & Accessories' };
+  const title = [make, labels[type] || 'Cars', 'for Sale in India | MileVaahan'].filter(Boolean).join(' ');
+  document.getElementById('page-title').textContent = title;
+  document.getElementById('page-desc').content = `Find ${[make, labels[type] || 'cars'].filter(Boolean).join(' ')} for sale across India on MileVaahan. ${filteredListings.length}+ listings with detailed specs and photos.`;
+  document.getElementById('og-title').content = title;
+  if (make || type) document.getElementById('breadcrumb-current').textContent = [make, labels[type]].filter(Boolean).join(' ') || 'All Cars';
+}
+
+async function applyAIFilter() {
+  const query = document.getElementById('ai-query').value.trim();
+  if (!query) return;
+
+  showToast('🤖 Applying AI filter...', 'info');
+
+  // Parse common patterns
+  const priceMatch = query.match(/under\s*(\d+)\s*l/i) || query.match(/below\s*(\d+)\s*l/i);
+  const cityMatch = query.match(/\bin\s+([A-Za-z]+(?:\s+[A-Za-z]+)?)/i);
+  const fuelMatch = query.match(/\b(electric|petrol|diesel|cng|hybrid)\b/i);
+  const bodyMatch = query.match(/\b(suv|sedan|hatchback|muv|mpv|coupe)\b/i);
+
+  if (priceMatch) {
+    const lakhs = parseInt(priceMatch[1]) * 100000;
+    document.getElementById('max-price').value = lakhs;
+    updatePriceDisplay();
+  }
+  if (fuelMatch) {
+    const fuel = fuelMatch[1].charAt(0).toUpperCase() + fuelMatch[1].slice(1).toLowerCase();
+    if (!selectedFuels.includes(fuel)) {
+      selectedFuels.push(fuel);
+      const cb = document.querySelector(`#fuel-list input[value="${fuel}"]`);
+      if (cb) cb.checked = true;
+    }
+  }
+  if (cityMatch) {
+    const cityInput = cityMatch[1];
+    const allCities = Object.values(INDIA_LOCATIONS).flat();
+    const matched = allCities.find(c => c.toLowerCase().includes(cityInput.toLowerCase()));
+    if (matched) {
+      document.getElementById('f-city').value = matched;
+    }
+  }
+  applyFilters();
+  showToast('🤖 AI filter applied!', 'success');
+}
+
+function toggleWishlist(id, btn) {
+  if (!auth.currentUser) { window.location.href = 'login.html'; return; }
+  const icon = btn.querySelector('.wishlist-icon');
+  const isSaved = icon.getAttribute('fill') === 'currentColor';
+  icon.setAttribute('fill', isSaved ? 'none' : 'currentColor');
+  icon.classList.toggle('text-red-500', !isSaved);
+  showToast(isSaved ? 'Removed from wishlist' : 'Saved! ❤️');
+}
+</script>
+</body>
+</html>

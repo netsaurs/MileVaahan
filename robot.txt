@@ -1,0 +1,37 @@
+User-agent: *
+Allow: /
+Allow: /pages/
+Allow: /images/
+
+Disallow: /admin/
+Disallow: /dealer/
+Disallow: /pages/login.html
+Disallow: /pages/register.html
+Disallow: /pages/dealer-register.html
+Disallow: /pages/post-listing.html
+Disallow: /pages/profile.html
+Disallow: /pages/messages.html
+Disallow: /pages/wishlist.html
+Disallow: /pages/my-listings.html
+
+# Block AI training bots
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+# Allow Google Image Bot
+User-agent: Googlebot-Image
+Allow: /images/
+
+# Crawl delay
+Crawl-delay: 1
+
+Sitemap: https://www.milevaahan.com/sitemap.xml
